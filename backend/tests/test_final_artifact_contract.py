@@ -14,12 +14,28 @@ from app.services.ai_investigator import InvestigatorError
 from app.services.evaluator import CachedInvestigator, evaluate_dataset
 from app.utils import results
 from app.utils.loaders import Dataset, load_dataset, load_ground_truth
-from scripts.evaluate import _publish_results, main as evaluate_main
+from scripts.evaluate import _csv_bytes, _publish_results, main as evaluate_main
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS_DIR = REPO_ROOT / "results"
 client = TestClient(app)
+
+
+def test_csv_serialization_is_platform_independent_lf_bytes():
+    payload = _csv_bytes(
+        [
+            {"payment_id": "PAY_001", "reason": "plain"},
+            {"payment_id": "PAY_002", "reason": "comma, quoted"},
+        ]
+    )
+
+    assert payload == (
+        b"payment_id,reason\n"
+        b"PAY_001,plain\n"
+        b'PAY_002,"comma, quoted"\n'
+    )
+    assert b"\r\n" not in payload
 
 
 def _active_payloads():

@@ -45,7 +45,7 @@
         "CUS_E001"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 15
+      "latency_ms": 14
     },
     "proposal": null,
     "candidates": {
@@ -253,7 +253,7 @@
         "CUS_E002"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 10
     },
     "proposal": null,
     "candidates": {
@@ -605,7 +605,7 @@
         "CUS_E004"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 10
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -715,7 +715,7 @@
         "CUS_E005"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 13
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -923,7 +923,7 @@
         "CUS_E006"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 18
+      "latency_ms": 16
     },
     "proposal": null,
     "candidates": {
@@ -1391,7 +1391,7 @@
         "CUS_E009"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 13
     },
     "proposal": null,
     "candidates": {
@@ -1578,7 +1578,7 @@
         "CUS_E010"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -2050,7 +2050,7 @@
         "CUS_E013"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 13
     },
     "proposal": null,
     "candidates": {
@@ -2237,7 +2237,7 @@
         "CUS_E014"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -2604,7 +2604,7 @@
         "CUS_E016"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 10
     },
     "proposal": null,
     "candidates": {
@@ -2714,7 +2714,7 @@
         "CUS_E017"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -2901,7 +2901,7 @@
         "CUS_E018"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 10
     },
     "proposal": null,
     "candidates": {
@@ -3088,7 +3088,7 @@
         "CUS_E019"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 10
     },
     "proposal": null,
     "candidates": {
@@ -3441,7 +3441,7 @@
         "CUS_E021"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 13
+      "latency_ms": 12
     },
     "proposal": null,
     "candidates": {
@@ -3823,7 +3823,7 @@
         "CUS_E023"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 12
     },
     "proposal": null,
     "candidates": {
@@ -4012,7 +4012,7 @@
         "CUS_E024"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 10
     },
     "proposal": null,
     "candidates": {
@@ -4297,7 +4297,7 @@
         "CUS_E026"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 12
     },
     "proposal": null,
     "candidates": {
@@ -4484,7 +4484,7 @@
         "CUS_E027"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 12
     },
     "proposal": null,
     "candidates": {
@@ -4670,7 +4670,7 @@
         "CUS_E028"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 12
     },
     "proposal": null,
     "candidates": {
@@ -4862,7 +4862,7 @@
         "CUS_E029"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 12
     },
     "proposal": null,
     "candidates": {
@@ -5049,7 +5049,7 @@
         "CUS_E030"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 12
     },
     "proposal": null,
     "candidates": {
@@ -5443,7 +5443,7 @@
         "CUS_E032"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 10
     },
     "proposal": null,
     "candidates": {
@@ -5586,7 +5586,7 @@
         "CUS_E033"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -5773,7 +5773,7 @@
         "CUS_E034"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 13
+      "latency_ms": 14
     },
     "proposal": null,
     "candidates": {
@@ -5981,7 +5981,7 @@
         "CUS_E035"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 14
     },
     "proposal": null,
     "candidates": {
@@ -6343,7 +6343,7 @@
         "CUS_E037"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 15
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -6721,7 +6721,7 @@
         "CUS_E039"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -7113,7 +7113,7 @@
         "CUS_E041"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 13
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -7321,7 +7321,7 @@
         "CUS_E042"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 10
     },
     "proposal": null,
     "candidates": {
@@ -7514,7 +7514,7 @@
         "CUS_E043"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -7701,7 +7701,7 @@
         "CUS_E044"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 13
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -7911,7 +7911,7 @@
         "CUS_E045"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 11
+      "latency_ms": 12
     },
     "proposal": null,
     "candidates": {
@@ -8304,7 +8304,7 @@
         "CUS_E047"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 12
+      "latency_ms": 13
     },
     "proposal": null,
     "candidates": {
@@ -8666,7 +8666,7 @@
         "CUS_E049"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 13
+      "latency_ms": 11
     },
     "proposal": null,
     "candidates": {
@@ -8880,7 +8880,7 @@
         "CUS_E050"
       ],
       "reason": "Unique deterministic allocation; no AI investigation required.",
-      "latency_ms": 15
+      "latency_ms": 12
     },
     "proposal": null,
     "candidates": {
@@ -9079,7 +9079,7 @@
         "INV_X051B"
       ],
       "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
-      "latency_ms": 27
+      "latency_ms": 22
     },
     "proposal": {
       "payment_id": "PAY_051",
@@ -9431,7 +9431,7 @@
         "CR_X054A"
       ],
       "reason": "unsupported_entity_relationship",
-      "latency_ms": 14
+      "latency_ms": 15
     },
     "proposal": {
       "payment_id": "PAY_052",
@@ -9807,7 +9807,7 @@
         "CR_X053B"
       ],
       "reason": "unsupported_entity_relationship",
-      "latency_ms": 19
+      "latency_ms": 16
     },
     "proposal": {
       "payment_id": "PAY_053",
@@ -10209,7 +10209,7 @@
         "INV_E002"
       ],
       "reason": "unsupported_entity_relationship",
-      "latency_ms": 13
+      "latency_ms": 14
     },
     "proposal": {
       "payment_id": "PAY_054",
@@ -10887,7 +10887,7 @@
         "CR_X054A"
       ],
       "reason": "contradictory_evidence",
-      "latency_ms": 13
+      "latency_ms": 15
     },
     "proposal": {
       "payment_id": "PAY_056",
@@ -11241,7 +11241,7 @@
         "CR_X057A"
       ],
       "reason": "missing_required_evidence",
-      "latency_ms": 15
+      "latency_ms": 17
     },
     "proposal": {
       "payment_id": "PAY_057",
@@ -11966,7 +11966,7 @@
         "INV_X059B"
       ],
       "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
-      "latency_ms": 13
+      "latency_ms": 16
     },
     "proposal": {
       "payment_id": "PAY_059",
@@ -12674,7 +12674,7 @@
         "INV_X061B"
       ],
       "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
-      "latency_ms": 15
+      "latency_ms": 13
     },
     "proposal": {
       "payment_id": "PAY_061",
@@ -12996,7 +12996,7 @@
         "INV_X062A"
       ],
       "reason": "unsupported_currency_mismatch",
-      "latency_ms": 14
+      "latency_ms": 13
     },
     "proposal": {
       "payment_id": "PAY_062",
@@ -13296,7 +13296,7 @@
         "CR_X063A"
       ],
       "reason": "missing_required_evidence",
-      "latency_ms": 14
+      "latency_ms": 15
     },
     "proposal": {
       "payment_id": "PAY_063",
@@ -13685,7 +13685,7 @@
         "EMAIL_X064"
       ],
       "reason": "missing_credit_note",
-      "latency_ms": 13
+      "latency_ms": 14
     },
     "proposal": {
       "payment_id": "PAY_064",
@@ -13980,7 +13980,7 @@
         "INV_X065B"
       ],
       "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
-      "latency_ms": 13
+      "latency_ms": 14
     },
     "proposal": {
       "payment_id": "PAY_065",
@@ -14307,7 +14307,7 @@
         "INV_X066B"
       ],
       "reason": "unsupported_entity_relationship",
-      "latency_ms": 14
+      "latency_ms": 15
     },
     "proposal": {
       "payment_id": "PAY_066",
@@ -14639,7 +14639,7 @@
         "CR_X069A"
       ],
       "reason": "unsupported_entity_relationship",
-      "latency_ms": 12
+      "latency_ms": 14
     },
     "proposal": {
       "payment_id": "PAY_067",
@@ -15040,7 +15040,7 @@
         "CR_X068A"
       ],
       "reason": "missing_required_evidence",
-      "latency_ms": 15
+      "latency_ms": 17
     },
     "proposal": {
       "payment_id": "PAY_068",
@@ -15417,7 +15417,7 @@
         "CR_X069A"
       ],
       "reason": "unsupported_entity_relationship",
-      "latency_ms": 13
+      "latency_ms": 14
     },
     "proposal": {
       "payment_id": "PAY_069",
@@ -15772,7 +15772,7 @@
         "INV_X070B"
       ],
       "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
-      "latency_ms": 13
+      "latency_ms": 14
     },
     "proposal": {
       "payment_id": "PAY_070",
@@ -16090,7 +16090,7 @@
         "CR_X069A"
       ],
       "reason": "unsupported_entity_relationship",
-      "latency_ms": 12
+      "latency_ms": 14
     },
     "proposal": {
       "payment_id": "PAY_071",
@@ -16431,7 +16431,7 @@
         "CR_X072B"
       ],
       "reason": "contradictory_evidence",
-      "latency_ms": 15
+      "latency_ms": 14
     },
     "proposal": {
       "payment_id": "PAY_072",
@@ -17484,7 +17484,7 @@
         "CR_X069A"
       ],
       "reason": "duplicate_allocation_risk",
-      "latency_ms": 14
+      "latency_ms": 13
     },
     "proposal": {
       "payment_id": "PAY_075",
@@ -17829,7 +17829,7 @@
         "INV_X076B"
       ],
       "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
-      "latency_ms": 17
+      "latency_ms": 13
     },
     "proposal": {
       "payment_id": "PAY_076",
@@ -18127,7 +18127,7 @@
         "CR_X069A"
       ],
       "reason": "unsupported_entity_relationship",
-      "latency_ms": 14
+      "latency_ms": 12
     },
     "proposal": {
       "payment_id": "PAY_077",
@@ -18491,7 +18491,7 @@
         "CR_X078B"
       ],
       "reason": "contradictory_evidence",
-      "latency_ms": 16
+      "latency_ms": 17
     },
     "proposal": {
       "payment_id": "PAY_078",
@@ -18852,7 +18852,7 @@
         "INV_X079B"
       ],
       "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
-      "latency_ms": 14
+      "latency_ms": 16
     },
     "proposal": {
       "payment_id": "PAY_079",
@@ -19157,7 +19157,7 @@
         "INV_X080B"
       ],
       "reason": "unsupported_entity_relationship",
-      "latency_ms": 15
+      "latency_ms": 14
     },
     "proposal": {
       "payment_id": "PAY_080",

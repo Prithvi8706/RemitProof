@@ -36,7 +36,11 @@ def _csv_bytes(rows: List[Dict[str, object]]) -> bytes:
     if not rows:
         return b""
     handle = io.StringIO(newline="")
-    writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+    writer = csv.DictWriter(
+        handle,
+        fieldnames=list(rows[0]),
+        lineterminator="\n",
+    )
     writer.writeheader()
     writer.writerows(rows)
     return handle.getvalue().encode("utf-8")
