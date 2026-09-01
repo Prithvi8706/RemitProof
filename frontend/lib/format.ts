@@ -1,10 +1,98 @@
-export function formatMoney(amount: string | number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
+interface DecimalParts {
+  integer: string;
+  fraction: string;
+  negative: boolean;
+}
+
+const MAX_DECIMAL_DIGITS = 10_000;
+
+function parseDecimal(amount: string | number): DecimalParts {
+  if (typeof amount === "number" && !Number.isFinite(amount)) {
+    throw new RangeError("Monetary amount must be finite.");
+  }
+
+  const value = String(amount).trim();
+  if (value.length > MAX_DECIMAL_DIGITS) {
+    throw new RangeError("Monetary amount is too large to format safely.");
+  }
+  const match = /^([+-]?)(?:(\d+)(?:\.(\d*))?|\.(\d+))(?:[eE]([+-]?\d+))?$/.exec(value);
+  if (!match) {
+    throw new RangeError(`Invalid monetary amount: ${value || "(empty)"}`);
+  }
+
+  const sign = match[1];
+  const sourceInteger = match[2] ?? "0";
+  const sourceFraction = match[3] ?? match[4] ?? "";
+  const exponent = Number(match[5] ?? "0");
+  if (!Number.isSafeInteger(exponent)) {
+    throw new RangeError("Monetary amount exponent is outside the supported range.");
+  }
+  if (Math.abs(exponent) > MAX_DECIMAL_DIGITS) {
+    throw new RangeError("Monetary amount exponent is too large to format safely.");
+  }
+
+  const digits = `${sourceInteger}${sourceFraction}`;
+  const decimalIndex = sourceInteger.length + exponent;
+  let integer: string;
+  let fraction: string;
+
+  if (decimalIndex <= 0) {
+    integer = "0";
+    fraction = `${"0".repeat(-decimalIndex)}${digits}`;
+  } else if (decimalIndex >= digits.length) {
+    integer = `${digits}${"0".repeat(decimalIndex - digits.length)}`;
+    fraction = "";
+  } else {
+    integer = digits.slice(0, decimalIndex);
+    fraction = digits.slice(decimalIndex);
+  }
+
+  integer = integer.replace(/^0+(?=\d)/, "");
+  const isZero = !/[1-9]/.test(`${integer}${fraction}`);
+  return { integer, fraction, negative: sign === "-" && !isZero };
+}
+
+function roundDecimal(parts: DecimalParts, scale: number): DecimalParts {
+  const retainedFraction = parts.fraction.slice(0, scale).padEnd(scale, "0");
+  const retainedDigits = `${parts.integer}${retainedFraction}`.replace(/^0+(?=\d)/, "") || "0";
+  const shouldRoundUp = parts.fraction.length > scale && parts.fraction[scale] >= "5";
+  const coefficient = BigInt(retainedDigits) + (shouldRoundUp ? BigInt(1) : BigInt(0));
+  const divisor = BigInt(10) ** BigInt(scale);
+  const integer = (coefficient / divisor).toString();
+  const fraction = scale === 0 ? "" : (coefficient % divisor).toString().padStart(scale, "0");
+
+  return {
+    integer,
+    fraction,
+    negative: parts.negative && coefficient !== BigInt(0),
+  };
+}
+
+export function formatMoney(
+  amount: string | number,
+  currency: string,
+  locale: Intl.LocalesArgument = "en-US",
+): string {
+  const normalizedCurrency = currency.trim().toUpperCase();
+  const currencyDefaults = new Intl.NumberFormat(locale, {
     style: "currency",
-    currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(Number(amount));
+    currency: normalizedCurrency,
+  }).resolvedOptions();
+  const scale = currencyDefaults.maximumFractionDigits ?? 2;
+  const rounded = roundDecimal(parseDecimal(amount), scale);
+  const integer = BigInt(rounded.integer);
+  const templateValue = rounded.negative ? (integer === BigInt(0) ? -0 : -integer) : integer;
+  const formatter = new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: normalizedCurrency,
+    minimumFractionDigits: scale,
+    maximumFractionDigits: scale,
+  });
+
+  return formatter
+    .formatToParts(templateValue)
+    .map((part) => (part.type === "fraction" ? rounded.fraction : part.value))
+    .join("");
 }
 
 export function formatPercent(value: number, digits = 1): string {

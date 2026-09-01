@@ -16,7 +16,7 @@ def _exception_summary(detail):
         "amount": payment["amount"],
         "currency": payment["currency"],
         "status": payment["status"],
-        "exception_class": detail["exception_class"],
+        "exception_class": detail["operational_exception_class"],
         "decision": decision["decision"],
         "reason": decision["reason"],
         "latency_ms": decision["latency_ms"],
@@ -27,7 +27,9 @@ def _exception_summary(detail):
 def dashboard():
     try:
         metrics, details = load_results()
-        exception_details = [detail for detail in details if detail["is_exception"]]
+        exception_details = [
+            detail for detail in details if detail["operational_is_exception"]
+        ]
     except ResultsUnavailableError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 

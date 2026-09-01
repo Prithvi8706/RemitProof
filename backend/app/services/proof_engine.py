@@ -10,6 +10,7 @@ from app.utils.remittance_semantics import (
     classify_document_semantics,
     explicitly_negates_payer_relationship,
     payer_identity_phrases,
+    sender_is_trusted_for_relationship,
 )
 
 
@@ -21,7 +22,10 @@ def _explicitly_negates_payer_relationship(
     for email in emails:
         if email.customer_id != customer.customer_id:
             continue
-        if explicitly_negates_payer_relationship(email.body, payer_name):
+        if explicitly_negates_payer_relationship(
+            f"{email.subject} {email.body}",
+            payer_name,
+        ):
             return True
     return False
 
@@ -39,7 +43,14 @@ def _explicit_entity_support(
     payer_name: str,
     emails: List[RemittanceEmail],
     negative_emails: Optional[List[RemittanceEmail]] = None,
+    payment_texts: Optional[List[str]] = None,
 ) -> bool:
+    if any(
+        explicitly_negates_payer_relationship(text, payer_name)
+        for text in (payment_texts or [])
+        if text
+    ):
+        return False
     if _explicitly_negates_payer_relationship(
         customer,
         payer_name,
@@ -64,8 +75,19 @@ def _explicit_entity_support(
     for email in emails:
         if email.customer_id != customer.customer_id:
             continue
+        if not sender_is_trusted_for_relationship(
+            email.sender,
+            payer_name,
+            [
+                customer.legal_name,
+                *customer.aliases,
+                *customer.parent_entities,
+                *customer.subsidiaries,
+            ],
+        ):
+            continue
         if affirmatively_supports_payer_relationship(
-            email.body,
+            f"{email.subject} {email.body}",
             payer_name,
             customer.legal_name,
         ):
@@ -94,6 +116,14 @@ def verify_candidate(
         missing_evidence.append("payment_identity")
 
     payment_text = f"{payment.bank_reference} {payment.remittance_reference}"
+    payment_relationship_contradiction = explicitly_negates_payer_relationship(
+        payment_text,
+        payment.payer_name,
+    )
+    if payment_relationship_contradiction:
+        reason_codes.append("conflicting_payer_evidence")
+        missing_evidence.append("entity_relationship")
+        contradictions.append("payment fields explicitly deny the payer relationship")
     payment_semantics = classify_document_semantics(
         payment_text,
         bare_references_are_affirmative=True,
@@ -173,6 +203,30 @@ def verify_candidate(
         reason_codes.append("invalid_credit_amount")
         missing_evidence.extend(invalid_credit_ids)
 
+    selected_invoice_amounts = {
+        invoice.invoice_id: invoice.amount
+        for invoice in selected_invoices
+        if is_valid_monetary_amount(invoice.amount)
+    }
+    overapplied_invoice_ids = sorted(
+        invoice_id
+        for invoice_id, invoice_amount in selected_invoice_amounts.items()
+        if money_sum(
+            credit.amount
+            for credit in selected_credits
+            if credit.invoice_id == invoice_id and is_valid_monetary_amount(credit.amount)
+        )
+        > invoice_amount
+    )
+    credits_within_invoice_balance = not overapplied_invoice_ids
+    if overapplied_invoice_ids:
+        reason_codes.append("credit_exceeds_invoice_balance")
+        missing_evidence.append("valid_credit_application")
+        contradictions.append(
+            "selected credits exceed the linked invoice amount for "
+            f"{overapplied_invoice_ids}"
+        )
+
     invoice_total = money_sum(
         invoice.amount for invoice in selected_invoices if is_valid_monetary_amount(invoice.amount)
     )
@@ -191,6 +245,7 @@ def verify_candidate(
         and not unknown_credits
         and not invalid_invoice_ids
         and not invalid_credit_ids
+        and credits_within_invoice_balance
         and calculated_total == payment.amount
     )
     if not financial_validity:
@@ -233,6 +288,23 @@ def verify_candidate(
         and all(credit.customer_id == proposed_customer.customer_id for credit in selected_credits)
         and all(credit.invoice_id in set(proposal.invoice_ids) for credit in selected_credits)
     )
+    contradictory_relationship_emails = [
+        email.email_id
+        for email in bundle.candidate_emails
+        if proposed_customer
+        and email.customer_id == proposed_customer.customer_id
+        and explicitly_negates_payer_relationship(
+            f"{email.subject} {email.body}",
+            payment.payer_name,
+        )
+    ]
+    if contradictory_relationship_emails:
+        reason_codes.append("conflicting_payer_evidence")
+        missing_evidence.append("entity_relationship")
+        contradictions.append(
+            "candidate emails explicitly deny the payer relationship: "
+            f"{sorted(contradictory_relationship_emails)}"
+        )
     cited_evidence_ids = set(proposal.evidence_ids)
     cited_emails = [
         email for email in bundle.candidate_emails if email.email_id in cited_evidence_ids
@@ -245,6 +317,7 @@ def verify_candidate(
             payment.payer_name,
             cited_emails,
             negative_emails=bundle.candidate_emails,
+            payment_texts=[payment.bank_reference, payment.remittance_reference],
         )
     )
     if not entity_support:
@@ -252,7 +325,7 @@ def verify_candidate(
         missing_evidence.append("entity_relationship")
 
     valid_credit_ids = {credit.credit_id for credit in selected_credits if credit.status == "valid"}
-    credit_support = payment_credit_reference_consistent and (
+    credit_support = payment_credit_reference_consistent and credits_within_invoice_balance and (
         not proposal.credit_ids
         or (
             len(valid_credit_ids) == len(proposal.credit_ids)

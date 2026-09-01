@@ -64,6 +64,18 @@ def baseline_match(bundle: CandidateBundle) -> BaselineResult:
             reason="payer_not_deterministically_mapped",
         )
 
+    payment_relationship_texts = [payment.bank_reference, payment.remittance_reference]
+    if any(
+        _has_negative_payer_relationship(payment.payer_name, text)
+        for text in payment_relationship_texts
+        if text
+    ):
+        return BaselineResult(
+            payment_id=payment.payment_id,
+            status="unresolved",
+            reason="conflicting_payer_evidence",
+        )
+
     payment_semantics = classify_document_semantics(
         " ".join([payment.bank_reference, payment.remittance_reference]),
         bare_references_are_affirmative=True,

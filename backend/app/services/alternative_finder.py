@@ -1,14 +1,29 @@
 from itertools import combinations
-from typing import Iterable, List, Sequence, Tuple
+from typing import Iterable, List, Optional, Sequence, Tuple
 
 from app.models import AlternativeAllocation, CandidateBundle
 from app.models.payment import is_valid_monetary_amount
 from app.utils.money import money_sum
 
 
-def _subsets(items: Sequence[object], maximum_size: int) -> Iterable[Tuple[object, ...]]:
-    for size in range(1, min(len(items), maximum_size) + 1):
+def _subsets(
+    items: Sequence[object],
+    maximum_size: Optional[int] = None,
+) -> Iterable[Tuple[object, ...]]:
+    upper_bound = len(items) if maximum_size is None else min(len(items), maximum_size)
+    for size in range(1, upper_bound + 1):
         yield from combinations(items, size)
+
+
+def _credits_fit_linked_invoices(invoice_group, credit_group) -> bool:
+    invoice_amounts = {invoice.invoice_id: invoice.amount for invoice in invoice_group}
+    for invoice_id, invoice_amount in invoice_amounts.items():
+        applied_credit = money_sum(
+            credit.amount for credit in credit_group if credit.invoice_id == invoice_id
+        )
+        if applied_credit > invoice_amount:
+            return False
+    return True
 
 
 def find_valid_alternatives(bundle: CandidateBundle) -> List[AlternativeAllocation]:
@@ -50,12 +65,17 @@ def find_valid_alternatives(bundle: CandidateBundle) -> List[AlternativeAllocati
         credit_choices = [tuple()]
         credit_choices.extend(_subsets(customer_credits, maximum_size=3))
 
-        for invoice_group_raw in _subsets(customer_invoices, maximum_size=4):
+        # Retrieval bounds this set to eight invoices, so all 255 non-empty
+        # subsets are cheap enough to enumerate. A smaller silent cap can turn
+        # a real multi-invoice alternative into a false uniqueness proof.
+        for invoice_group_raw in _subsets(customer_invoices):
             invoice_group = tuple(invoice_group_raw)
             invoice_ids = {invoice.invoice_id for invoice in invoice_group}
             for credit_group_raw in credit_choices:
                 credit_group = tuple(credit_group_raw)
                 if any(credit.invoice_id not in invoice_ids for credit in credit_group):
+                    continue
+                if not _credits_fit_linked_invoices(invoice_group, credit_group):
                     continue
 
                 calculated = money_sum(invoice.amount for invoice in invoice_group) - money_sum(

@@ -4,7 +4,9 @@ import hashlib
 import io
 import json
 import os
+import shutil
 import sys
+import tempfile
 from pathlib import Path
 from typing import Dict, List
 
@@ -22,6 +24,12 @@ from app.services.evaluator import (  # noqa: E402
 )
 from app.utils.atomic import atomic_write_bytes, atomic_write_json  # noqa: E402
 from app.utils.loaders import load_dataset, load_ground_truth  # noqa: E402
+from app.utils.results import (  # noqa: E402
+    MANIFEST_FILENAME,
+    MANIFEST_FORMAT_VERSION,
+    POINTER_FILENAME,
+    publication_id,
+)
 
 
 def _csv_bytes(rows: List[Dict[str, object]]) -> bytes:
@@ -47,28 +55,69 @@ def _publish_results(
         "metrics.json": (json.dumps(metrics, indent=2) + "\n").encode("utf-8"),
         "details.json": (json.dumps(details, indent=2) + "\n").encode("utf-8"),
     }
-    for name, content in artifacts.items():
-        atomic_write_bytes(output_dir / name, content)
-
-    # Published last so readers and reviewers can verify that every artifact belongs
-    # to one complete generation, even though files are replaced independently.
+    artifact_hashes = {
+        name: hashlib.sha256(content).hexdigest()
+        for name, content in artifacts.items()
+    }
+    publication = publication_id(generation_id, artifact_hashes)
     manifest = {
+        "manifest_format_version": MANIFEST_FORMAT_VERSION,
+        "publication_id": publication,
         "evaluation_generation_id": generation_id,
         "evaluation_mode": metrics["evaluation_mode"],
-        "artifacts": {
-            name: hashlib.sha256(content).hexdigest()
-            for name, content in artifacts.items()
-        },
+        "artifacts": artifact_hashes,
     }
-    cache_path = output_dir / "proposal_cache.json"
-    if cache_path.exists():
-        manifest["proposal_cache_file_sha256"] = hashlib.sha256(
-            cache_path.read_bytes()
-        ).hexdigest()
-    atomic_write_json(
-        output_dir / "generation_manifest.json",
-        manifest,
-    )
+    manifest_bytes = (json.dumps(manifest, indent=2) + "\n").encode("utf-8")
+
+    generations_dir = output_dir / "generations"
+    generations_dir.mkdir(parents=True, exist_ok=True)
+    generation_dir = generations_dir / publication
+    expected_generation_files = {**artifacts, MANIFEST_FILENAME: manifest_bytes}
+
+    def generation_matches() -> bool:
+        return generation_dir.is_dir() and all(
+            (generation_dir / name).is_file()
+            and (generation_dir / name).read_bytes() == content
+            for name, content in expected_generation_files.items()
+        )
+
+    if generation_dir.exists():
+        if not generation_matches():
+            raise RuntimeError(
+                f"immutable result publication {publication} already exists with different content"
+            )
+    else:
+        staging_dir = Path(
+            tempfile.mkdtemp(prefix=".publishing-", dir=str(generations_dir))
+        )
+        try:
+            for name, content in artifacts.items():
+                atomic_write_bytes(staging_dir / name, content)
+            atomic_write_bytes(staging_dir / MANIFEST_FILENAME, manifest_bytes)
+            try:
+                os.replace(staging_dir, generation_dir)
+            except OSError:
+                # A concurrent publisher may have installed the identical immutable
+                # generation first. Accept only an exact byte-for-byte match.
+                if not generation_matches():
+                    raise
+        finally:
+            if staging_dir.exists():
+                shutil.rmtree(staging_dir)
+
+    # Root exports are compatibility copies only. API readers use the immutable
+    # generation selected by the pointer below and never combine these files.
+    for name, content in artifacts.items():
+        atomic_write_bytes(output_dir / name, content)
+    atomic_write_bytes(output_dir / MANIFEST_FILENAME, manifest_bytes)
+
+    pointer = {
+        "pointer_format_version": MANIFEST_FORMAT_VERSION,
+        "publication_id": publication,
+        "evaluation_generation_id": generation_id,
+        "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+    }
+    atomic_write_json(output_dir / POINTER_FILENAME, pointer)
 
 
 def main() -> int:
@@ -118,12 +167,17 @@ def main() -> int:
     _publish_results(output_dir, rows, metrics, details)
     print(json.dumps(metrics, indent=2))
 
-    safety_ok = (
-        metrics["incorrect_auto_resolution_rate"] == 0
-        and metrics["arithmetic_correctness"] == 1
-        and metrics["retrieval_accuracy"] == 1
+    gate_name = (
+        "safety_gate"
+        if metrics["benchmark_claim_eligible"]
+        else "verifier_regression_gate"
     )
-    return 0 if safety_ok else 2
+    if arguments.cache_only and (
+        metrics["cache_misses"] > 0
+        or metrics["provenance"]["investigator_failures"] > 0
+    ):
+        return 2
+    return 0 if metrics[gate_name]["passed"] else 2
 
 
 if __name__ == "__main__":

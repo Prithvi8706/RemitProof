@@ -2,6 +2,7 @@ import time
 from typing import Protocol
 
 from app.models import (
+    BaselineResult,
     CandidateBundle,
     Decision,
     InvestigationProposal,
@@ -42,6 +43,34 @@ def process_payment(
         raise KeyError(f"Unknown payment: {payment_id}")
 
     candidates = retrieve_candidates(payment, dataset)
+    if payment.payment_id in dataset.replayed_payment_ids:
+        baseline = BaselineResult(
+            payment_id=payment.payment_id,
+            status="unresolved",
+            reason="duplicate_bank_transaction",
+        )
+        latency_ms = round((time.perf_counter() - started) * 1000)
+        decision = Decision(
+            payment_id=payment.payment_id,
+            decision="human_review",
+            proof={
+                "duplicate_risk": True,
+                "reason_code": "duplicate_bank_transaction",
+                "investigator_skipped": True,
+            },
+            reason=(
+                "Another payment record has the same normalized bank reference and "
+                "transaction facts; autonomous allocation is blocked."
+            ),
+            latency_ms=latency_ms,
+        )
+        return ProcessingResult(
+            payment=payment.model_dump(mode="json"),
+            baseline=baseline,
+            decision=decision,
+            candidates=_candidate_dump(candidates),
+        )
+
     baseline = baseline_match(candidates)
     if baseline.status == "matched":
         latency_ms = round((time.perf_counter() - started) * 1000)

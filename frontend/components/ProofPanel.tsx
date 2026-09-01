@@ -7,23 +7,28 @@ interface CheckRow {
   passed: boolean | null;
 }
 
+function statusLabel(passed: boolean | null): "Passed" | "Failed" | "Not evaluated" {
+  if (passed === null) return "Not evaluated";
+  return passed ? "Passed" : "Failed";
+}
+
 function StatusIcon({ passed }: { passed: boolean | null }) {
   if (passed === null) {
     return (
-      <span className="grid size-6 place-items-center rounded-full bg-surface-raised text-muted">
+      <span aria-hidden="true" className="grid size-6 place-items-center rounded-full bg-surface-raised text-muted">
         <Minus className="size-3.5" aria-hidden="true" />
       </span>
     );
   }
   if (passed) {
     return (
-      <span className="grid size-6 place-items-center rounded-full bg-primary-soft text-primary-dark">
+      <span aria-hidden="true" className="grid size-6 place-items-center rounded-full bg-primary-soft text-primary-dark">
         <Check className="size-3.5" strokeWidth={2.5} aria-hidden="true" />
       </span>
     );
   }
   return (
-    <span className="grid size-6 place-items-center rounded-full bg-danger-soft text-danger">
+    <span aria-hidden="true" className="grid size-6 place-items-center rounded-full bg-danger-soft text-danger">
       <X className="size-3.5" strokeWidth={2.5} aria-hidden="true" />
     </span>
   );
@@ -90,17 +95,24 @@ export function ProofPanel({ detail }: { detail: ExceptionDetail }) {
           </span>
         )}
       </div>
-      <div className="border-y border-line">
+      <ul className="border-y border-line" aria-label="Deterministic proof checks">
         {rows.map((row) => (
-          <div key={row.label} className="grid grid-cols-[24px_minmax(0,1fr)] gap-3 border-b border-line px-1 py-3.5 last:border-b-0">
+          <li key={row.label} className="grid grid-cols-[24px_minmax(0,1fr)] gap-3 border-b border-line px-1 py-3.5 last:border-b-0">
             <StatusIcon passed={row.passed} />
-            <div>
-              <div className="text-sm font-semibold text-ink">{row.label}</div>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <span className="text-sm font-semibold text-ink">{row.label}</span>
+                <span className={`text-xs font-semibold ${
+                  row.passed === null ? "text-muted" : row.passed ? "text-primary-dark" : "text-danger"
+                }`}>
+                  {statusLabel(row.passed)}
+                </span>
+              </div>
               <div className="mt-0.5 text-xs leading-5 text-muted">{row.description}</div>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
       {proof?.contradictions && proof.contradictions.length > 0 && (
         <div className="mt-4 border border-danger/25 bg-danger-soft p-4 text-sm leading-6 text-[oklch(0.38_0.12_28)]">
           {proof.contradictions.map((item) => <p key={item}>{item}</p>)}

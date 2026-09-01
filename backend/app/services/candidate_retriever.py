@@ -6,6 +6,10 @@ from typing import Dict, Iterable, List, Set, Tuple
 from app.models import CandidateBundle, Customer, Invoice, Payment, RemittanceEmail
 from app.utils.loaders import Dataset
 from app.utils.normalization import extract_document_ids, normalize_name
+from app.utils.remittance_semantics import (
+    classify_document_semantics,
+    explicitly_negates_payer_relationship,
+)
 
 
 def _tokens(value: str) -> Set[str]:
@@ -116,6 +120,21 @@ def _email_score(
     return score
 
 
+def _contains_safety_contradiction(payment: Payment, email: RemittanceEmail) -> bool:
+    """Return whether relevant correspondence contains fail-closed evidence."""
+
+    text = f"{email.subject} {email.body}"
+    if explicitly_negates_payer_relationship(text, payment.payer_name):
+        return True
+    semantics = classify_document_semantics(text)
+    return bool(
+        semantics.prohibited_invoice_ids
+        or semantics.prohibited_credit_ids
+        or semantics.noncurrent_invoice_ids
+        or semantics.prohibited_credit_amounts
+    )
+
+
 def _amount_is_close(invoice_amount: Decimal, payment_amount: Decimal) -> bool:
     if invoice_amount == payment_amount:
         return True
@@ -136,11 +155,18 @@ def retrieve_candidates(payment: Payment, dataset: Dataset) -> CandidateBundle:
         )
         for email in dataset.emails
     ]
+    # Keep the established bounded payload, but rank fail-closed evidence ahead
+    # of supportive correspondence. A fifth equally relevant denial must never
+    # disappear merely because four positive messages sort first.
     candidate_emails = [
         email
         for score, email in sorted(
             scored_emails,
-            key=lambda item: (-item[0], item[1].email_id),
+            key=lambda item: (
+                -int(_contains_safety_contradiction(payment, item[1])),
+                -item[0],
+                item[1].email_id,
+            ),
         )
         if score >= 80
     ][:4]

@@ -4,7 +4,7 @@ from typing import Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from .payment import is_valid_monetary_amount
+from .payment import is_valid_monetary_amount, normalize_iso_currency
 
 
 class Invoice(BaseModel):
@@ -26,3 +26,8 @@ class Invoice(BaseModel):
         if not is_valid_monetary_amount(value):
             raise ValueError("amount must be a finite, positive value with at most two decimals")
         return value
+
+    @field_validator("currency", mode="before")
+    @classmethod
+    def currency_must_be_valid(cls, value: object) -> str:
+        return normalize_iso_currency(value)

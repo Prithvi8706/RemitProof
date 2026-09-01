@@ -1,4 +1,5 @@
 import hashlib
+import http.client
 import json
 import os
 from pathlib import Path
@@ -22,6 +23,28 @@ def _sha256_json(value: object) -> str:
 
 class InvestigatorError(RuntimeError):
     pass
+
+
+def _read_response_json(response: object) -> object:
+    """Decode an Ollama HTTP response without leaking transport details."""
+
+    try:
+        raw_body = response.read()
+    except (OSError, http.client.HTTPException) as exc:
+        raise InvestigatorError("Ollama response body read failed") from exc
+
+    if not isinstance(raw_body, (bytes, bytearray)):
+        raise InvestigatorError("Ollama response body must be bytes")
+
+    try:
+        decoded_body = bytes(raw_body).decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise InvestigatorError("Ollama response body is not valid UTF-8") from exc
+
+    try:
+        return json.loads(decoded_body)
+    except json.JSONDecodeError as exc:
+        raise InvestigatorError("Ollama response body is not valid JSON") from exc
 
 
 def _response_content(result: object) -> str:
@@ -108,9 +131,11 @@ class OllamaInvestigator:
             )
             try:
                 with request.urlopen(call, timeout=self.timeout_seconds) as response:
-                    result = json.loads(response.read().decode("utf-8"))
-            except (error.URLError, TimeoutError, json.JSONDecodeError) as exc:
-                raise InvestigatorError(f"Ollama request failed: {exc}") from exc
+                    result = _read_response_json(response)
+            except InvestigatorError:
+                raise
+            except (error.URLError, TimeoutError, OSError, http.client.HTTPException) as exc:
+                raise InvestigatorError("Ollama request transport failed") from exc
 
             raw_content = _response_content(result)
             try:

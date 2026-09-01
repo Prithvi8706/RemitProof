@@ -1,10 +1,16 @@
 import csv
 import json
+import re
 from dataclasses import dataclass
+from decimal import Decimal
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Set, Tuple
 
 from app.models import Credit, Customer, Invoice, Payment, RemittanceEmail
+from app.utils.normalization import normalize_name
+
+
+PaymentFingerprint = Tuple[str, object, Decimal, str, str]
 
 
 @dataclass(frozen=True)
@@ -18,6 +24,43 @@ class Dataset:
     @property
     def payments_by_id(self) -> Dict[str, Payment]:
         return {payment.payment_id: payment for payment in self.payments}
+
+    @property
+    def replayed_payment_ids(self) -> Set[str]:
+        """Return every payment participating in a high-confidence bank replay."""
+
+        payments_by_fingerprint: Dict[PaymentFingerprint, List[str]] = {}
+        for payment in self.payments:
+            fingerprint = payment_transaction_fingerprint(payment)
+            if fingerprint is None:
+                continue
+            payments_by_fingerprint.setdefault(fingerprint, []).append(payment.payment_id)
+        return {
+            payment_id
+            for payment_ids in payments_by_fingerprint.values()
+            if len(payment_ids) > 1
+            for payment_id in payment_ids
+        }
+
+
+def payment_transaction_fingerprint(payment: Payment) -> Optional[PaymentFingerprint]:
+    """Identify replays without conflating merely similar legitimate receipts.
+
+    A bank reference is required and separators/case are normalized. The date,
+    amount, currency, and payer must also agree before records are treated as
+    copies of the same bank transaction.
+    """
+
+    bank_reference = re.sub(r"[^a-z0-9]+", "", payment.bank_reference.casefold())
+    if not bank_reference:
+        return None
+    return (
+        bank_reference,
+        payment.date,
+        payment.amount,
+        payment.currency,
+        normalize_name(payment.payer_name),
+    )
 
 
 def _read_csv(path: Path) -> List[Dict[str, str]]:

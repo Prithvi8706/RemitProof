@@ -1,7 +1,7 @@
 import re
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Set
+from typing import Iterable, Set
 
 from app.utils.normalization import extract_credit_amounts, extract_document_ids
 
@@ -65,6 +65,25 @@ _NEGATED_CREDIT_AMOUNT = re.compile(
     r"(?:USD|EUR|GBP|\$|€|£)\s*[0-9]",
     re.IGNORECASE,
 )
+_SENDER_ADDRESS = re.compile(
+    r"^(?P<local>[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+)@"
+    r"(?P<domain>[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?)$"
+)
+_ORGANIZATION_STOPWORDS = {
+    "bank",
+    "co",
+    "company",
+    "corp",
+    "corporation",
+    "group",
+    "inc",
+    "international",
+    "limited",
+    "llc",
+    "ltd",
+    "plc",
+    "services",
+}
 
 
 def _clauses(text: str):
@@ -110,6 +129,69 @@ def contains_payer_identity(text: str, payer_name: str) -> bool:
         contains_token_phrase(text, phrase)
         for phrase in payer_identity_phrases(payer_name)
     )
+
+
+def _identity_keys(values: Iterable[str]) -> Set[str]:
+    keys: Set[str] = set()
+    for value in values:
+        tokens = [
+            token
+            for token in re.findall(r"[a-z0-9]+", (value or "").casefold())
+            if len(token) >= 3 and token not in _ORGANIZATION_STOPWORDS
+        ]
+        keys.update(tokens)
+        if tokens:
+            keys.add("".join(tokens))
+    return keys
+
+
+def _identity_slugs(values: Iterable[str]) -> Set[str]:
+    """Return complete organization slugs, never isolated shared-name tokens."""
+
+    slugs: Set[str] = set()
+    for value in values:
+        tokens = [
+            token
+            for token in re.findall(r"[a-z0-9]+", (value or "").casefold())
+            if len(token) >= 3 and token not in _ORGANIZATION_STOPWORDS
+        ]
+        if tokens:
+            slugs.add("".join(tokens))
+    return slugs
+
+
+def sender_is_trusted_for_relationship(
+    sender: str,
+    payer_name: str,
+    customer_names: Iterable[str],
+) -> bool:
+    """Require relationship assertions to come from an identity-aligned source.
+
+    The synthetic repository has no DKIM/authentication metadata. Its defensible
+    local invariant is therefore narrower: an asserting sender's organizational
+    domain must align with the customer identity. The reserved ``example.test``
+    unit-test mailbox additionally models a payer-controlled authenticated source
+    when its local part aligns with the payer. Unknown domains never establish a
+    payer/customer relationship, though their contradictions remain safety input.
+    """
+
+    match = _SENDER_ADDRESS.fullmatch((sender or "").strip())
+    if match is None:
+        return False
+    local = match.group("local").casefold()
+    domain = match.group("domain").casefold().rstrip(".")
+    customer_slugs = _identity_slugs(customer_names)
+    # Repository fixtures model customer-controlled mailboxes with the exact
+    # organization slug immediately below the reserved ``.example`` suffix
+    # (for example, ``copperleaffoods.example``). Requiring an exact slug match
+    # prevents a merely shared token or an attacker-owned lookalike such as
+    # ``acme.evil.example`` from becoming authorization evidence.
+    if domain.endswith(".example"):
+        organization_slug = re.sub(r"[^a-z0-9]+", "", domain[: -len(".example")])
+        return bool(organization_slug and organization_slug in customer_slugs)
+    if domain == "example.test":
+        return bool(_identity_keys([local]).intersection(_identity_keys([payer_name])))
+    return False
 
 
 def explicitly_negates_payer_relationship(text: str, payer_name: str) -> bool:

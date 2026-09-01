@@ -63,7 +63,7 @@ The three-system comparison is restricted to unresolved exceptions to avoid easy
 | Forced proposal without verification | 12 | 18 | 0 | 0 |
 | RemitProof | 9 | 0 | 12 | 9 |
 
-The current artifact achieves 100% arithmetic correctness, 100% retrieval accuracy, 100% correct abstention, and 0% incorrect auto-resolution under the supplied synthetic truth. It was regenerated with existing cached proposals after verifier hardening. Its throughput and mean latency therefore measure verifier/pipeline execution with cache lookup; model inference is excluded. These are not end-to-end RemitProof/Ollama performance figures. Use a new output directory for uncached model timing; the safety counts above are the central result.
+The committed artifact was regenerated with identity-unverified legacy cached proposals after verifier hardening. It is therefore labeled `offline_verifier_regression_only`: its safety counts exercise the deterministic verifier against fixed proposal inputs, but it is not eligible to pass the model-backed benchmark safety gate. The offline verifier-regression gate is eligible only when every required proposal was replayed from cache with no misses or investigator failures; missing cache entries make the CLI exit nonzero. Its throughput and mean latency measure verifier/pipeline execution with cache lookup; model inference was not attempted. These are not end-to-end RemitProof/Ollama performance figures. A model-backed result requires identity-verified proposal sources and no investigator failures.
 
 ## Reproduce
 
@@ -75,7 +75,9 @@ python backend\scripts\run_spike.py --model llama3.2
 python backend\scripts\evaluate.py --data data --output results\fresh --model llama3.2
 ```
 
-Use a new output directory for a fresh timed run. `CachedInvestigator` keys proposals by model tag, prompt, and candidate input. Reusing an output directory with `proposal_cache.json` reproduces proposal decisions while avoiding model calls, so its resulting latency and throughput are verifier-only and must not be reported as fresh inference or end-to-end performance. The cache does not record a model digest, host, generation-option fingerprint, or code revision; cached outputs are suitable for verifier regression work, not model-to-model performance claims.
+Use a new output directory for a fresh timed run. Versioned cache keys hash the complete investigator identity and candidate bundle. The investigator identity includes the investigator version, model tag and optional digest, timeout, deterministic generation options, prompt hash, proposal-schema hash, and a one-way host hash. The bundle hash covers the payment and all supplied candidates. Legacy entries that predate this identity are explicitly marked unverified; replaying them is allowed only with the opt-in migration flag and produces an offline verifier-regression result, never a model-backed benchmark pass. Any attempted live call—including a failed call—is included in the timing scope and attempt counters.
+
+Result publication uses immutable, content-addressed generation directories. Every artifact hash and generation ID is recorded in that generation's manifest, and an atomic `current_generation.json` pointer selects the only generation API readers may serve. A crash before pointer replacement leaves the prior generation active; malformed, incomplete, mixed, or hash-mismatched generations make readiness and artifact-backed APIs return a controlled 503.
 
 Generated artifacts:
 
@@ -84,6 +86,8 @@ Generated artifacts:
 - `confusion_breakdown.csv`: outcome counts by exception class;
 - `details.json`: audit payloads used by the API and UI;
 - `proposal_cache.json`: keyed model proposals, with no ground truth.
+- `generations/<publication-id>/`: immutable API-readable snapshots with a hashed manifest;
+- `current_generation.json`: atomic pointer to the active snapshot. Root artifact copies are compatibility exports and are not used to assemble API responses.
 
 ## Limitations
 

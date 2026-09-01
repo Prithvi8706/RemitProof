@@ -13,7 +13,7 @@ from app.utils.loaders import Dataset
 
 
 CACHE_FORMAT_VERSION = 2
-EVALUATOR_VERSION = "remitproof-evaluator-v2"
+EVALUATOR_VERSION = "remitproof-evaluator-v3"
 PROPOSAL_ABLATION_MODE = "proposal_only_forced_proposal_verifier_ablation"
 SYNTHETIC_BENCHMARK_LABEL = (
     "synthetic benchmark/regression partition; not an independent held-out set"
@@ -47,6 +47,7 @@ class CachedInvestigator:
         self.hits = 0
         self.misses = 0
         self.live_calls = 0
+        self.successful_live_calls = 0
         self.legacy_promotions = 0
         self.unverified_legacy_hits = 0
         self._cache_needs_versioned_write = False
@@ -125,6 +126,8 @@ class CachedInvestigator:
             "cache_hits": self.hits,
             "cache_misses": self.misses,
             "live_model_calls": self.live_calls,
+            "successful_live_model_calls": self.successful_live_calls,
+            "failed_live_model_calls": self.live_calls - self.successful_live_calls,
             "legacy_cache_promotions": self.legacy_promotions,
             "unverified_legacy_cache_hits": self.unverified_legacy_hits,
             "cache_entries": len(self.cache),
@@ -188,8 +191,9 @@ class CachedInvestigator:
                 "cache-only evaluation refused an Ollama call for "
                 f"payment {bundle.payment.payment_id}"
             )
-        proposal = self.delegate.investigate(bundle)
         self.live_calls += 1
+        proposal = self.delegate.investigate(bundle)
+        self.successful_live_calls += 1
         self.cache[key] = self._entry(
             proposal,
             bundle,
@@ -306,6 +310,22 @@ def _row_from_result(
     }
 
 
+def _operational_exception_class(result: ProcessingResult) -> str:
+    """Classify a case using runtime output only, never evaluation truth."""
+
+    if result.baseline.status == "matched":
+        return "matched_normally"
+    if result.investigator_error:
+        return "investigator_error"
+    if result.decision.decision == "resolved":
+        return "resolved_after_investigation"
+    if result.proof and result.proof.reason_codes:
+        return str(result.proof.reason_codes[0]).lower()
+    if result.sufficiency and result.sufficiency.abstention_reason:
+        return "evidence_review_required"
+    return "unresolved_payment"
+
+
 def _comparison(rows: List[Dict[str, object]], prefix: str) -> Dict[str, object]:
     if prefix == "remitproof":
         resolved = [row for row in rows if row["decision"] in {"matched_normally", "resolved"}]
@@ -338,6 +358,7 @@ def _comparison(rows: List[Dict[str, object]], prefix: str) -> Dict[str, object]
 def _metrics_for_rows(
     rows: List[Dict[str, object]],
     elapsed_seconds: float,
+    timing_scope: str = "pipeline/verifier timing; model-inference inclusion is declared by run metadata",
 ) -> Dict[str, object]:
     exceptions = [row for row in rows if row["is_exception"]]
     resolvable_exceptions = [
@@ -400,7 +421,7 @@ def _metrics_for_rows(
         ) if rows else 0.0,
         "comparison_scope": "unresolved exception records",
         "comparison_record_count": len(exceptions),
-        "timing_scope": "pipeline/verifier replay; cached model inference is excluded when evaluation_mode is cache_only",
+        "timing_scope": timing_scope,
         "comparison": {
             "baseline": _comparison(exceptions, "baseline"),
             "llm_only": _comparison(exceptions, "llm_only"),
@@ -426,6 +447,8 @@ def evaluate_dataset(
         rows.append(row)
         details.append(
             {
+                "operational_exception_class": _operational_exception_class(result),
+                "operational_is_exception": result.baseline.status != "matched",
                 "exception_class": truth["exception_class"],
                 "is_exception": truth["is_exception"],
                 "split": truth["split"],
@@ -441,6 +464,13 @@ def evaluate_dataset(
     elapsed_seconds = time.perf_counter() - started
     benchmark_rows = [row for row in rows if row["split"] == "benchmark"]
     cache_statistics = investigator.statistics()
+    investigator_failures = sum(bool(row["investigator_error"]) for row in rows)
+    model_inference_attempted = cache_statistics["live_model_calls"] > 0
+    timing_scope = (
+        "end-to-end pipeline timing including attempted model inference"
+        if model_inference_attempted
+        else "pipeline/verifier replay timing; model inference was not attempted"
+    )
     dataset_sha256 = _sha256_json(
         {
             "dataset": {
@@ -468,8 +498,27 @@ def evaluate_dataset(
         "proposal_source_identity_verified": (
             cache_statistics["unverified_legacy_cache_hits"] == 0
         ),
+        "investigator_failures": investigator_failures,
         **cache_statistics,
     }
+    proposal_source_identity_verified = (
+        cache_statistics["unverified_legacy_cache_hits"] == 0
+    )
+    benchmark_claim_eligible = bool(
+        proposal_source_identity_verified
+        and cache_statistics["failed_live_model_calls"] == 0
+        and investigator_failures == 0
+    )
+    cache_only_proposal_coverage_complete = bool(
+        investigator.cache_only
+        and cache_statistics["cache_hits"] > 0
+        and cache_statistics["cache_misses"] == 0
+        and cache_statistics["live_model_calls"] == 0
+        and investigator_failures == 0
+    )
+    verifier_regression_eligible = bool(
+        benchmark_claim_eligible or cache_only_proposal_coverage_complete
+    )
     generation_id = _sha256_json(provenance)
     for row in rows:
         row["evaluation_generation_id"] = generation_id
@@ -482,12 +531,19 @@ def evaluate_dataset(
         **_metrics_for_rows(
             benchmark_rows,
             sum(int(row["latency_ms"]) for row in benchmark_rows) / 1000,
+            timing_scope,
         ),
     }
     metrics = {
         "generated_from": "deterministic synthetic benchmark/regression evaluation",
         "evaluation_generation_id": generation_id,
         "evaluation_mode": evaluation_mode,
+        "result_status": (
+            "model_backed_benchmark"
+            if benchmark_claim_eligible
+            else "offline_verifier_regression_only"
+        ),
+        "benchmark_claim_eligible": benchmark_claim_eligible,
         "partition_label": f"{len(rows)}-record synthetic regression corpus",
         "independent_held_out": False,
         "model": investigator.delegate.model,
@@ -502,18 +558,51 @@ def evaluate_dataset(
             ),
             "hits": cache_statistics["cache_hits"],
             "misses": cache_statistics["cache_misses"],
-            "model_inference_included": cache_statistics["live_model_calls"] > 0,
-            "proposal_source_identity_verified": (
-                cache_statistics["unverified_legacy_cache_hits"] == 0
+            "model_inference_included": model_inference_attempted,
+            "model_inference_attempted": model_inference_attempted,
+            "proposal_source_identity_verified": proposal_source_identity_verified,
+        },
+        "safety_gate": {
+            "eligible": benchmark_claim_eligible,
+            "passed": False,
+            "reason": (
+                "eligible identity-verified proposal sources"
+                if benchmark_claim_eligible
+                else "identity-unverified cached proposals are verifier regression inputs only"
+            ),
+        },
+        "verifier_regression_gate": {
+            "eligible": verifier_regression_eligible,
+            "passed": False,
+            "reason": (
+                "identity-verified proposal evaluation also satisfies verifier regression checks"
+                if benchmark_claim_eligible
+                else (
+                    "all required cached proposals were replayed; offline verifier regression checks only"
+                    if cache_only_proposal_coverage_complete
+                    else "required proposal coverage was incomplete"
+                )
             ),
         },
         "provenance": provenance,
-        **_metrics_for_rows(rows, elapsed_seconds),
+        **_metrics_for_rows(rows, elapsed_seconds, timing_scope),
         "synthetic_benchmark_regression": benchmark_metrics,
         # Legacy API key retained for compatibility; its metadata explicitly states
         # that this is not an independently held-out evaluation.
         "held_out": {"legacy_key": True, **benchmark_metrics},
     }
+    metrics["safety_gate"]["passed"] = bool(
+        benchmark_claim_eligible
+        and metrics["incorrect_auto_resolution_rate"] == 0
+        and metrics["arithmetic_correctness"] == 1
+        and metrics["retrieval_accuracy"] == 1
+    )
+    metrics["verifier_regression_gate"]["passed"] = bool(
+        verifier_regression_eligible
+        and metrics["incorrect_auto_resolution_rate"] == 0
+        and metrics["arithmetic_correctness"] == 1
+        and metrics["retrieval_accuracy"] == 1
+    )
     return rows, metrics, details
 
 
