@@ -1,0 +1,4 @@
+/results/*.json text eol=lf
+/results/*.csv text eol=lf
+/results/generations/**/*.json text eol=lf
+/results/generations/**/*.csv text eol=lf
