@@ -34,7 +34,7 @@ export function DecisionPanel({ detail }: { detail: ExceptionDetail }) {
         aria-hidden="true"
       />
       <h2 id="decision-title" className="mt-4 text-2xl font-semibold tracking-[-0.025em] text-ink">
-        {isResolved ? "Safe to resolve" : "Do not post automatically"}
+        {isResolved ? "Authorized to resolve" : "Decision blocked"}
       </h2>
       <p className="mt-3 max-w-[62ch] text-sm leading-6 text-muted">{description}</p>
       <dl className="mt-7 grid grid-cols-2 gap-x-5 gap-y-4 border-t border-current/10 pt-5 text-sm">

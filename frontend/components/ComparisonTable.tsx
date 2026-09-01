@@ -17,8 +17,8 @@ export function ComparisonTable({ benchmark }: { benchmark: BenchmarkData }) {
     },
     {
       key: "llm_only",
-      label: "Model only",
-      supporting: "Proposal trusted directly",
+      label: "Proposal only",
+      supporting: "No proof gate",
       metrics: benchmark.comparison.llm_only,
     },
     {

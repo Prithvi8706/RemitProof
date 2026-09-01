@@ -83,6 +83,32 @@ export interface PaymentRecord {
   status: string;
 }
 
+export interface BaselineRecord {
+  payment_id: string;
+  status: "matched" | "unresolved";
+  matched_invoices: string[];
+  matched_credits: string[];
+  customer_id: string | null;
+  reason: string;
+  candidate_count: number;
+}
+
+export interface SemanticClaimRecord {
+  claim_id: string;
+  claim: string;
+  evidence_ids: string[];
+}
+
+export interface ProposalRecord {
+  payment_id: string;
+  proposed_customer: string | null;
+  invoice_ids: string[];
+  credit_ids: string[];
+  semantic_claims: SemanticClaimRecord[];
+  evidence_ids: string[];
+  unresolved_questions: string[];
+}
+
 export interface DecisionRecord {
   payment_id: string;
   decision: DecisionState;
@@ -153,7 +179,10 @@ export interface AlternativeRecord {
 export interface ExceptionDetail {
   exception_class: string;
   payment: PaymentRecord;
+  baseline: BaselineRecord;
   decision: DecisionRecord;
+  proposal: ProposalRecord | null;
+  candidates: Record<string, Array<Record<string, unknown>>>;
   proposed_allocation: AllocationRow[];
   evidence: EvidenceRecord[];
   model_cited_evidence: EvidenceRecord[];

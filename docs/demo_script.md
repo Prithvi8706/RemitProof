@@ -9,17 +9,17 @@ Run the API on port 8001 and the frontend on port 3000. Open the dashboard, then
 
 Do not imply that the prototype writes to Razorpay or an accounting system.
 
-## 0:00–0:30 — Problem
+## 0:00–0:30 — Boundary
 
 On the dashboard, point to the operational funnel: 80 receipts, 50 reconciled normally, 30 exceptions.
 
-Say: “Most reconciliation demos show AI matching easy transactions. Easy transactions do not need AI.”
+Say: “Normal reconciliation already handles structured matches. RemitProof starts with the 30 exceptions where those signals were insufficient.”
 
 ## 0:30–0:55 — Thesis
 
 Point to the pipeline.
 
-Say: “RemitProof starts where normal reconciliation stops. AI interprets the messy evidence; deterministic code decides whether that interpretation is safe enough to act on.”
+Say: “The AI proposes. Deterministic code proves. Conflict detection asks whether another explanation survives. Evidence decides whether the system may act or must abstain.”
 
 ## 0:55–2:15 — Complex resolution
 
@@ -27,6 +27,7 @@ Open `PAY_051`.
 
 Show:
 
+- the visible investigation path from normal-match failure to authorization;
 - the USD 14,763 payment from `CITIBANK N.A. OBO COPPERLEAF FOODS`;
 - why the baseline stopped at an unmapped payer;
 - the detached remittance email connecting the treasury bank to Copperleaf Foods International;
@@ -35,7 +36,7 @@ Show:
 - the competing pair `INV_X051C` and `INV_X051D`, which is also financially valid;
 - the proof checklist showing that the remittance uniquely disambiguates the alternatives.
 
-Say: “The model proposed the meaning. It did not get authority. Code recomputed the money, checked state and entity support, enumerated the other valid allocation, and resolved only because the evidence selected exactly one.”
+Say: “The model produced a proposal, not a decision. Code recomputed the money, checked state and entity support, found the competing allocation, and authorized only because the remittance evidence cleared that conflict.”
 
 ## 2:15–3:00 — Abstention
 
@@ -43,7 +44,7 @@ Open `PAY_052`.
 
 Show the two USD 11,544 invoices, `INV_X052A` and `INV_X052B`. There is no remittance evidence selecting one. The raw model proposal also fails deterministic proof, while the alternative finder still exposes both financially valid explanations.
 
-Say: “Two valid allocations remain, and no available evidence tells us which was intended. In finance, unresolved is better than confidently wrong.”
+Say: “Both explanations are plausible. Neither is justified strongly enough to execute. The product succeeds by blocking the decision and naming the evidence a controller needs.”
 
 Point to `HUMAN REVIEW` and the missing/disambiguating evidence message.
 

@@ -1,6 +1,14 @@
 # Architecture
 
-RemitProof separates interpretation from authorization. The model may suggest what a receipt means, but only deterministic code can authorize a result.
+RemitProof is conflict detection for AI financial decisions. The model may suggest what a receipt means, but only deterministic proof, alternative search, and evidence sufficiency can authorize a result.
+
+The architecture revolves around three domain objects:
+
+- **Proposal:** the model's structured hypothesis, claims, citations, and unresolved questions.
+- **Proof:** deterministic financial, state, entity, credit, duplicate, and contradiction checks.
+- **Conflict:** any competing financially valid explanation that the available evidence has not eliminated.
+
+Normal reconciliation remains the first stage. RemitProof receives only the exceptions that structured financial signals could not determine.
 
 ```mermaid
 flowchart TD

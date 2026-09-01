@@ -15,7 +15,7 @@ export function AppHeader() {
           </span>
           <span>
             <span className="block text-[15px] font-semibold tracking-[-0.01em]">RemitProof</span>
-            <span className="hidden text-xs text-white/70 sm:block">AI Finance Controller</span>
+            <span className="hidden text-xs text-white/70 sm:block">Financial conflict control</span>
           </span>
         </Link>
         <div className="flex min-w-0 items-center justify-end gap-2 sm:gap-4">

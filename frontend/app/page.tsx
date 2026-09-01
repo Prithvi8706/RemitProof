@@ -1,4 +1,4 @@
-import { Activity, CheckCircle2, Gauge, ListFilter, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2, CircleStop, Gauge, GitCompareArrows, ListFilter, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
@@ -53,14 +53,14 @@ export default async function DashboardPage() {
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)] lg:items-end">
             <div>
               <p className="mb-4 flex items-center gap-2 text-sm font-semibold text-primary">
-                <Activity className="size-4" aria-hidden="true" />
-                Cross-border receivables control
+                <GitCompareArrows className="size-4" aria-hidden="true" />
+                Proposal → Proof → Conflict
               </p>
               <h1 className="max-w-[820px] text-[2.35rem] font-semibold leading-[1.08] tracking-[-0.04em] text-ink sm:text-[3.25rem]">
-                Investigate the receipts normal reconciliation could not explain.
+                Conflict detection for AI financial decisions.
               </h1>
               <p className="mt-5 max-w-[68ch] text-base leading-7 text-muted sm:text-lg">
-                AI proposes an allocation. Deterministic code verifies the money and record state. Evidence must make the result unique, or RemitProof sends it to human review.
+                Normal reconciliation handles structured matches. RemitProof starts with the unresolved exceptions, then checks whether an AI proposal is uniquely supported by non-conflicting evidence.
               </p>
             </div>
             <div className="border-t border-line pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
@@ -69,9 +69,9 @@ export default async function DashboardPage() {
                   <ShieldCheck className="size-5" aria-hidden="true" />
                 </span>
                 <div>
-                  <h2 className="text-sm font-semibold text-ink">Proof-carrying resolution</h2>
+                  <h2 className="text-sm font-semibold text-ink">The AI recommends. The system authorizes.</h2>
                   <p className="mt-1 text-sm leading-6 text-muted">
-                    Financial validity + entity support + evidence support + no unresolved alternative.
+                    A plausible explanation remains blocked until financial proof, evidence, and conflict checks justify action.
                   </p>
                 </div>
               </div>
@@ -143,7 +143,7 @@ export default async function DashboardPage() {
                 Plausible is not the same as justified.
               </h2>
               <p className="mt-2 max-w-[68ch] text-sm leading-6 text-muted">
-                The model finds semantic explanations, but it also proposes actions on ambiguous and unsupported cases. The verifier keeps the semantic wins and blocks unsafe postings.
+                A proposal can be mathematically valid and semantically reasonable while another financial explanation still survives. RemitProof authorizes only the cases the evidence makes unique.
               </p>
             </div>
             <div className="text-sm text-muted">
@@ -152,6 +152,47 @@ export default async function DashboardPage() {
             </div>
           </div>
           <ComparisonTable benchmark={benchmark} />
+        </section>
+
+        <section className="mx-auto max-w-[1440px] px-4 pb-14 sm:px-6 sm:pb-16" aria-labelledby="demo-cases-title">
+          <div className="mb-5">
+            <h2 id="demo-cases-title" className="text-2xl font-semibold tracking-[-0.025em] text-ink">
+              Two cases explain the product.
+            </h2>
+            <p className="mt-2 max-w-[68ch] text-sm leading-6 text-muted">
+              One conflict is cleared by remittance evidence. The other remains blocked because payer intent cannot be proven.
+            </p>
+          </div>
+          <div className="border-y border-line">
+            <Link href="/exceptions/PAY_051" className="group grid gap-4 border-b border-line py-5 hover:bg-surface sm:grid-cols-[180px_minmax(0,1fr)_auto] sm:items-center sm:px-4">
+              <div className="flex items-center gap-2 text-sm font-semibold text-primary-dark">
+                <CheckCircle2 className="size-4" aria-hidden="true" />
+                CONFLICT CLEARED
+              </div>
+              <div>
+                <div className="numeric text-sm font-semibold text-ink">PAY_051</div>
+                <p className="mt-1 text-sm leading-6 text-muted">Two allocations balance. A detached remittance instruction uniquely selects one.</p>
+              </div>
+              <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                Inspect proof
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </span>
+            </Link>
+            <Link href="/exceptions/PAY_052" className="group grid gap-4 py-5 hover:bg-surface sm:grid-cols-[180px_minmax(0,1fr)_auto] sm:items-center sm:px-4">
+              <div className="flex items-center gap-2 text-sm font-semibold text-warning">
+                <CircleStop className="size-4" aria-hidden="true" />
+                DECISION BLOCKED
+              </div>
+              <div>
+                <div className="numeric text-sm font-semibold text-ink">PAY_052</div>
+                <p className="mt-1 text-sm leading-6 text-muted">Two allocations remain plausible. No evidence establishes which one the payer intended.</p>
+              </div>
+              <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                Inspect abstention
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </span>
+            </Link>
+          </div>
         </section>
 
         <section className="mx-auto max-w-[1440px] px-4 pb-8 sm:px-6" aria-labelledby="queue-title">

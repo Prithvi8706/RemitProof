@@ -1,8 +1,69 @@
 # RemitProof
 
-RemitProof is an evidence-grounded investigation layer for cross-border receipts that normal reconciliation cannot safely explain. A local language model proposes a semantic interpretation; deterministic code independently proves the money, record state, entity relationship, credit support, and uniqueness before any receipt is marked resolved.
+Normal reconciliation is deterministic.
 
-The operating rule is simple: maximize justified automation subject to an incorrect auto-resolution rate near zero. If the evidence does not identify one safe explanation, RemitProof sends the case to human review.
+```text
+Payment reference matches.
+Amount matches.
+Customer matches.
+Done.
+```
+
+The dangerous cases begin when several financial explanations are simultaneously plausible.
+
+**RemitProof verifies whether an AI-generated financial reconciliation is uniquely supported by non-conflicting evidence before allowing it to resolve the transaction.**
+
+It is not a replacement for normal reconciliation. It is a financial conflict-resolution layer for the unresolved exceptions left behind by structured matching.
+
+```text
+Incoming receipts
+        |
+normal deterministic reconciliation
+        |
+        +---- structured match ----> resolved normally
+        |
+        +---- unresolved exception
+                    |
+             REMITPROOF STARTS
+                    |
+               AI proposal
+                    |
+       financial proof + conflict search
+                    |
+          evidence sufficiency gate
+              /             \\
+         RESOLVE           ABSTAIN
+```
+
+The project is not about generating more financial decisions with AI. It determines which AI-generated financial decisions are justified enough to execute.
+
+## Three domain primitives
+
+### Proposal
+
+The local model constructs one structured hypothesis: customer, invoices, credits, semantic claims, cited evidence, and unresolved questions. A proposal describes what the model thinks happened. It has no authority to resolve the receipt.
+
+### Proof
+
+Deterministic code recomputes the money and verifies record state, currency, credit validity, entity support, duplicate risk, contradictions, and evidence requirements. The model cannot override these checks.
+
+### Conflict
+
+The alternative finder searches for every other allocation that satisfies the bounded financial constraints. If more than one explanation remains and evidence does not uniquely distinguish the proposal, RemitProof blocks the decision and produces a deliberate abstention.
+
+> A plausible financial explanation is not automatically a justified financial action.
+
+## Product boundary
+
+The conventional matcher is intentionally competent. It already handles:
+
+- exact invoice references and exact amount matches;
+- known customer IDs, aliases, and payer relationships;
+- currency and date constraints;
+- simple multi-invoice totals;
+- valid ordinary credits.
+
+RemitProof adds value only on semantic ambiguity, fragmented evidence, contradictory evidence, and multiple financially valid explanations. OCR, ERP write-back, FX, settlement, compliance, generic chat, and production integrations remain outside scope.
 
 ## What is implemented
 
@@ -35,7 +96,7 @@ On the 30 unresolved exceptions, the forced-proposal-without-verification ablati
 
 ## Architecture in one sentence
 
-AI proposes; code proves; evidence sufficiency authorizes or abstains.
+The AI proposes. Deterministic code proves. Conflict detection and evidence sufficiency authorize or abstain.
 
 ```text
 receipt -> retrieve -> conventional match
