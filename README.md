@@ -93,6 +93,9 @@ RemitProof adds value only on semantic ambiguity, fragmented evidence, contradic
 - Explicit abstention when alternatives survive or evidence contradicts a proposal.
 - An 80-receipt synthetic dataset, a 10-case kill spike, a 60-record synthetic benchmark/regression subset, and three-way evaluation.
 - A FastAPI read API and a responsive Next.js dashboard with resolved and human-review detail states.
+- A dark, evidence-first demonstration website with a progressively enhanced WebGL hypothesis field, reversible GSAP/Lenis motion, accessible glass navigation, publication-style benchmark figures, and direct links into the live exception artifacts.
+
+The home route is the judge-facing demonstration surface. The exception library and case-detail routes remain operational views backed by the generated FastAPI artifacts.
 
 ## Measured result
 
