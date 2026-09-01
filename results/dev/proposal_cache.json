@@ -1,0 +1,282 @@
+{
+  "cache_format_version": 2,
+  "entries": {
+    "921b001544ee626a1eaaccb27b54169d002ed15bd956a038f92081b3619a253b": {
+      "proposal": {
+        "payment_id": "PAY_051",
+        "proposed_customer": "CUS_X051",
+        "invoice_ids": [
+          "INV_X051A",
+          "INV_X051B"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_X051"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_X051",
+          "CUS_X051"
+        ],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "88a6c4e6853c974cbe8586718e5dd03046483a080e68b0576fd7587ca93dbcd6",
+      "source_identity_verified": false
+    },
+    "830641e868dda5308e9ec3441fb70afe6dcf1e006cecfdd7bb4889c70028c9ce": {
+      "proposal": {
+        "payment_id": "PAY_052",
+        "proposed_customer": "CUS_X052",
+        "invoice_ids": [
+          "INV_X052A",
+          "INV_X052B"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_EXAMPLE"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_EXAMPLE",
+          "CUS_X052"
+        ],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "601514e791ca0086c1eb074eba94c729527161a0e62cba7ec74b49b15c061ee9",
+      "source_identity_verified": false
+    },
+    "2e41c46e26ce82d8abd375e0e27bd6610f912e40accb608ffa7cca6fb9991dee": {
+      "proposal": {
+        "payment_id": "PAY_053",
+        "proposed_customer": "CUS_X053",
+        "invoice_ids": [
+          "INV_X053A",
+          "INV_X053B"
+        ],
+        "credit_ids": [
+          "CR_X053A"
+        ],
+        "semantic_claims": [],
+        "evidence_ids": [],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "7bfd9f72f85ca39cde51a95e74b12c1940fe07e35f6fe76e33d28fdf7e446656",
+      "source_identity_verified": false
+    },
+    "d93c3015507b70fb89b966fdd1d4ba21c6520eeb4662dcdbb38d556dfdf73524": {
+      "proposal": {
+        "payment_id": "PAY_054",
+        "proposed_customer": "CUS_X054",
+        "invoice_ids": [
+          "INV_X054A"
+        ],
+        "credit_ids": [
+          "CR_X054A"
+        ],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_X054"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_X054",
+          "CUS_X054"
+        ],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "a30fb609943aac5056c4e4f87b9e4c69a16b9d6ab8d651b403a631aa3f303eaa",
+      "source_identity_verified": false
+    },
+    "e4efddb32dd61380ed61cd0e6557d99383d6adc170cebbed4ff8365d6506a87e": {
+      "proposal": {
+        "payment_id": "PAY_055",
+        "proposed_customer": "CUS_X055",
+        "invoice_ids": [
+          "INV_X055A",
+          "INV_X055B"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_X055"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_X055",
+          "CUS_X055"
+        ],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "2d7422f1a892c23a42630698579a4713b0298bb125d1d348ad87219914545285",
+      "source_identity_verified": false
+    },
+    "7bd88b0c149914d2be6be41103aa867eabb68fd800c783408f4b8be3eec63523": {
+      "proposal": {
+        "payment_id": "PAY_056",
+        "proposed_customer": "CUS_X056",
+        "invoice_ids": [
+          "INV_X056A"
+        ],
+        "credit_ids": [
+          "CR_X054A"
+        ],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_X056"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_X056",
+          "CUS_X056"
+        ],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "08f7524e1e69e49ce750e022e39e85c653fd60763cdba90c9f4b3baa340d89eb",
+      "source_identity_verified": false
+    },
+    "f80fba7715b329c92c71e8caeadbd7fb5b341a36d260fc64b7e1441c63938cdf": {
+      "proposal": {
+        "payment_id": "PAY_057",
+        "proposed_customer": "CUS_X057",
+        "invoice_ids": [
+          "INV_X057A",
+          "INV_X057B"
+        ],
+        "credit_ids": [
+          "CR_X057A"
+        ],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_X057"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_X057",
+          "CUS_X057"
+        ],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "9936cddb24ba2ac4b8bcabbc63cf49cfb172544e245af263552e963db59dddf2",
+      "source_identity_verified": false
+    },
+    "f71b7dd62689f64d9fbe5d36d1b538aa9a7f9e1f7e85fd1bc269cc86a4a6593a": {
+      "proposal": {
+        "payment_id": "PAY_058",
+        "proposed_customer": "CUS_X058",
+        "invoice_ids": [
+          "INV_X058A"
+        ],
+        "credit_ids": [
+          "CR_X054A"
+        ],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_EXAMPLE"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_EXAMPLE",
+          "CUS_X058"
+        ],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "181d5103ebb2aa317a62a19e1145b31396b7ae2e743a1078ba880e2e8c3f6d56",
+      "source_identity_verified": false
+    },
+    "363fa15d5cd4129952d08f66e42b31ac48ae7f7f4e1acfd658558175d545d534": {
+      "proposal": {
+        "payment_id": "PAY_059",
+        "proposed_customer": "CUS_X059",
+        "invoice_ids": [
+          "INV_X059A",
+          "INV_X059B"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_X059"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_X059",
+          "CUS_X059"
+        ],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "3585941a058b0c190804432cc0e5667659b9ea708a0df3c3b38e87fb1d3e8f62",
+      "source_identity_verified": false
+    },
+    "70dab30609de5dabfc0e639bdf05196384e0707c35a0944820aec3163a97aa2d": {
+      "proposal": {
+        "payment_id": "PAY_060",
+        "proposed_customer": "CUS_X060",
+        "invoice_ids": [
+          "INV_X060A"
+        ],
+        "credit_ids": [
+          "CR_X054A"
+        ],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_X060"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_X060",
+          "CUS_X060"
+        ],
+        "unresolved_questions": []
+      },
+      "investigator_identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3",
+      "bundle_sha256": "673ffcaa4dc78646d697766949676e75b5f0e7d6f79a2fc6c486eceaef95cdc0",
+      "source_identity_verified": false
+    }
+  }
+}

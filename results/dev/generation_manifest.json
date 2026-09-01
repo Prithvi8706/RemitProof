@@ -1,0 +1,11 @@
+{
+  "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241",
+  "evaluation_mode": "cache_only_legacy_identity_unverified_proposal_replay",
+  "artifacts": {
+    "results.csv": "69679fb19e93a5099a73d97b3fb2743fc12e33f813980b374505e5780954840e",
+    "confusion_breakdown.csv": "257189433b077d29eab147b509b10b90be79d4e33d177915e62f76b856afda07",
+    "metrics.json": "7572c511055880e10b450899533521970efa4860e412c285872418dd31286b32",
+    "details.json": "e9a65f6b4bdddaba1032d8a18aa84af65094cd62a5aa7e85326ea155f1099b81"
+  },
+  "proposal_cache_file_sha256": "8d934e5f1351aea095ecb08f11f3d04742a91b400d625d0da3e8d668adc6ab35"
+}

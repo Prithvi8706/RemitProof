@@ -1,0 +1,212 @@
+{
+  "generated_from": "deterministic synthetic benchmark/regression evaluation",
+  "evaluation_generation_id": "95f330d320163ff29b4c09b1a2bb382bba97b5d488a9c8b808ba06bfbe2c5880",
+  "evaluation_mode": "cache_only_legacy_identity_unverified_proposal_replay",
+  "result_status": "offline_verifier_regression_only",
+  "benchmark_claim_eligible": false,
+  "partition_label": "80-record synthetic regression corpus",
+  "independent_held_out": false,
+  "model": "llama3.2",
+  "elapsed_seconds": 1.043,
+  "cache_hits": 30,
+  "cache_misses": 0,
+  "cache": {
+    "status": "cache_only",
+    "hits": 30,
+    "misses": 0,
+    "model_inference_included": false,
+    "model_inference_attempted": false,
+    "proposal_source_identity_verified": false
+  },
+  "safety_gate": {
+    "eligible": false,
+    "passed": false,
+    "reason": "identity-unverified cached proposals are verifier regression inputs only"
+  },
+  "verifier_regression_gate": {
+    "eligible": true,
+    "passed": true,
+    "reason": "all required cached proposals were replayed; offline verifier regression checks only"
+  },
+  "provenance": {
+    "evaluator_version": "remitproof-evaluator-v3",
+    "evaluation_mode": "cache_only_legacy_identity_unverified_proposal_replay",
+    "dataset_sha256": "fd59237a5dddab0ee712c7a34bab735544c0acc1726026dfda7bdf0cfb7671ae",
+    "proposal_cache_sha256": "9a96b7d2d4211386d8cc004f652946b776d37eea99d4f447ffc3c6455667488f",
+    "investigator": {
+      "investigator_version": "remitproof-ollama-investigator-v2",
+      "model": "llama3.2",
+      "model_digest": null,
+      "timeout_seconds": 120,
+      "generation_options": {
+        "temperature": 0,
+        "seed": 42
+      },
+      "prompt_sha256": "3b7fa14df630427ad26105df67c733dbdbaef201001ca88876f7ce8e5f787d9b",
+      "proposal_schema_sha256": "1f6c56733140fa4679b59ecb54619e6778b43fd5a2be38d3f5d8d470b73bdde7",
+      "host_sha256": "b26993598dffd1f14aed97def57ef67f753518a9b773d8a12033c82b4fa545ca",
+      "identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3"
+    },
+    "proposal_source_identity_verified": false,
+    "investigator_failures": 0,
+    "cache_hits": 30,
+    "cache_misses": 0,
+    "live_model_calls": 0,
+    "successful_live_model_calls": 0,
+    "failed_live_model_calls": 0,
+    "legacy_cache_promotions": 0,
+    "unverified_legacy_cache_hits": 30,
+    "cache_entries": 30,
+    "unverified_legacy_entries": 0
+  },
+  "total_receipts": 80,
+  "matched_normally": 50,
+  "exceptions": 30,
+  "resolved_by_remitproof": 9,
+  "human_review": 21,
+  "baseline_match_rate": 0.625,
+  "exception_resolution_rate": 0.3,
+  "resolution_accuracy": 0.5,
+  "incorrect_auto_resolution_rate": 0.0,
+  "correct_abstention_rate": 1.0,
+  "false_escalation_rate": 0.5,
+  "entity_resolution_accuracy": 0.7,
+  "evidence_precision": 0.7679,
+  "arithmetic_correctness": 1.0,
+  "retrieval_accuracy": 1.0,
+  "throughput_per_minute": 4602.3,
+  "mean_latency_ms": 12.7,
+  "comparison_scope": "unresolved exception records",
+  "comparison_record_count": 30,
+  "timing_scope": "pipeline/verifier replay timing; model inference was not attempted",
+  "comparison": {
+    "baseline": {
+      "resolved": 0,
+      "correct_resolutions": 0,
+      "wrong_auto_resolutions": 0,
+      "correct_abstentions": 12,
+      "false_escalations": 18
+    },
+    "llm_only": {
+      "resolved": 30,
+      "correct_resolutions": 12,
+      "wrong_auto_resolutions": 18,
+      "correct_abstentions": 0,
+      "false_escalations": 0,
+      "mode": "proposal_only_forced_proposal_verifier_ablation",
+      "label": "Forced-proposal verifier ablation (proposal only)",
+      "standalone_llm_system": false,
+      "allows_independent_abstention": false
+    },
+    "remitproof": {
+      "resolved": 9,
+      "correct_resolutions": 9,
+      "wrong_auto_resolutions": 0,
+      "correct_abstentions": 12,
+      "false_escalations": 9
+    }
+  },
+  "synthetic_benchmark_regression": {
+    "partition_label": "synthetic benchmark/regression partition; not an independent held-out set",
+    "independent_held_out": false,
+    "total_receipts": 60,
+    "matched_normally": 40,
+    "exceptions": 20,
+    "resolved_by_remitproof": 6,
+    "human_review": 14,
+    "baseline_match_rate": 0.6667,
+    "exception_resolution_rate": 0.3,
+    "resolution_accuracy": 0.4615,
+    "incorrect_auto_resolution_rate": 0.0,
+    "correct_abstention_rate": 1.0,
+    "false_escalation_rate": 0.5385,
+    "entity_resolution_accuracy": 0.7,
+    "evidence_precision": 0.7778,
+    "arithmetic_correctness": 1.0,
+    "retrieval_accuracy": 1.0,
+    "throughput_per_minute": 4864.86,
+    "mean_latency_ms": 12.3,
+    "comparison_scope": "unresolved exception records",
+    "comparison_record_count": 20,
+    "timing_scope": "pipeline/verifier replay timing; model inference was not attempted",
+    "comparison": {
+      "baseline": {
+        "resolved": 0,
+        "correct_resolutions": 0,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 7,
+        "false_escalations": 13
+      },
+      "llm_only": {
+        "resolved": 20,
+        "correct_resolutions": 8,
+        "wrong_auto_resolutions": 12,
+        "correct_abstentions": 0,
+        "false_escalations": 0,
+        "mode": "proposal_only_forced_proposal_verifier_ablation",
+        "label": "Forced-proposal verifier ablation (proposal only)",
+        "standalone_llm_system": false,
+        "allows_independent_abstention": false
+      },
+      "remitproof": {
+        "resolved": 6,
+        "correct_resolutions": 6,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 7,
+        "false_escalations": 7
+      }
+    }
+  },
+  "held_out": {
+    "legacy_key": true,
+    "partition_label": "synthetic benchmark/regression partition; not an independent held-out set",
+    "independent_held_out": false,
+    "total_receipts": 60,
+    "matched_normally": 40,
+    "exceptions": 20,
+    "resolved_by_remitproof": 6,
+    "human_review": 14,
+    "baseline_match_rate": 0.6667,
+    "exception_resolution_rate": 0.3,
+    "resolution_accuracy": 0.4615,
+    "incorrect_auto_resolution_rate": 0.0,
+    "correct_abstention_rate": 1.0,
+    "false_escalation_rate": 0.5385,
+    "entity_resolution_accuracy": 0.7,
+    "evidence_precision": 0.7778,
+    "arithmetic_correctness": 1.0,
+    "retrieval_accuracy": 1.0,
+    "throughput_per_minute": 4864.86,
+    "mean_latency_ms": 12.3,
+    "comparison_scope": "unresolved exception records",
+    "comparison_record_count": 20,
+    "timing_scope": "pipeline/verifier replay timing; model inference was not attempted",
+    "comparison": {
+      "baseline": {
+        "resolved": 0,
+        "correct_resolutions": 0,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 7,
+        "false_escalations": 13
+      },
+      "llm_only": {
+        "resolved": 20,
+        "correct_resolutions": 8,
+        "wrong_auto_resolutions": 12,
+        "correct_abstentions": 0,
+        "false_escalations": 0,
+        "mode": "proposal_only_forced_proposal_verifier_ablation",
+        "label": "Forced-proposal verifier ablation (proposal only)",
+        "standalone_llm_system": false,
+        "allows_independent_abstention": false
+      },
+      "remitproof": {
+        "resolved": 6,
+        "correct_resolutions": 6,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 7,
+        "false_escalations": 7
+      }
+    }
+  }
+}

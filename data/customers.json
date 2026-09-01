@@ -1,0 +1,892 @@
+[
+  {
+    "customer_id": "CUS_E001",
+    "legal_name": "Asteria Commerce 01 Ltd",
+    "aliases": [
+      "Asteria Commerce 01",
+      "Asteria Commerce 01 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E002",
+    "legal_name": "Boreal Systems 02 Ltd",
+    "aliases": [
+      "Boreal Systems 02",
+      "Boreal Systems 02 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E003",
+    "legal_name": "Cobalt Ridge 03 Ltd",
+    "aliases": [
+      "Cobalt Ridge 03",
+      "Cobalt Ridge 03 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E004",
+    "legal_name": "Driftwood Analytics 04 Ltd",
+    "aliases": [
+      "Driftwood Analytics 04",
+      "Driftwood Analytics 04 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E005",
+    "legal_name": "Evergreen Mobility 05 Ltd",
+    "aliases": [
+      "Evergreen Mobility 05"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E006",
+    "legal_name": "Fableworks Media 06 Ltd",
+    "aliases": [
+      "Fableworks Media 06",
+      "Fableworks Media 06 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E007",
+    "legal_name": "Granite Cloud 07 Ltd",
+    "aliases": [
+      "Granite Cloud 07",
+      "Granite Cloud 07 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": [
+      "Granite Cloud Global Treasury 07"
+    ]
+  },
+  {
+    "customer_id": "CUS_E008",
+    "legal_name": "Horizon Foods 08 Ltd",
+    "aliases": [
+      "Horizon Foods 08",
+      "Horizon Foods 08 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E009",
+    "legal_name": "Indigo Networks 09 Ltd",
+    "aliases": [
+      "Indigo Networks 09",
+      "Indigo Networks 09 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E010",
+    "legal_name": "Juniper Labs 10 Ltd",
+    "aliases": [
+      "Juniper Labs 10"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E011",
+    "legal_name": "Keystone Retail 11 Ltd",
+    "aliases": [
+      "Keystone Retail 11",
+      "Keystone Retail 11 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E012",
+    "legal_name": "Lattice Health 12 Ltd",
+    "aliases": [
+      "Lattice Health 12",
+      "Lattice Health 12 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E013",
+    "legal_name": "Meridian Robotics 13 Ltd",
+    "aliases": [
+      "Meridian Robotics 13",
+      "Meridian Robotics 13 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E014",
+    "legal_name": "Northwind Digital 14 Ltd",
+    "aliases": [
+      "Northwind Digital 14",
+      "Northwind Digital 14 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": [
+      "Northwind Digital Global Treasury 14"
+    ]
+  },
+  {
+    "customer_id": "CUS_E015",
+    "legal_name": "Oakline Software 15 Ltd",
+    "aliases": [
+      "Oakline Software 15"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E016",
+    "legal_name": "Pioneer Logistics 16 Ltd",
+    "aliases": [
+      "Pioneer Logistics 16",
+      "Pioneer Logistics 16 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E017",
+    "legal_name": "Quartz Financial 17 Ltd",
+    "aliases": [
+      "Quartz Financial 17",
+      "Quartz Financial 17 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E018",
+    "legal_name": "Redwood Energy 18 Ltd",
+    "aliases": [
+      "Redwood Energy 18",
+      "Redwood Energy 18 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E019",
+    "legal_name": "Summit Learning 19 Ltd",
+    "aliases": [
+      "Summit Learning 19",
+      "Summit Learning 19 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E020",
+    "legal_name": "Tidalwave Travel 20 Ltd",
+    "aliases": [
+      "Tidalwave Travel 20"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E021",
+    "legal_name": "Umber Design 21 Ltd",
+    "aliases": [
+      "Umber Design 21",
+      "Umber Design 21 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": [
+      "Umber Design Global Treasury 21"
+    ]
+  },
+  {
+    "customer_id": "CUS_E022",
+    "legal_name": "Vector Manufacturing 22 Ltd",
+    "aliases": [
+      "Vector Manufacturing 22",
+      "Vector Manufacturing 22 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E023",
+    "legal_name": "Westbridge Telecom 23 Ltd",
+    "aliases": [
+      "Westbridge Telecom 23",
+      "Westbridge Telecom 23 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E024",
+    "legal_name": "Xenon Biotech 24 Ltd",
+    "aliases": [
+      "Xenon Biotech 24",
+      "Xenon Biotech 24 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E025",
+    "legal_name": "Yellowfin Markets 25 Ltd",
+    "aliases": [
+      "Yellowfin Markets 25"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E026",
+    "legal_name": "Zenith Operations 26 Ltd",
+    "aliases": [
+      "Zenith Operations 26",
+      "Zenith Operations 26 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E027",
+    "legal_name": "Arcadia Studios 27 Ltd",
+    "aliases": [
+      "Arcadia Studios 27",
+      "Arcadia Studios 27 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E028",
+    "legal_name": "Brightpath Security 28 Ltd",
+    "aliases": [
+      "Brightpath Security 28",
+      "Brightpath Security 28 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": [
+      "Brightpath Security Global Treasury 28"
+    ]
+  },
+  {
+    "customer_id": "CUS_E029",
+    "legal_name": "Copperleaf Foods 29 Ltd",
+    "aliases": [
+      "Copperleaf Foods 29",
+      "Copperleaf Foods 29 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E030",
+    "legal_name": "Deepfield AI 30 Ltd",
+    "aliases": [
+      "Deepfield AI 30"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E031",
+    "legal_name": "Asteria Commerce 31 Ltd",
+    "aliases": [
+      "Asteria Commerce 31",
+      "Asteria Commerce 31 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E032",
+    "legal_name": "Boreal Systems 32 Ltd",
+    "aliases": [
+      "Boreal Systems 32",
+      "Boreal Systems 32 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E033",
+    "legal_name": "Cobalt Ridge 33 Ltd",
+    "aliases": [
+      "Cobalt Ridge 33",
+      "Cobalt Ridge 33 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E034",
+    "legal_name": "Driftwood Analytics 34 Ltd",
+    "aliases": [
+      "Driftwood Analytics 34",
+      "Driftwood Analytics 34 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E035",
+    "legal_name": "Evergreen Mobility 35 Ltd",
+    "aliases": [
+      "Evergreen Mobility 35"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E036",
+    "legal_name": "Fableworks Media 36 Ltd",
+    "aliases": [
+      "Fableworks Media 36",
+      "Fableworks Media 36 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E037",
+    "legal_name": "Granite Cloud 37 Ltd",
+    "aliases": [
+      "Granite Cloud 37",
+      "Granite Cloud 37 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E038",
+    "legal_name": "Horizon Foods 38 Ltd",
+    "aliases": [
+      "Horizon Foods 38",
+      "Horizon Foods 38 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E039",
+    "legal_name": "Indigo Networks 39 Ltd",
+    "aliases": [
+      "Indigo Networks 39",
+      "Indigo Networks 39 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E040",
+    "legal_name": "Juniper Labs 40 Ltd",
+    "aliases": [
+      "Juniper Labs 40"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E041",
+    "legal_name": "Keystone Retail 41 Ltd",
+    "aliases": [
+      "Keystone Retail 41",
+      "Keystone Retail 41 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E042",
+    "legal_name": "Lattice Health 42 Ltd",
+    "aliases": [
+      "Lattice Health 42",
+      "Lattice Health 42 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": [
+      "Lattice Health Global Treasury 42"
+    ]
+  },
+  {
+    "customer_id": "CUS_E043",
+    "legal_name": "Meridian Robotics 43 Ltd",
+    "aliases": [
+      "Meridian Robotics 43",
+      "Meridian Robotics 43 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E044",
+    "legal_name": "Northwind Digital 44 Ltd",
+    "aliases": [
+      "Northwind Digital 44",
+      "Northwind Digital 44 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E045",
+    "legal_name": "Oakline Software 45 Ltd",
+    "aliases": [
+      "Oakline Software 45"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E046",
+    "legal_name": "Pioneer Logistics 46 Ltd",
+    "aliases": [
+      "Pioneer Logistics 46",
+      "Pioneer Logistics 46 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E047",
+    "legal_name": "Quartz Financial 47 Ltd",
+    "aliases": [
+      "Quartz Financial 47",
+      "Quartz Financial 47 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E048",
+    "legal_name": "Redwood Energy 48 Ltd",
+    "aliases": [
+      "Redwood Energy 48",
+      "Redwood Energy 48 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_E049",
+    "legal_name": "Summit Learning 49 Ltd",
+    "aliases": [
+      "Summit Learning 49",
+      "Summit Learning 49 Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": [
+      "Summit Learning Global Treasury 49"
+    ]
+  },
+  {
+    "customer_id": "CUS_E050",
+    "legal_name": "Tidalwave Travel 50 Ltd",
+    "aliases": [
+      "Tidalwave Travel 50"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X051",
+    "legal_name": "Copperleaf Foods International Ltd",
+    "aliases": [
+      "Copperleaf Foods International",
+      "Copperleaf Foods International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X052",
+    "legal_name": "Deepfield AI International Ltd",
+    "aliases": [
+      "Deepfield AI International",
+      "Deepfield AI International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X053",
+    "legal_name": "Asteria Commerce International Ltd",
+    "aliases": [
+      "Asteria Commerce International",
+      "Asteria Commerce International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X054",
+    "legal_name": "Boreal Systems International Ltd",
+    "aliases": [
+      "Boreal Systems International",
+      "Boreal Systems International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X055",
+    "legal_name": "Cobalt Ridge International Ltd",
+    "aliases": [
+      "Cobalt Ridge International",
+      "Cobalt Ridge International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X056",
+    "legal_name": "Driftwood Analytics International Ltd",
+    "aliases": [
+      "Driftwood Analytics International",
+      "Driftwood Analytics International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X057",
+    "legal_name": "Evergreen Mobility International Ltd",
+    "aliases": [
+      "Evergreen Mobility International",
+      "Evergreen Mobility International Ltd"
+    ],
+    "parent_entities": [
+      "EVERGREEN MOBILITY GLOBAL HOLDINGS LLC"
+    ],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X058",
+    "legal_name": "Fableworks Media International Ltd",
+    "aliases": [
+      "Fableworks Media International",
+      "Fableworks Media International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X059",
+    "legal_name": "Granite Cloud International Ltd",
+    "aliases": [
+      "Granite Cloud International",
+      "Granite Cloud International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": [
+      "GRANITE CLOUD TREASURY SERVICES LTD"
+    ]
+  },
+  {
+    "customer_id": "CUS_X060",
+    "legal_name": "Horizon Foods International Ltd",
+    "aliases": [
+      "Horizon Foods International",
+      "Horizon Foods International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X061",
+    "legal_name": "Indigo Networks International Ltd",
+    "aliases": [
+      "Indigo Networks International",
+      "Indigo Networks International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X062",
+    "legal_name": "Juniper Labs International Ltd",
+    "aliases": [
+      "Juniper Labs International",
+      "Juniper Labs International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X063",
+    "legal_name": "Keystone Retail International Ltd",
+    "aliases": [
+      "Keystone Retail International",
+      "Keystone Retail International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X064",
+    "legal_name": "Lattice Health International Ltd",
+    "aliases": [
+      "Lattice Health International",
+      "Lattice Health International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X065",
+    "legal_name": "Meridian Robotics International Ltd",
+    "aliases": [
+      "Meridian Robotics International",
+      "Meridian Robotics International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X066",
+    "legal_name": "Northwind Digital International Ltd",
+    "aliases": [
+      "Northwind Digital International",
+      "Northwind Digital International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X067",
+    "legal_name": "Oakline Software International Ltd",
+    "aliases": [
+      "Oakline Software International",
+      "Oakline Software International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X068",
+    "legal_name": "Pioneer Logistics International Ltd",
+    "aliases": [
+      "Pioneer Logistics International",
+      "Pioneer Logistics International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X069",
+    "legal_name": "Quartz Financial International Ltd",
+    "aliases": [
+      "Quartz Financial International",
+      "Quartz Financial International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X070",
+    "legal_name": "Redwood Energy International Ltd",
+    "aliases": [
+      "Redwood Energy International",
+      "Redwood Energy International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X071",
+    "legal_name": "Summit Learning International Ltd",
+    "aliases": [
+      "Summit Learning International",
+      "Summit Learning International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X072",
+    "legal_name": "Tidalwave Travel International Ltd",
+    "aliases": [
+      "Tidalwave Travel International",
+      "Tidalwave Travel International Ltd"
+    ],
+    "parent_entities": [
+      "TIDALWAVE TRAVEL GLOBAL HOLDINGS LLC"
+    ],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X073",
+    "legal_name": "Umber Design International Ltd",
+    "aliases": [
+      "Umber Design International",
+      "Umber Design International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X074",
+    "legal_name": "Vector Manufacturing International Ltd",
+    "aliases": [
+      "Vector Manufacturing International",
+      "Vector Manufacturing International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": [
+      "VECTOR MANUFACTURING TREASURY SERVICES LTD"
+    ]
+  },
+  {
+    "customer_id": "CUS_X075",
+    "legal_name": "Westbridge Telecom International Ltd",
+    "aliases": [
+      "Westbridge Telecom International",
+      "Westbridge Telecom International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X076",
+    "legal_name": "Xenon Biotech International Ltd",
+    "aliases": [
+      "Xenon Biotech International",
+      "Xenon Biotech International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X077",
+    "legal_name": "Yellowfin Markets International Ltd",
+    "aliases": [
+      "Yellowfin Markets International",
+      "Yellowfin Markets International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X078",
+    "legal_name": "Zenith Operations International Ltd",
+    "aliases": [
+      "Zenith Operations International",
+      "Zenith Operations International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X079",
+    "legal_name": "Arcadia Studios International Ltd",
+    "aliases": [
+      "Arcadia Studios International",
+      "Arcadia Studios International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  },
+  {
+    "customer_id": "CUS_X080",
+    "legal_name": "Brightpath Security International Ltd",
+    "aliases": [
+      "Brightpath Security International",
+      "Brightpath Security International Ltd"
+    ],
+    "parent_entities": [],
+    "subsidiaries": [],
+    "known_payers": []
+  }
+]

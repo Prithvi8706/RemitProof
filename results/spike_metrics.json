@@ -1,0 +1,943 @@
+{
+  "spike_case_count": 10,
+  "model": "llama3.2",
+  "elapsed_seconds": 0.006,
+  "mean_model_latency_ms": 0.0,
+  "comparison": {
+    "baseline": {
+      "resolved": 2,
+      "correct_resolutions": 2,
+      "wrong_auto_resolutions": 0,
+      "correct_abstentions": 4,
+      "false_escalations": 4
+    },
+    "llm_only": {
+      "resolved": 10,
+      "correct_resolutions": 5,
+      "wrong_auto_resolutions": 5,
+      "correct_abstentions": 0,
+      "false_escalations": 0
+    },
+    "remitproof": {
+      "resolved": 4,
+      "correct_resolutions": 4,
+      "wrong_auto_resolutions": 0,
+      "correct_abstentions": 4,
+      "false_escalations": 2
+    }
+  },
+  "semantic_wins_over_baseline": 2,
+  "unsafe_llm_resolutions_blocked": 4,
+  "gate": "GO",
+  "gate_requirements": {
+    "two_or_more_semantic_wins": true,
+    "at_least_one_unsafe_llm_resolution_blocked": true,
+    "zero_incorrect_remitproof_auto_resolutions": true
+  },
+  "results": [
+    {
+      "case_id": "SPIKE_01",
+      "exception": "Parent company pays subsidiary invoice",
+      "expected_should_resolve": true,
+      "baseline_decision": "resolve",
+      "baseline_correct_resolution": true,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": true,
+      "remitproof_decision": "resolve",
+      "remitproof_correct_resolution": true,
+      "abstention_reason": "",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S01",
+        "status": "matched",
+        "matched_invoices": [
+          "INV_S01A"
+        ],
+        "matched_credits": [],
+        "customer_id": "CUS_S01",
+        "reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "proposal": {
+        "payment_id": "PAY_S01",
+        "proposed_customer": "CUS_S01",
+        "invoice_ids": [
+          "INV_S01A"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_EXAMPLE"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_EXAMPLE",
+          "CUS_S01"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "12500.00",
+        "credit_total": "0.00",
+        "calculated_total": "12500.00",
+        "payment_total": "12500.00"
+      },
+      "alternatives": [
+        {
+          "customer_id": "CUS_S01",
+          "invoice_ids": [
+            "INV_S01A"
+          ],
+          "credit_ids": [],
+          "calculated_total": "12500.00"
+        }
+      ],
+      "sufficiency": {
+        "financial_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "alternative_allocations_exist": false,
+        "evidence_disambiguates_alternatives": true,
+        "contradictions_exist": false,
+        "missing_required_evidence": [
+          "EMAIL_EXAMPLE"
+        ],
+        "duplicate_risk": false,
+        "safe_to_resolve": false,
+        "abstention_reason": "missing_required_evidence"
+      }
+    },
+    {
+      "case_id": "SPIKE_02",
+      "exception": "Different legal payer name with supporting entity record",
+      "expected_should_resolve": true,
+      "baseline_decision": "resolve",
+      "baseline_correct_resolution": true,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": true,
+      "remitproof_decision": "resolve",
+      "remitproof_correct_resolution": true,
+      "abstention_reason": "",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S02",
+        "status": "matched",
+        "matched_invoices": [
+          "INV_S02A"
+        ],
+        "matched_credits": [],
+        "customer_id": "CUS_S02",
+        "reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "proposal": {
+        "payment_id": "PAY_S02",
+        "proposed_customer": "CUS_S02",
+        "invoice_ids": [
+          "INV_S02A"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_EXAMPLE"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_EXAMPLE",
+          "CUS_S02"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "8700.00",
+        "credit_total": "0.00",
+        "calculated_total": "8700.00",
+        "payment_total": "8700.00"
+      },
+      "alternatives": [
+        {
+          "customer_id": "CUS_S02",
+          "invoice_ids": [
+            "INV_S02A"
+          ],
+          "credit_ids": [],
+          "calculated_total": "8700.00"
+        }
+      ],
+      "sufficiency": {
+        "financial_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "alternative_allocations_exist": false,
+        "evidence_disambiguates_alternatives": true,
+        "contradictions_exist": false,
+        "missing_required_evidence": [
+          "EMAIL_EXAMPLE"
+        ],
+        "duplicate_risk": false,
+        "safe_to_resolve": false,
+        "abstention_reason": "missing_required_evidence"
+      }
+    },
+    {
+      "case_id": "SPIKE_03",
+      "exception": "Detached email specifies two invoices",
+      "expected_should_resolve": true,
+      "baseline_decision": "abstain",
+      "baseline_correct_resolution": false,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": true,
+      "remitproof_decision": "resolve",
+      "remitproof_correct_resolution": true,
+      "abstention_reason": "",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S03",
+        "status": "unresolved",
+        "matched_invoices": [],
+        "matched_credits": [],
+        "customer_id": null,
+        "reason": "payer_not_deterministically_mapped",
+        "candidate_count": 0
+      },
+      "proposal": {
+        "payment_id": "PAY_S03",
+        "proposed_customer": "CUS_S03",
+        "invoice_ids": [
+          "INV_S03A",
+          "INV_S03B"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_S03"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_S03",
+          "CUS_S03"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "10000.00",
+        "credit_total": "0.00",
+        "calculated_total": "10000.00",
+        "payment_total": "10000.00"
+      },
+      "alternatives": [
+        {
+          "customer_id": "CUS_S03",
+          "invoice_ids": [
+            "INV_S03A",
+            "INV_S03B"
+          ],
+          "credit_ids": [],
+          "calculated_total": "10000.00"
+        }
+      ],
+      "sufficiency": {
+        "financial_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "alternative_allocations_exist": false,
+        "evidence_disambiguates_alternatives": true,
+        "contradictions_exist": false,
+        "missing_required_evidence": [],
+        "duplicate_risk": false,
+        "safe_to_resolve": true,
+        "abstention_reason": null
+      }
+    },
+    {
+      "case_id": "SPIKE_04",
+      "exception": "Credit deduction explained by remittance",
+      "expected_should_resolve": true,
+      "baseline_decision": "abstain",
+      "baseline_correct_resolution": false,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": false,
+      "remitproof_decision": "abstain",
+      "remitproof_correct_resolution": false,
+      "abstention_reason": "financial_mismatch",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S04",
+        "status": "unresolved",
+        "matched_invoices": [],
+        "matched_credits": [],
+        "customer_id": null,
+        "reason": "multiple_financial_allocations",
+        "candidate_count": 2
+      },
+      "proposal": {
+        "payment_id": "PAY_S04",
+        "proposed_customer": "CUS_S04",
+        "invoice_ids": [
+          "INV_S04A"
+        ],
+        "credit_ids": [
+          "CR_S04A",
+          "CR_S04B"
+        ],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_S04"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_S04",
+          "CUS_S04"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": false,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [
+          "financial_mismatch"
+        ],
+        "invoice_total": "15000.00",
+        "credit_total": "800.00",
+        "calculated_total": "14200.00",
+        "payment_total": "14600.00"
+      },
+      "alternatives": [
+        {
+          "customer_id": "CUS_S04",
+          "invoice_ids": [
+            "INV_S04A"
+          ],
+          "credit_ids": [
+            "CR_S04A"
+          ],
+          "calculated_total": "14600.00"
+        },
+        {
+          "customer_id": "CUS_S04",
+          "invoice_ids": [
+            "INV_S04A"
+          ],
+          "credit_ids": [
+            "CR_S04B"
+          ],
+          "calculated_total": "14600.00"
+        }
+      ],
+      "sufficiency": {
+        "financial_validity": false,
+        "entity_support": true,
+        "credit_support": true,
+        "alternative_allocations_exist": true,
+        "evidence_disambiguates_alternatives": false,
+        "contradictions_exist": false,
+        "missing_required_evidence": [
+          "CR_S04A",
+          "CR_S04B"
+        ],
+        "duplicate_risk": false,
+        "safe_to_resolve": false,
+        "abstention_reason": "financial_mismatch"
+      }
+    },
+    {
+      "case_id": "SPIKE_05",
+      "exception": "Two numeric allocations, email disambiguates",
+      "expected_should_resolve": true,
+      "baseline_decision": "abstain",
+      "baseline_correct_resolution": false,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": true,
+      "remitproof_decision": "resolve",
+      "remitproof_correct_resolution": true,
+      "abstention_reason": "",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S05",
+        "status": "unresolved",
+        "matched_invoices": [],
+        "matched_credits": [],
+        "customer_id": null,
+        "reason": "multiple_financial_allocations",
+        "candidate_count": 2
+      },
+      "proposal": {
+        "payment_id": "PAY_S05",
+        "proposed_customer": "CUS_S05",
+        "invoice_ids": [
+          "INV_S05A",
+          "INV_S05B"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_S05"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_S05",
+          "CUS_S05"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "10000.00",
+        "credit_total": "0.00",
+        "calculated_total": "10000.00",
+        "payment_total": "10000.00"
+      },
+      "alternatives": [
+        {
+          "customer_id": "CUS_S05",
+          "invoice_ids": [
+            "INV_S05A",
+            "INV_S05B"
+          ],
+          "credit_ids": [],
+          "calculated_total": "10000.00"
+        },
+        {
+          "customer_id": "CUS_S05",
+          "invoice_ids": [
+            "INV_S05C",
+            "INV_S05D"
+          ],
+          "credit_ids": [],
+          "calculated_total": "10000.00"
+        }
+      ],
+      "sufficiency": {
+        "financial_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "alternative_allocations_exist": true,
+        "evidence_disambiguates_alternatives": true,
+        "contradictions_exist": false,
+        "missing_required_evidence": [],
+        "duplicate_risk": false,
+        "safe_to_resolve": true,
+        "abstention_reason": null
+      }
+    },
+    {
+      "case_id": "SPIKE_06",
+      "exception": "Same-amount invoices with no remittance",
+      "expected_should_resolve": false,
+      "baseline_decision": "abstain",
+      "baseline_correct_resolution": false,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": false,
+      "remitproof_decision": "abstain",
+      "remitproof_correct_resolution": false,
+      "abstention_reason": "multiple_financially_valid_explanations",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S06",
+        "status": "unresolved",
+        "matched_invoices": [],
+        "matched_credits": [],
+        "customer_id": null,
+        "reason": "multiple_financial_allocations",
+        "candidate_count": 2
+      },
+      "proposal": {
+        "payment_id": "PAY_S06",
+        "proposed_customer": "CUS_S06",
+        "invoice_ids": [
+          "INV_S06A"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_EXAMPLE"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_EXAMPLE",
+          "CUS_S06"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "5000.00",
+        "credit_total": "0.00",
+        "calculated_total": "5000.00",
+        "payment_total": "5000.00"
+      },
+      "alternatives": [
+        {
+          "customer_id": "CUS_S06",
+          "invoice_ids": [
+            "INV_S06A"
+          ],
+          "credit_ids": [],
+          "calculated_total": "5000.00"
+        },
+        {
+          "customer_id": "CUS_S06",
+          "invoice_ids": [
+            "INV_S06B"
+          ],
+          "credit_ids": [],
+          "calculated_total": "5000.00"
+        }
+      ],
+      "sufficiency": {
+        "financial_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "alternative_allocations_exist": true,
+        "evidence_disambiguates_alternatives": false,
+        "contradictions_exist": false,
+        "missing_required_evidence": [
+          "EMAIL_EXAMPLE"
+        ],
+        "duplicate_risk": false,
+        "safe_to_resolve": false,
+        "abstention_reason": "multiple_financially_valid_explanations"
+      }
+    },
+    {
+      "case_id": "SPIKE_07",
+      "exception": "Email conflicts with credit note",
+      "expected_should_resolve": false,
+      "baseline_decision": "abstain",
+      "baseline_correct_resolution": false,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": false,
+      "remitproof_decision": "abstain",
+      "remitproof_correct_resolution": false,
+      "abstention_reason": "contradictory_evidence",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S07",
+        "status": "unresolved",
+        "matched_invoices": [],
+        "matched_credits": [],
+        "customer_id": null,
+        "reason": "no_unique_safe_allocation",
+        "candidate_count": 1
+      },
+      "proposal": {
+        "payment_id": "PAY_S07",
+        "proposed_customer": "CUS_S07",
+        "invoice_ids": [
+          "INV_S07A"
+        ],
+        "credit_ids": [
+          "CR_S07A"
+        ],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_S07"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_S07",
+          "CUS_S07"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [
+          "EMAIL_S07 states credit amount ['500'] but credit note amount is ['350.00']"
+        ],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "10000.00",
+        "credit_total": "350.00",
+        "calculated_total": "9650.00",
+        "payment_total": "9650.00"
+      },
+      "alternatives": [
+        {
+          "customer_id": "CUS_S07",
+          "invoice_ids": [
+            "INV_S07A"
+          ],
+          "credit_ids": [
+            "CR_S07A"
+          ],
+          "calculated_total": "9650.00"
+        }
+      ],
+      "sufficiency": {
+        "financial_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "alternative_allocations_exist": false,
+        "evidence_disambiguates_alternatives": true,
+        "contradictions_exist": true,
+        "missing_required_evidence": [
+          "CR_S07A"
+        ],
+        "duplicate_risk": false,
+        "safe_to_resolve": false,
+        "abstention_reason": "contradictory_evidence"
+      }
+    },
+    {
+      "case_id": "SPIKE_08",
+      "exception": "Claimed credit but credit note missing",
+      "expected_should_resolve": false,
+      "baseline_decision": "abstain",
+      "baseline_correct_resolution": false,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": false,
+      "remitproof_decision": "abstain",
+      "remitproof_correct_resolution": false,
+      "abstention_reason": "missing_credit_note",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S08",
+        "status": "unresolved",
+        "matched_invoices": [],
+        "matched_credits": [],
+        "customer_id": null,
+        "reason": "no_unique_safe_allocation",
+        "candidate_count": 0
+      },
+      "proposal": {
+        "payment_id": "PAY_S08",
+        "proposed_customer": "CUS_S08",
+        "invoice_ids": [
+          "INV_S08A"
+        ],
+        "credit_ids": [
+          "CR_S08A"
+        ],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_S08"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_S08",
+          "CUS_S08"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": false,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": false,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [
+          "CR_S08A"
+        ],
+        "reason_codes": [
+          "missing_credit_note",
+          "financial_mismatch",
+          "unsupported_credit"
+        ],
+        "invoice_total": "8000.00",
+        "credit_total": "0.00",
+        "calculated_total": "8000.00",
+        "payment_total": "7800.00"
+      },
+      "alternatives": [],
+      "sufficiency": {
+        "financial_validity": false,
+        "entity_support": true,
+        "credit_support": false,
+        "alternative_allocations_exist": false,
+        "evidence_disambiguates_alternatives": true,
+        "contradictions_exist": false,
+        "missing_required_evidence": [
+          "CR_S08A"
+        ],
+        "duplicate_risk": false,
+        "safe_to_resolve": false,
+        "abstention_reason": "missing_credit_note"
+      }
+    },
+    {
+      "case_id": "SPIKE_09",
+      "exception": "Payer relationship uncertain",
+      "expected_should_resolve": false,
+      "baseline_decision": "abstain",
+      "baseline_correct_resolution": false,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": false,
+      "remitproof_decision": "abstain",
+      "remitproof_correct_resolution": false,
+      "abstention_reason": "unsupported_entity_relationship",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S09",
+        "status": "unresolved",
+        "matched_invoices": [],
+        "matched_credits": [],
+        "customer_id": null,
+        "reason": "payer_not_deterministically_mapped",
+        "candidate_count": 0
+      },
+      "proposal": {
+        "payment_id": "PAY_S09",
+        "proposed_customer": "CUS_S09",
+        "invoice_ids": [
+          "INV_S09A"
+        ],
+        "credit_ids": [],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_EXAMPLE"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_EXAMPLE",
+          "CUS_S09"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": false,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [
+          "entity_relationship"
+        ],
+        "reason_codes": [
+          "unsupported_entity_relationship"
+        ],
+        "invoice_total": "6200.00",
+        "credit_total": "0.00",
+        "calculated_total": "6200.00",
+        "payment_total": "6200.00"
+      },
+      "alternatives": [
+        {
+          "customer_id": "CUS_S09",
+          "invoice_ids": [
+            "INV_S09A"
+          ],
+          "credit_ids": [],
+          "calculated_total": "6200.00"
+        }
+      ],
+      "sufficiency": {
+        "financial_validity": true,
+        "entity_support": false,
+        "credit_support": true,
+        "alternative_allocations_exist": false,
+        "evidence_disambiguates_alternatives": true,
+        "contradictions_exist": false,
+        "missing_required_evidence": [
+          "entity_relationship",
+          "EMAIL_EXAMPLE"
+        ],
+        "duplicate_risk": false,
+        "safe_to_resolve": false,
+        "abstention_reason": "unsupported_entity_relationship"
+      }
+    },
+    {
+      "case_id": "SPIKE_10",
+      "exception": "Multi-invoice deduction with entity mismatch",
+      "expected_should_resolve": true,
+      "baseline_decision": "abstain",
+      "baseline_correct_resolution": false,
+      "llm_only_decision": "resolve",
+      "llm_only_correct_resolution": true,
+      "remitproof_decision": "abstain",
+      "remitproof_correct_resolution": false,
+      "abstention_reason": "missing_required_evidence",
+      "model_latency_ms": 0,
+      "investigator_error": "",
+      "baseline": {
+        "payment_id": "PAY_S10",
+        "status": "unresolved",
+        "matched_invoices": [],
+        "matched_credits": [],
+        "customer_id": null,
+        "reason": "multiple_financial_allocations",
+        "candidate_count": 2
+      },
+      "proposal": {
+        "payment_id": "PAY_S10",
+        "proposed_customer": "CUS_S10",
+        "invoice_ids": [
+          "INV_S10A",
+          "INV_S10B"
+        ],
+        "credit_ids": [
+          "CR_S10A"
+        ],
+        "semantic_claims": [
+          {
+            "claim_id": "CLAIM_001",
+            "claim": "The remittance names the selected invoice.",
+            "evidence_ids": [
+              "EMAIL_S10"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "EMAIL_S10",
+          "CUS_S10"
+        ],
+        "unresolved_questions": []
+      },
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "20000.00",
+        "credit_total": "350.00",
+        "calculated_total": "19650.00",
+        "payment_total": "19650.00"
+      },
+      "alternatives": [
+        {
+          "customer_id": "CUS_S10",
+          "invoice_ids": [
+            "INV_S10A",
+            "INV_S10B"
+          ],
+          "credit_ids": [
+            "CR_S10A"
+          ],
+          "calculated_total": "19650.00"
+        },
+        {
+          "customer_id": "CUS_S10",
+          "invoice_ids": [
+            "INV_S10C",
+            "INV_S10D"
+          ],
+          "credit_ids": [],
+          "calculated_total": "19650.00"
+        }
+      ],
+      "sufficiency": {
+        "financial_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "alternative_allocations_exist": true,
+        "evidence_disambiguates_alternatives": true,
+        "contradictions_exist": false,
+        "missing_required_evidence": [
+          "CR_S10A"
+        ],
+        "duplicate_risk": false,
+        "safe_to_resolve": false,
+        "abstention_reason": "missing_required_evidence"
+      }
+    }
+  ]
+}

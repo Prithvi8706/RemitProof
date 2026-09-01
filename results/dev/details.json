@@ -1,0 +1,4823 @@
+[
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_001",
+      "date": "2026-08-01",
+      "amount": "2237.00",
+      "currency": "USD",
+      "payer_name": "Asteria Commerce 01 Ltd",
+      "bank_reference": "BNK-E-00001",
+      "remittance_reference": "INV_E001",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_001",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E001"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E001",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_001",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E001",
+      "invoice_ids": [
+        "INV_E001"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E001",
+        "CUS_E001"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 4
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E001",
+          "legal_name": "Asteria Commerce 01 Ltd",
+          "aliases": [
+            "Asteria Commerce 01",
+            "Asteria Commerce 01 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X053",
+          "legal_name": "Asteria Commerce International Ltd",
+          "aliases": [
+            "Asteria Commerce International",
+            "Asteria Commerce International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E002",
+          "legal_name": "Boreal Systems 02 Ltd",
+          "aliases": [
+            "Boreal Systems 02",
+            "Boreal Systems 02 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E001",
+          "customer_id": "CUS_E001",
+          "amount": "2237.00",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E002",
+          "customer_id": "CUS_E002",
+          "amount": "2374.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X053A",
+          "customer_id": "CUS_X053",
+          "amount": "8603.84",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "description": "Platform subscription",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X053B",
+          "customer_id": "CUS_X053",
+          "amount": "6760.16",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "description": "Implementation services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X053C",
+          "customer_id": "CUS_X053",
+          "amount": "9443.07",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "description": "Legacy integration",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X053D",
+          "customer_id": "CUS_X053",
+          "amount": "5545.93",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "description": "Support retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E003",
+          "customer_id": "CUS_E003",
+          "amount": "2511.00",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X053A",
+          "customer_id": "CUS_X053",
+          "invoice_id": "INV_X053B",
+          "amount": "375.00",
+          "currency": "USD",
+          "reason": "Approved SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        },
+        {
+          "credit_id": "CR_X053B",
+          "customer_id": "CUS_X053",
+          "invoice_id": "INV_X053B",
+          "amount": "375.00",
+          "currency": "USD",
+          "reason": "Disputed quality adjustment",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_002",
+      "date": "2026-08-02",
+      "amount": "2374.00",
+      "currency": "USD",
+      "payer_name": "Boreal Systems 02 Ltd",
+      "bank_reference": "BNK-E-00002",
+      "remittance_reference": "INV_E002",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_002",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E002"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E002",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_002",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E002",
+      "invoice_ids": [
+        "INV_E002"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E002",
+        "CUS_E002"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 2
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E002",
+          "legal_name": "Boreal Systems 02 Ltd",
+          "aliases": [
+            "Boreal Systems 02",
+            "Boreal Systems 02 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X054",
+          "legal_name": "Boreal Systems International Ltd",
+          "aliases": [
+            "Boreal Systems International",
+            "Boreal Systems International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E001",
+          "legal_name": "Asteria Commerce 01 Ltd",
+          "aliases": [
+            "Asteria Commerce 01",
+            "Asteria Commerce 01 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E002",
+          "customer_id": "CUS_E002",
+          "amount": "2374.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E001",
+          "customer_id": "CUS_E001",
+          "amount": "2237.00",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X054A",
+          "customer_id": "CUS_X054",
+          "amount": "12088.00",
+          "currency": "USD",
+          "issue_date": "2026-07-03",
+          "due_date": "2026-08-02",
+          "description": "Network retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E003",
+          "customer_id": "CUS_E003",
+          "amount": "2511.00",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E005",
+          "customer_id": "CUS_E005",
+          "amount": "2785.00",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X054A",
+          "customer_id": "CUS_X054",
+          "invoice_id": "INV_X054A",
+          "amount": "350.00",
+          "currency": "USD",
+          "reason": "SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_003",
+      "date": "2026-08-03",
+      "amount": "2511.00",
+      "currency": "USD",
+      "payer_name": "Cobalt Ridge 03 Ltd",
+      "bank_reference": "BNK-E-00003",
+      "remittance_reference": "INV_E003",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_003",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E003"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E003",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_003",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E003",
+      "invoice_ids": [
+        "INV_E003"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E003",
+        "CUS_E003"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 2
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E003",
+          "legal_name": "Cobalt Ridge 03 Ltd",
+          "aliases": [
+            "Cobalt Ridge 03",
+            "Cobalt Ridge 03 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X055",
+          "legal_name": "Cobalt Ridge International Ltd",
+          "aliases": [
+            "Cobalt Ridge International",
+            "Cobalt Ridge International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E001",
+          "legal_name": "Asteria Commerce 01 Ltd",
+          "aliases": [
+            "Asteria Commerce 01",
+            "Asteria Commerce 01 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E003",
+          "customer_id": "CUS_E003",
+          "amount": "2511.00",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E001",
+          "customer_id": "CUS_E001",
+          "amount": "2237.00",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X055A",
+          "customer_id": "CUS_X055",
+          "amount": "8520.40",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Platform subscription",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X055B",
+          "customer_id": "CUS_X055",
+          "amount": "6694.60",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Implementation services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X055C",
+          "customer_id": "CUS_X055",
+          "amount": "9585.45",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Legacy integration",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X055D",
+          "customer_id": "CUS_X055",
+          "amount": "5629.55",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Support retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E002",
+          "customer_id": "CUS_E002",
+          "amount": "2374.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E005",
+          "customer_id": "CUS_E005",
+          "amount": "2785.00",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_004",
+      "date": "2026-08-04",
+      "amount": "2648.00",
+      "currency": "EUR",
+      "payer_name": "Driftwood Analytics 04 Ltd",
+      "bank_reference": "BNK-E-00004",
+      "remittance_reference": "INV_E004",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_004",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E004"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E004",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_004",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E004",
+      "invoice_ids": [
+        "INV_E004"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E004",
+        "CUS_E004"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 2
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E004",
+          "legal_name": "Driftwood Analytics 04 Ltd",
+          "aliases": [
+            "Driftwood Analytics 04",
+            "Driftwood Analytics 04 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X056",
+          "legal_name": "Driftwood Analytics International Ltd",
+          "aliases": [
+            "Driftwood Analytics International",
+            "Driftwood Analytics International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E004",
+          "customer_id": "CUS_E004",
+          "amount": "2648.00",
+          "currency": "EUR",
+          "issue_date": "2026-06-10",
+          "due_date": "2026-07-10",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_005",
+      "date": "2026-08-05",
+      "amount": "2785.00",
+      "currency": "USD",
+      "payer_name": "Evergreen Mobility 05",
+      "bank_reference": "BNK-E-00005",
+      "remittance_reference": "INV_E005",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_005",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E005"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E005",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_005",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E005",
+      "invoice_ids": [
+        "INV_E005"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E005",
+        "CUS_E005"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 2
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E005",
+          "legal_name": "Evergreen Mobility 05 Ltd",
+          "aliases": [
+            "Evergreen Mobility 05"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X057",
+          "legal_name": "Evergreen Mobility International Ltd",
+          "aliases": [
+            "Evergreen Mobility International",
+            "Evergreen Mobility International Ltd"
+          ],
+          "parent_entities": [
+            "EVERGREEN MOBILITY GLOBAL HOLDINGS LLC"
+          ],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E002",
+          "legal_name": "Boreal Systems 02 Ltd",
+          "aliases": [
+            "Boreal Systems 02",
+            "Boreal Systems 02 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E005",
+          "customer_id": "CUS_E005",
+          "amount": "2785.00",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E002",
+          "customer_id": "CUS_E002",
+          "amount": "2374.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X057A",
+          "customer_id": "CUS_X057",
+          "amount": "8856.96",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Platform subscription",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X057B",
+          "customer_id": "CUS_X057",
+          "amount": "6959.04",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Implementation services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X057C",
+          "customer_id": "CUS_X057",
+          "amount": "9727.83",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Legacy integration",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X057D",
+          "customer_id": "CUS_X057",
+          "amount": "5713.17",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Support retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E003",
+          "customer_id": "CUS_E003",
+          "amount": "2511.00",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E006",
+          "customer_id": "CUS_E006",
+          "amount": "2922.00",
+          "currency": "USD",
+          "issue_date": "2026-06-12",
+          "due_date": "2026-07-12",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X057A",
+          "customer_id": "CUS_X057",
+          "invoice_id": "INV_X057B",
+          "amount": "375.00",
+          "currency": "USD",
+          "reason": "Approved SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        },
+        {
+          "credit_id": "CR_X057B",
+          "customer_id": "CUS_X057",
+          "invoice_id": "INV_X057B",
+          "amount": "375.00",
+          "currency": "USD",
+          "reason": "Disputed quality adjustment",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_006",
+      "date": "2026-08-06",
+      "amount": "2922.00",
+      "currency": "USD",
+      "payer_name": "Fableworks Media 06 Ltd",
+      "bank_reference": "BNK-E-00006",
+      "remittance_reference": "INV_E006",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_006",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E006"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E006",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_006",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E006",
+      "invoice_ids": [
+        "INV_E006"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E006",
+        "CUS_E006"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 2
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E006",
+          "legal_name": "Fableworks Media 06 Ltd",
+          "aliases": [
+            "Fableworks Media 06",
+            "Fableworks Media 06 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X058",
+          "legal_name": "Fableworks Media International Ltd",
+          "aliases": [
+            "Fableworks Media International",
+            "Fableworks Media International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E003",
+          "legal_name": "Cobalt Ridge 03 Ltd",
+          "aliases": [
+            "Cobalt Ridge 03",
+            "Cobalt Ridge 03 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E006",
+          "customer_id": "CUS_E006",
+          "amount": "2922.00",
+          "currency": "USD",
+          "issue_date": "2026-06-12",
+          "due_date": "2026-07-12",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E003",
+          "customer_id": "CUS_E003",
+          "amount": "2511.00",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X058A",
+          "customer_id": "CUS_X058",
+          "amount": "12126.00",
+          "currency": "USD",
+          "issue_date": "2026-06-10",
+          "due_date": "2026-07-10",
+          "description": "Advisory services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E005",
+          "customer_id": "CUS_E005",
+          "amount": "2785.00",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E007",
+          "customer_id": "CUS_E007",
+          "amount": "3059.00",
+          "currency": "USD",
+          "issue_date": "2026-06-13",
+          "due_date": "2026-07-13",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E009",
+          "customer_id": "CUS_E009",
+          "amount": "3333.00",
+          "currency": "USD",
+          "issue_date": "2026-06-15",
+          "due_date": "2026-07-15",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_007",
+      "date": "2026-08-07",
+      "amount": "3059.00",
+      "currency": "USD",
+      "payer_name": "Granite Cloud Global Treasury 07",
+      "bank_reference": "BNK-E-00007",
+      "remittance_reference": "INV_E007",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_007",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E007"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E007",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_007",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E007",
+      "invoice_ids": [
+        "INV_E007"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E007",
+        "CUS_E007"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 2
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E007",
+          "legal_name": "Granite Cloud 07 Ltd",
+          "aliases": [
+            "Granite Cloud 07",
+            "Granite Cloud 07 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": [
+            "Granite Cloud Global Treasury 07"
+          ]
+        },
+        {
+          "customer_id": "CUS_X059",
+          "legal_name": "Granite Cloud International Ltd",
+          "aliases": [
+            "Granite Cloud International",
+            "Granite Cloud International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": [
+            "GRANITE CLOUD TREASURY SERVICES LTD"
+          ]
+        },
+        {
+          "customer_id": "CUS_E005",
+          "legal_name": "Evergreen Mobility 05 Ltd",
+          "aliases": [
+            "Evergreen Mobility 05"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E007",
+          "customer_id": "CUS_E007",
+          "amount": "3059.00",
+          "currency": "USD",
+          "issue_date": "2026-06-13",
+          "due_date": "2026-07-13",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E005",
+          "customer_id": "CUS_E005",
+          "amount": "2785.00",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X059A",
+          "customer_id": "CUS_X059",
+          "amount": "8773.52",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Platform subscription",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X059B",
+          "customer_id": "CUS_X059",
+          "amount": "6893.48",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Implementation services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X059C",
+          "customer_id": "CUS_X059",
+          "amount": "9870.21",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Legacy integration",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X059D",
+          "customer_id": "CUS_X059",
+          "amount": "5796.79",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Support retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E006",
+          "customer_id": "CUS_E006",
+          "amount": "2922.00",
+          "currency": "USD",
+          "issue_date": "2026-06-12",
+          "due_date": "2026-07-12",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E009",
+          "customer_id": "CUS_E009",
+          "amount": "3333.00",
+          "currency": "USD",
+          "issue_date": "2026-06-15",
+          "due_date": "2026-07-15",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_008",
+      "date": "2026-08-08",
+      "amount": "3196.00",
+      "currency": "EUR",
+      "payer_name": "Horizon Foods 08 Ltd",
+      "bank_reference": "BNK-E-00008",
+      "remittance_reference": "INV_E008",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_008",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E008"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E008",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_008",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E008",
+      "invoice_ids": [
+        "INV_E008"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E008",
+        "CUS_E008"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 2
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E008",
+          "legal_name": "Horizon Foods 08 Ltd",
+          "aliases": [
+            "Horizon Foods 08",
+            "Horizon Foods 08 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X060",
+          "legal_name": "Horizon Foods International Ltd",
+          "aliases": [
+            "Horizon Foods International",
+            "Horizon Foods International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X051",
+          "legal_name": "Copperleaf Foods International Ltd",
+          "aliases": [
+            "Copperleaf Foods International",
+            "Copperleaf Foods International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E008",
+          "customer_id": "CUS_E008",
+          "amount": "3196.00",
+          "currency": "EUR",
+          "issue_date": "2026-06-14",
+          "due_date": "2026-07-14",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_009",
+      "date": "2026-08-09",
+      "amount": "3333.00",
+      "currency": "USD",
+      "payer_name": "Indigo Networks 09 Ltd",
+      "bank_reference": "BNK-E-00009",
+      "remittance_reference": "INV_E009",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_009",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E009"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E009",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_009",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E009",
+      "invoice_ids": [
+        "INV_E009"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E009",
+        "CUS_E009"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 2
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E009",
+          "legal_name": "Indigo Networks 09 Ltd",
+          "aliases": [
+            "Indigo Networks 09",
+            "Indigo Networks 09 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E006",
+          "legal_name": "Fableworks Media 06 Ltd",
+          "aliases": [
+            "Fableworks Media 06",
+            "Fableworks Media 06 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E007",
+          "legal_name": "Granite Cloud 07 Ltd",
+          "aliases": [
+            "Granite Cloud 07",
+            "Granite Cloud 07 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": [
+            "Granite Cloud Global Treasury 07"
+          ]
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E009",
+          "customer_id": "CUS_E009",
+          "amount": "3333.00",
+          "currency": "USD",
+          "issue_date": "2026-06-15",
+          "due_date": "2026-07-15",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E006",
+          "customer_id": "CUS_E006",
+          "amount": "2922.00",
+          "currency": "USD",
+          "issue_date": "2026-06-12",
+          "due_date": "2026-07-12",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E007",
+          "customer_id": "CUS_E007",
+          "amount": "3059.00",
+          "currency": "USD",
+          "issue_date": "2026-06-13",
+          "due_date": "2026-07-13",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E010",
+          "customer_id": "CUS_E010",
+          "amount": "3470.00",
+          "currency": "USD",
+          "issue_date": "2026-06-16",
+          "due_date": "2026-07-16",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conventional_exact_reference",
+    "is_exception": false,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_010",
+      "date": "2026-08-10",
+      "amount": "3470.00",
+      "currency": "USD",
+      "payer_name": "Juniper Labs 10",
+      "bank_reference": "BNK-E-00010",
+      "remittance_reference": "INV_E010",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_010",
+      "status": "matched",
+      "matched_invoices": [
+        "INV_E010"
+      ],
+      "matched_credits": [],
+      "customer_id": "CUS_E010",
+      "reason": "unique_deterministic_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_010",
+      "decision": "matched_normally",
+      "customer_id": "CUS_E010",
+      "invoice_ids": [
+        "INV_E010"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "baseline_reason": "unique_deterministic_allocation",
+        "candidate_count": 1
+      },
+      "evidence": [
+        "INV_E010",
+        "CUS_E010"
+      ],
+      "reason": "Unique deterministic allocation; no AI investigation required.",
+      "latency_ms": 2
+    },
+    "proposal": null,
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_E010",
+          "legal_name": "Juniper Labs 10 Ltd",
+          "aliases": [
+            "Juniper Labs 10"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E007",
+          "legal_name": "Granite Cloud 07 Ltd",
+          "aliases": [
+            "Granite Cloud 07",
+            "Granite Cloud 07 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": [
+            "Granite Cloud Global Treasury 07"
+          ]
+        },
+        {
+          "customer_id": "CUS_E009",
+          "legal_name": "Indigo Networks 09 Ltd",
+          "aliases": [
+            "Indigo Networks 09",
+            "Indigo Networks 09 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_E010",
+          "customer_id": "CUS_E010",
+          "amount": "3470.00",
+          "currency": "USD",
+          "issue_date": "2026-06-16",
+          "due_date": "2026-07-16",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E007",
+          "customer_id": "CUS_E007",
+          "amount": "3059.00",
+          "currency": "USD",
+          "issue_date": "2026-06-13",
+          "due_date": "2026-07-13",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E009",
+          "customer_id": "CUS_E009",
+          "amount": "3333.00",
+          "currency": "USD",
+          "issue_date": "2026-06-15",
+          "due_date": "2026-07-15",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": []
+    },
+    "proposed_allocation": [],
+    "evidence": [],
+    "proof": null,
+    "alternatives": [],
+    "sufficiency": null,
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "detached_remittance_email",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_051",
+      "date": "2026-08-24",
+      "amount": "14763.00",
+      "currency": "USD",
+      "payer_name": "CITIBANK N.A. OBO COPPERLEAF FOODS",
+      "bank_reference": "BNK-X-00051",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_051",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "payer_not_deterministically_mapped",
+      "candidate_count": 0
+    },
+    "decision": {
+      "payment_id": "PAY_051",
+      "decision": "resolved",
+      "customer_id": "CUS_X051",
+      "invoice_ids": [
+        "INV_X051A",
+        "INV_X051B"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "14763.00",
+        "credit_total": "0.00",
+        "calculated_total": "14763.00",
+        "payment_total": "14763.00"
+      },
+      "evidence": [
+        "EMAIL_X051",
+        "CUS_X051",
+        "INV_X051A",
+        "INV_X051B"
+      ],
+      "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
+      "latency_ms": 9
+    },
+    "proposal": {
+      "payment_id": "PAY_051",
+      "proposed_customer": "CUS_X051",
+      "invoice_ids": [
+        "INV_X051A",
+        "INV_X051B"
+      ],
+      "credit_ids": [],
+      "semantic_claims": [
+        {
+          "claim_id": "CLAIM_001",
+          "claim": "The remittance names the selected invoice.",
+          "evidence_ids": [
+            "EMAIL_X051"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "EMAIL_X051",
+        "CUS_X051"
+      ],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X051",
+          "legal_name": "Copperleaf Foods International Ltd",
+          "aliases": [
+            "Copperleaf Foods International",
+            "Copperleaf Foods International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E008",
+          "legal_name": "Horizon Foods 08 Ltd",
+          "aliases": [
+            "Horizon Foods 08",
+            "Horizon Foods 08 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X060",
+          "legal_name": "Horizon Foods International Ltd",
+          "aliases": [
+            "Horizon Foods International",
+            "Horizon Foods International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X051A",
+          "customer_id": "CUS_X051",
+          "amount": "8267.28",
+          "currency": "USD",
+          "issue_date": "2026-06-30",
+          "due_date": "2026-07-30",
+          "description": "Platform subscription",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X051B",
+          "customer_id": "CUS_X051",
+          "amount": "6495.72",
+          "currency": "USD",
+          "issue_date": "2026-06-30",
+          "due_date": "2026-07-30",
+          "description": "Implementation services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X051C",
+          "customer_id": "CUS_X051",
+          "amount": "9300.69",
+          "currency": "USD",
+          "issue_date": "2026-06-30",
+          "due_date": "2026-07-30",
+          "description": "Legacy integration",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X051D",
+          "customer_id": "CUS_X051",
+          "amount": "5462.31",
+          "currency": "USD",
+          "issue_date": "2026-06-30",
+          "due_date": "2026-07-30",
+          "description": "Support retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X060A",
+          "customer_id": "CUS_X060",
+          "amount": "12320.00",
+          "currency": "USD",
+          "issue_date": "2026-06-12",
+          "due_date": "2026-07-12",
+          "description": "Closed implementation",
+          "status": "closed",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": [
+        {
+          "email_id": "EMAIL_X051",
+          "sender": "controller51@copperleaffoods.example",
+          "customer_id": "CUS_X051",
+          "date": "2026-08-23",
+          "subject": "Remittance BNK-X-00051",
+          "body": "Payment BNK-X-00051 was sent by our treasury bank, Citibank N.A., on behalf of Copperleaf Foods International Ltd. Apply the USD 14763.00 receipt only to INV_X051A and INV_X051B. The other open invoices will be paid separately."
+        }
+      ]
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X051A",
+        "description": "Platform subscription",
+        "amount": "8267.28",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X051B",
+        "description": "Implementation services",
+        "amount": "6495.72",
+        "currency": "USD",
+        "operator": "+"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EMAIL_X051",
+        "evidence_type": "remittance_email",
+        "title": "Remittance BNK-X-00051",
+        "content": "Payment BNK-X-00051 was sent by our treasury bank, Citibank N.A., on behalf of Copperleaf Foods International Ltd. Apply the USD 14763.00 receipt only to INV_X051A and INV_X051B. The other open invoices will be paid separately.",
+        "sender": "controller51@copperleaffoods.example",
+        "date": "2026-08-23",
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "CUS_X051",
+        "evidence_type": "customer_record",
+        "title": "Copperleaf Foods International Ltd",
+        "content": {
+          "aliases": [
+            "Copperleaf Foods International",
+            "Copperleaf Foods International Ltd"
+          ],
+          "parent_entities": [],
+          "known_payers": []
+        },
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "INV_X051A",
+        "evidence_type": "invoice_record",
+        "title": "Platform subscription",
+        "content": {
+          "customer_id": "CUS_X051",
+          "amount": "8267.28",
+          "currency": "USD",
+          "issue_date": "2026-06-30",
+          "due_date": "2026-07-30",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "INV_X051B",
+        "evidence_type": "invoice_record",
+        "title": "Implementation services",
+        "content": {
+          "customer_id": "CUS_X051",
+          "amount": "6495.72",
+          "currency": "USD",
+          "issue_date": "2026-06-30",
+          "due_date": "2026-07-30",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": true,
+      "state_validity": true,
+      "currency_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "duplicate_risk": false,
+      "contradictions": [],
+      "missing_required_evidence": [],
+      "reason_codes": [],
+      "invoice_total": "14763.00",
+      "credit_total": "0.00",
+      "calculated_total": "14763.00",
+      "payment_total": "14763.00"
+    },
+    "alternatives": [
+      {
+        "customer_id": "CUS_X051",
+        "invoice_ids": [
+          "INV_X051A",
+          "INV_X051B"
+        ],
+        "credit_ids": [],
+        "calculated_total": "14763.00"
+      },
+      {
+        "customer_id": "CUS_X051",
+        "invoice_ids": [
+          "INV_X051C",
+          "INV_X051D"
+        ],
+        "credit_ids": [],
+        "calculated_total": "14763.00"
+      }
+    ],
+    "sufficiency": {
+      "financial_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "alternative_allocations_exist": true,
+      "evidence_disambiguates_alternatives": true,
+      "contradictions_exist": false,
+      "missing_required_evidence": [],
+      "duplicate_risk": false,
+      "safe_to_resolve": true,
+      "abstention_reason": null
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "same_amount_ambiguity",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": false,
+    "payment": {
+      "payment_id": "PAY_052",
+      "date": "2026-08-25",
+      "amount": "11544.00",
+      "currency": "USD",
+      "payer_name": "Deepfield AI International Ltd",
+      "bank_reference": "BNK-X-00052",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_052",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "multiple_financial_allocations",
+      "candidate_count": 2
+    },
+    "decision": {
+      "payment_id": "PAY_052",
+      "decision": "human_review",
+      "customer_id": "CUS_X052",
+      "invoice_ids": [
+        "INV_X052A",
+        "INV_X052B"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "financial_validity": false,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [
+          "financial_mismatch"
+        ],
+        "invoice_total": "23088.00",
+        "credit_total": "0.00",
+        "calculated_total": "23088.00",
+        "payment_total": "11544.00"
+      },
+      "evidence": [
+        "CUS_X052",
+        "INV_X052A",
+        "INV_X052B"
+      ],
+      "reason": "financial_mismatch",
+      "latency_ms": 8
+    },
+    "proposal": {
+      "payment_id": "PAY_052",
+      "proposed_customer": "CUS_X052",
+      "invoice_ids": [
+        "INV_X052A",
+        "INV_X052B"
+      ],
+      "credit_ids": [],
+      "semantic_claims": [
+        {
+          "claim_id": "CLAIM_001",
+          "claim": "The remittance names the selected invoice.",
+          "evidence_ids": [
+            "EMAIL_EXAMPLE"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "EMAIL_EXAMPLE",
+        "CUS_X052"
+      ],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X052",
+          "legal_name": "Deepfield AI International Ltd",
+          "aliases": [
+            "Deepfield AI International",
+            "Deepfield AI International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X054",
+          "legal_name": "Boreal Systems International Ltd",
+          "aliases": [
+            "Boreal Systems International",
+            "Boreal Systems International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X056",
+          "legal_name": "Driftwood Analytics International Ltd",
+          "aliases": [
+            "Driftwood Analytics International",
+            "Driftwood Analytics International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X052A",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region A services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X052B",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region B services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X054A",
+          "customer_id": "CUS_X054",
+          "amount": "12088.00",
+          "currency": "USD",
+          "issue_date": "2026-07-03",
+          "due_date": "2026-08-02",
+          "description": "Network retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X056A",
+          "customer_id": "CUS_X056",
+          "amount": "12132.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Quality program",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X058A",
+          "customer_id": "CUS_X058",
+          "amount": "12126.00",
+          "currency": "USD",
+          "issue_date": "2026-06-10",
+          "due_date": "2026-07-10",
+          "description": "Advisory services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X054A",
+          "customer_id": "CUS_X054",
+          "invoice_id": "INV_X054A",
+          "amount": "350.00",
+          "currency": "USD",
+          "reason": "SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": []
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X052A",
+        "description": "Region A services",
+        "amount": "11544.00",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X052B",
+        "description": "Region B services",
+        "amount": "11544.00",
+        "currency": "USD",
+        "operator": "+"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "CUS_X052",
+        "evidence_type": "customer_record",
+        "title": "Deepfield AI International Ltd",
+        "content": {
+          "aliases": [
+            "Deepfield AI International",
+            "Deepfield AI International Ltd"
+          ],
+          "parent_entities": [],
+          "known_payers": []
+        },
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "INV_X052A",
+        "evidence_type": "invoice_record",
+        "title": "Region A services",
+        "content": {
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "INV_X052B",
+        "evidence_type": "invoice_record",
+        "title": "Region B services",
+        "content": {
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": false,
+      "state_validity": true,
+      "currency_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "duplicate_risk": false,
+      "contradictions": [],
+      "missing_required_evidence": [],
+      "reason_codes": [
+        "financial_mismatch"
+      ],
+      "invoice_total": "23088.00",
+      "credit_total": "0.00",
+      "calculated_total": "23088.00",
+      "payment_total": "11544.00"
+    },
+    "alternatives": [
+      {
+        "customer_id": "CUS_X052",
+        "invoice_ids": [
+          "INV_X052A"
+        ],
+        "credit_ids": [],
+        "calculated_total": "11544.00"
+      },
+      {
+        "customer_id": "CUS_X052",
+        "invoice_ids": [
+          "INV_X052B"
+        ],
+        "credit_ids": [],
+        "calculated_total": "11544.00"
+      }
+    ],
+    "sufficiency": {
+      "financial_validity": false,
+      "entity_support": true,
+      "credit_support": true,
+      "alternative_allocations_exist": true,
+      "evidence_disambiguates_alternatives": false,
+      "contradictions_exist": false,
+      "missing_required_evidence": [
+        "EMAIL_EXAMPLE"
+      ],
+      "duplicate_risk": false,
+      "safe_to_resolve": false,
+      "abstention_reason": "financial_mismatch"
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "credit_deduction",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_053",
+      "date": "2026-08-26",
+      "amount": "14989.00",
+      "currency": "USD",
+      "payer_name": "Asteria Commerce International Ltd",
+      "bank_reference": "BNK-X-00053",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_053",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "multiple_financial_allocations",
+      "candidate_count": 3
+    },
+    "decision": {
+      "payment_id": "PAY_053",
+      "decision": "human_review",
+      "customer_id": "CUS_X053",
+      "invoice_ids": [
+        "INV_X053A",
+        "INV_X053B"
+      ],
+      "credit_ids": [
+        "CR_X053A"
+      ],
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "15364.00",
+        "credit_total": "375.00",
+        "calculated_total": "14989.00",
+        "payment_total": "14989.00"
+      },
+      "evidence": [
+        "CUS_X053",
+        "INV_X053A",
+        "INV_X053B",
+        "CR_X053A"
+      ],
+      "reason": "multiple_financially_valid_explanations",
+      "latency_ms": 10
+    },
+    "proposal": {
+      "payment_id": "PAY_053",
+      "proposed_customer": "CUS_X053",
+      "invoice_ids": [
+        "INV_X053A",
+        "INV_X053B"
+      ],
+      "credit_ids": [
+        "CR_X053A"
+      ],
+      "semantic_claims": [],
+      "evidence_ids": [],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X053",
+          "legal_name": "Asteria Commerce International Ltd",
+          "aliases": [
+            "Asteria Commerce International",
+            "Asteria Commerce International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E001",
+          "legal_name": "Asteria Commerce 01 Ltd",
+          "aliases": [
+            "Asteria Commerce 01",
+            "Asteria Commerce 01 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X053A",
+          "customer_id": "CUS_X053",
+          "amount": "8603.84",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "description": "Platform subscription",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X053B",
+          "customer_id": "CUS_X053",
+          "amount": "6760.16",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "description": "Implementation services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E001",
+          "customer_id": "CUS_E001",
+          "amount": "2237.00",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X053C",
+          "customer_id": "CUS_X053",
+          "amount": "9443.07",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "description": "Legacy integration",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X053D",
+          "customer_id": "CUS_X053",
+          "amount": "5545.93",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "description": "Support retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X053A",
+          "customer_id": "CUS_X053",
+          "invoice_id": "INV_X053B",
+          "amount": "375.00",
+          "currency": "USD",
+          "reason": "Approved SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        },
+        {
+          "credit_id": "CR_X053B",
+          "customer_id": "CUS_X053",
+          "invoice_id": "INV_X053B",
+          "amount": "375.00",
+          "currency": "USD",
+          "reason": "Disputed quality adjustment",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": [
+        {
+          "email_id": "EMAIL_X053",
+          "sender": "controller53@asteriacommerce.example",
+          "customer_id": "CUS_X053",
+          "date": "2026-08-25",
+          "subject": "Remittance BNK-X-00053",
+          "body": "Apply the USD 14989.00 receipt only to INV_X053A and INV_X053B. The other open invoices will be paid separately. Deduct the approved USD 375.00 credit CR_X053A; do not use the disputed adjustment."
+        }
+      ]
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X053A",
+        "description": "Platform subscription",
+        "amount": "8603.84",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X053B",
+        "description": "Implementation services",
+        "amount": "6760.16",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "credit",
+        "record_id": "CR_X053A",
+        "description": "Approved SLA service credit",
+        "amount": "375.00",
+        "currency": "USD",
+        "operator": "-"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "CUS_X053",
+        "evidence_type": "customer_record",
+        "title": "Asteria Commerce International Ltd",
+        "content": {
+          "aliases": [
+            "Asteria Commerce International",
+            "Asteria Commerce International Ltd"
+          ],
+          "parent_entities": [],
+          "known_payers": []
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "INV_X053A",
+        "evidence_type": "invoice_record",
+        "title": "Platform subscription",
+        "content": {
+          "customer_id": "CUS_X053",
+          "amount": "8603.84",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "INV_X053B",
+        "evidence_type": "invoice_record",
+        "title": "Implementation services",
+        "content": {
+          "customer_id": "CUS_X053",
+          "amount": "6760.16",
+          "currency": "USD",
+          "issue_date": "2026-07-02",
+          "due_date": "2026-08-01",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "CR_X053A",
+        "evidence_type": "credit_note",
+        "title": "Approved SLA service credit",
+        "content": {
+          "amount": "375.00",
+          "currency": "USD",
+          "status": "valid",
+          "invoice_id": "INV_X053B"
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": true,
+      "state_validity": true,
+      "currency_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "duplicate_risk": false,
+      "contradictions": [],
+      "missing_required_evidence": [],
+      "reason_codes": [],
+      "invoice_total": "15364.00",
+      "credit_total": "375.00",
+      "calculated_total": "14989.00",
+      "payment_total": "14989.00"
+    },
+    "alternatives": [
+      {
+        "customer_id": "CUS_X053",
+        "invoice_ids": [
+          "INV_X053A",
+          "INV_X053B"
+        ],
+        "credit_ids": [
+          "CR_X053A"
+        ],
+        "calculated_total": "14989.00"
+      },
+      {
+        "customer_id": "CUS_X053",
+        "invoice_ids": [
+          "INV_X053A",
+          "INV_X053B"
+        ],
+        "credit_ids": [
+          "CR_X053B"
+        ],
+        "calculated_total": "14989.00"
+      },
+      {
+        "customer_id": "CUS_X053",
+        "invoice_ids": [
+          "INV_X053C",
+          "INV_X053D"
+        ],
+        "credit_ids": [],
+        "calculated_total": "14989.00"
+      }
+    ],
+    "sufficiency": {
+      "financial_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "alternative_allocations_exist": true,
+      "evidence_disambiguates_alternatives": false,
+      "contradictions_exist": false,
+      "missing_required_evidence": [
+        "proposal_evidence",
+        "CR_X053A"
+      ],
+      "duplicate_risk": false,
+      "safe_to_resolve": false,
+      "abstention_reason": "multiple_financially_valid_explanations"
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "conflicting_evidence",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": false,
+    "payment": {
+      "payment_id": "PAY_054",
+      "date": "2026-08-27",
+      "amount": "11738.00",
+      "currency": "USD",
+      "payer_name": "Boreal Systems International Ltd",
+      "bank_reference": "BNK-X-00054",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_054",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "no_unique_safe_allocation",
+      "candidate_count": 1
+    },
+    "decision": {
+      "payment_id": "PAY_054",
+      "decision": "human_review",
+      "customer_id": "CUS_X054",
+      "invoice_ids": [
+        "INV_X054A"
+      ],
+      "credit_ids": [
+        "CR_X054A"
+      ],
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [
+          "EMAIL_X054 states credit amount ['500.00'] but credit note amount is ['350.00']"
+        ],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "12088.00",
+        "credit_total": "350.00",
+        "calculated_total": "11738.00",
+        "payment_total": "11738.00"
+      },
+      "evidence": [
+        "EMAIL_X054",
+        "CUS_X054",
+        "INV_X054A",
+        "CR_X054A"
+      ],
+      "reason": "contradictory_evidence",
+      "latency_ms": 8
+    },
+    "proposal": {
+      "payment_id": "PAY_054",
+      "proposed_customer": "CUS_X054",
+      "invoice_ids": [
+        "INV_X054A"
+      ],
+      "credit_ids": [
+        "CR_X054A"
+      ],
+      "semantic_claims": [
+        {
+          "claim_id": "CLAIM_001",
+          "claim": "The remittance names the selected invoice.",
+          "evidence_ids": [
+            "EMAIL_X054"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "EMAIL_X054",
+        "CUS_X054"
+      ],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X054",
+          "legal_name": "Boreal Systems International Ltd",
+          "aliases": [
+            "Boreal Systems International",
+            "Boreal Systems International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E002",
+          "legal_name": "Boreal Systems 02 Ltd",
+          "aliases": [
+            "Boreal Systems 02",
+            "Boreal Systems 02 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X052",
+          "legal_name": "Deepfield AI International Ltd",
+          "aliases": [
+            "Deepfield AI International",
+            "Deepfield AI International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X054A",
+          "customer_id": "CUS_X054",
+          "amount": "12088.00",
+          "currency": "USD",
+          "issue_date": "2026-07-03",
+          "due_date": "2026-08-02",
+          "description": "Network retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X052A",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region A services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X052B",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region B services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E002",
+          "customer_id": "CUS_E002",
+          "amount": "2374.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X056A",
+          "customer_id": "CUS_X056",
+          "amount": "12132.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Quality program",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X058A",
+          "customer_id": "CUS_X058",
+          "amount": "12126.00",
+          "currency": "USD",
+          "issue_date": "2026-06-10",
+          "due_date": "2026-07-10",
+          "description": "Advisory services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X054A",
+          "customer_id": "CUS_X054",
+          "invoice_id": "INV_X054A",
+          "amount": "350.00",
+          "currency": "USD",
+          "reason": "SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": [
+        {
+          "email_id": "EMAIL_X054",
+          "sender": "ap54@conflict.example",
+          "customer_id": "CUS_X054",
+          "date": "2026-08-26",
+          "subject": "Conflicting remittance BNK-X-00054",
+          "body": "For BNK-X-00054, apply payment to INV_X054A. We deducted a USD 500.00 credit under CR_X054A."
+        }
+      ]
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X054A",
+        "description": "Network retainer",
+        "amount": "12088.00",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "credit",
+        "record_id": "CR_X054A",
+        "description": "SLA service credit",
+        "amount": "350.00",
+        "currency": "USD",
+        "operator": "-"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EMAIL_X054",
+        "evidence_type": "remittance_email",
+        "title": "Conflicting remittance BNK-X-00054",
+        "content": "For BNK-X-00054, apply payment to INV_X054A. We deducted a USD 500.00 credit under CR_X054A.",
+        "sender": "ap54@conflict.example",
+        "date": "2026-08-26",
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "CUS_X054",
+        "evidence_type": "customer_record",
+        "title": "Boreal Systems International Ltd",
+        "content": {
+          "aliases": [
+            "Boreal Systems International",
+            "Boreal Systems International Ltd"
+          ],
+          "parent_entities": [],
+          "known_payers": []
+        },
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "INV_X054A",
+        "evidence_type": "invoice_record",
+        "title": "Network retainer",
+        "content": {
+          "customer_id": "CUS_X054",
+          "amount": "12088.00",
+          "currency": "USD",
+          "issue_date": "2026-07-03",
+          "due_date": "2026-08-02",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "CR_X054A",
+        "evidence_type": "credit_note",
+        "title": "SLA service credit",
+        "content": {
+          "amount": "350.00",
+          "currency": "USD",
+          "status": "valid",
+          "invoice_id": "INV_X054A"
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": true,
+      "state_validity": true,
+      "currency_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "duplicate_risk": false,
+      "contradictions": [
+        "EMAIL_X054 states credit amount ['500.00'] but credit note amount is ['350.00']"
+      ],
+      "missing_required_evidence": [],
+      "reason_codes": [],
+      "invoice_total": "12088.00",
+      "credit_total": "350.00",
+      "calculated_total": "11738.00",
+      "payment_total": "11738.00"
+    },
+    "alternatives": [
+      {
+        "customer_id": "CUS_X054",
+        "invoice_ids": [
+          "INV_X054A"
+        ],
+        "credit_ids": [
+          "CR_X054A"
+        ],
+        "calculated_total": "11738.00"
+      }
+    ],
+    "sufficiency": {
+      "financial_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "alternative_allocations_exist": false,
+      "evidence_disambiguates_alternatives": true,
+      "contradictions_exist": true,
+      "missing_required_evidence": [
+        "CR_X054A"
+      ],
+      "duplicate_risk": false,
+      "safe_to_resolve": false,
+      "abstention_reason": "contradictory_evidence"
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "multiple_allocations_email",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_055",
+      "date": "2026-08-01",
+      "amount": "15215.00",
+      "currency": "USD",
+      "payer_name": "Cobalt Ridge International Ltd",
+      "bank_reference": "BNK-X-00055",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_055",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "multiple_financial_allocations",
+      "candidate_count": 2
+    },
+    "decision": {
+      "payment_id": "PAY_055",
+      "decision": "resolved",
+      "customer_id": "CUS_X055",
+      "invoice_ids": [
+        "INV_X055A",
+        "INV_X055B"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "15215.00",
+        "credit_total": "0.00",
+        "calculated_total": "15215.00",
+        "payment_total": "15215.00"
+      },
+      "evidence": [
+        "EMAIL_X055",
+        "CUS_X055",
+        "INV_X055A",
+        "INV_X055B"
+      ],
+      "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
+      "latency_ms": 9
+    },
+    "proposal": {
+      "payment_id": "PAY_055",
+      "proposed_customer": "CUS_X055",
+      "invoice_ids": [
+        "INV_X055A",
+        "INV_X055B"
+      ],
+      "credit_ids": [],
+      "semantic_claims": [
+        {
+          "claim_id": "CLAIM_001",
+          "claim": "The remittance names the selected invoice.",
+          "evidence_ids": [
+            "EMAIL_X055"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "EMAIL_X055",
+        "CUS_X055"
+      ],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X055",
+          "legal_name": "Cobalt Ridge International Ltd",
+          "aliases": [
+            "Cobalt Ridge International",
+            "Cobalt Ridge International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E003",
+          "legal_name": "Cobalt Ridge 03 Ltd",
+          "aliases": [
+            "Cobalt Ridge 03",
+            "Cobalt Ridge 03 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X055A",
+          "customer_id": "CUS_X055",
+          "amount": "8520.40",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Platform subscription",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X055B",
+          "customer_id": "CUS_X055",
+          "amount": "6694.60",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Implementation services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E003",
+          "customer_id": "CUS_E003",
+          "amount": "2511.00",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X055C",
+          "customer_id": "CUS_X055",
+          "amount": "9585.45",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Legacy integration",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X055D",
+          "customer_id": "CUS_X055",
+          "amount": "5629.55",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "description": "Support retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": [
+        {
+          "email_id": "EMAIL_X055",
+          "sender": "controller55@cobaltridge.example",
+          "customer_id": "CUS_X055",
+          "date": "2026-07-31",
+          "subject": "Remittance BNK-X-00055",
+          "body": "Apply the USD 15215.00 receipt only to INV_X055A and INV_X055B. The other open invoices will be paid separately."
+        }
+      ]
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X055A",
+        "description": "Platform subscription",
+        "amount": "8520.40",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X055B",
+        "description": "Implementation services",
+        "amount": "6694.60",
+        "currency": "USD",
+        "operator": "+"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EMAIL_X055",
+        "evidence_type": "remittance_email",
+        "title": "Remittance BNK-X-00055",
+        "content": "Apply the USD 15215.00 receipt only to INV_X055A and INV_X055B. The other open invoices will be paid separately.",
+        "sender": "controller55@cobaltridge.example",
+        "date": "2026-07-31",
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "CUS_X055",
+        "evidence_type": "customer_record",
+        "title": "Cobalt Ridge International Ltd",
+        "content": {
+          "aliases": [
+            "Cobalt Ridge International",
+            "Cobalt Ridge International Ltd"
+          ],
+          "parent_entities": [],
+          "known_payers": []
+        },
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "INV_X055A",
+        "evidence_type": "invoice_record",
+        "title": "Platform subscription",
+        "content": {
+          "customer_id": "CUS_X055",
+          "amount": "8520.40",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "INV_X055B",
+        "evidence_type": "invoice_record",
+        "title": "Implementation services",
+        "content": {
+          "customer_id": "CUS_X055",
+          "amount": "6694.60",
+          "currency": "USD",
+          "issue_date": "2026-06-07",
+          "due_date": "2026-07-07",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": true,
+      "state_validity": true,
+      "currency_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "duplicate_risk": false,
+      "contradictions": [],
+      "missing_required_evidence": [],
+      "reason_codes": [],
+      "invoice_total": "15215.00",
+      "credit_total": "0.00",
+      "calculated_total": "15215.00",
+      "payment_total": "15215.00"
+    },
+    "alternatives": [
+      {
+        "customer_id": "CUS_X055",
+        "invoice_ids": [
+          "INV_X055A",
+          "INV_X055B"
+        ],
+        "credit_ids": [],
+        "calculated_total": "15215.00"
+      },
+      {
+        "customer_id": "CUS_X055",
+        "invoice_ids": [
+          "INV_X055C",
+          "INV_X055D"
+        ],
+        "credit_ids": [],
+        "calculated_total": "15215.00"
+      }
+    ],
+    "sufficiency": {
+      "financial_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "alternative_allocations_exist": true,
+      "evidence_disambiguates_alternatives": true,
+      "contradictions_exist": false,
+      "missing_required_evidence": [],
+      "duplicate_risk": false,
+      "safe_to_resolve": true,
+      "abstention_reason": null
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "missing_credit_note",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": false,
+    "payment": {
+      "payment_id": "PAY_056",
+      "date": "2026-08-02",
+      "amount": "11932.00",
+      "currency": "USD",
+      "payer_name": "Driftwood Analytics International Ltd",
+      "bank_reference": "BNK-X-00056",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_056",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "no_unique_safe_allocation",
+      "candidate_count": 0
+    },
+    "decision": {
+      "payment_id": "PAY_056",
+      "decision": "human_review",
+      "customer_id": "CUS_X056",
+      "invoice_ids": [
+        "INV_X056A"
+      ],
+      "credit_ids": [
+        "CR_X054A"
+      ],
+      "proof": {
+        "financial_validity": false,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": false,
+        "credit_support": false,
+        "duplicate_risk": false,
+        "contradictions": [
+          "EMAIL_X056 names ['CR_X056A'] but proposal uses ['CR_X054A']",
+          "EMAIL_X056 states credit amount ['200'] but credit note amount is ['350.00']",
+          "remittance names credits ['CR_X056A'] but proposal uses ['CR_X054A']"
+        ],
+        "missing_required_evidence": [
+          "credit_reference",
+          "entity_relationship"
+        ],
+        "reason_codes": [
+          "financial_mismatch",
+          "unsupported_entity_relationship",
+          "unsupported_credit",
+          "email_credit_reference_mismatch"
+        ],
+        "invoice_total": "12132.00",
+        "credit_total": "350.00",
+        "calculated_total": "11782.00",
+        "payment_total": "11932.00"
+      },
+      "evidence": [
+        "EMAIL_X056",
+        "CUS_X056",
+        "INV_X056A",
+        "CR_X054A"
+      ],
+      "reason": "contradictory_evidence",
+      "latency_ms": 7
+    },
+    "proposal": {
+      "payment_id": "PAY_056",
+      "proposed_customer": "CUS_X056",
+      "invoice_ids": [
+        "INV_X056A"
+      ],
+      "credit_ids": [
+        "CR_X054A"
+      ],
+      "semantic_claims": [
+        {
+          "claim_id": "CLAIM_001",
+          "claim": "The remittance names the selected invoice.",
+          "evidence_ids": [
+            "EMAIL_X056"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "EMAIL_X056",
+        "CUS_X056"
+      ],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X056",
+          "legal_name": "Driftwood Analytics International Ltd",
+          "aliases": [
+            "Driftwood Analytics International",
+            "Driftwood Analytics International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E004",
+          "legal_name": "Driftwood Analytics 04 Ltd",
+          "aliases": [
+            "Driftwood Analytics 04",
+            "Driftwood Analytics 04 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X052",
+          "legal_name": "Deepfield AI International Ltd",
+          "aliases": [
+            "Deepfield AI International",
+            "Deepfield AI International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X056A",
+          "customer_id": "CUS_X056",
+          "amount": "12132.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Quality program",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X052A",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region A services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X052B",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region B services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X054A",
+          "customer_id": "CUS_X054",
+          "amount": "12088.00",
+          "currency": "USD",
+          "issue_date": "2026-07-03",
+          "due_date": "2026-08-02",
+          "description": "Network retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X058A",
+          "customer_id": "CUS_X058",
+          "amount": "12126.00",
+          "currency": "USD",
+          "issue_date": "2026-06-10",
+          "due_date": "2026-07-10",
+          "description": "Advisory services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X054A",
+          "customer_id": "CUS_X054",
+          "invoice_id": "INV_X054A",
+          "amount": "350.00",
+          "currency": "USD",
+          "reason": "SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": [
+        {
+          "email_id": "EMAIL_X056",
+          "sender": "finance56@missing.example",
+          "customer_id": "CUS_X056",
+          "date": "2026-08-01",
+          "subject": "Short payment BNK-X-00056",
+          "body": "Apply BNK-X-00056 to INV_X056A after our USD 200 credit CR_X056A. Please send the credit note copy."
+        }
+      ]
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X056A",
+        "description": "Quality program",
+        "amount": "12132.00",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "credit",
+        "record_id": "CR_X054A",
+        "description": "SLA service credit",
+        "amount": "350.00",
+        "currency": "USD",
+        "operator": "-"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EMAIL_X056",
+        "evidence_type": "remittance_email",
+        "title": "Short payment BNK-X-00056",
+        "content": "Apply BNK-X-00056 to INV_X056A after our USD 200 credit CR_X056A. Please send the credit note copy.",
+        "sender": "finance56@missing.example",
+        "date": "2026-08-01",
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "CUS_X056",
+        "evidence_type": "customer_record",
+        "title": "Driftwood Analytics International Ltd",
+        "content": {
+          "aliases": [
+            "Driftwood Analytics International",
+            "Driftwood Analytics International Ltd"
+          ],
+          "parent_entities": [],
+          "known_payers": []
+        },
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "INV_X056A",
+        "evidence_type": "invoice_record",
+        "title": "Quality program",
+        "content": {
+          "customer_id": "CUS_X056",
+          "amount": "12132.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "CR_X054A",
+        "evidence_type": "credit_note",
+        "title": "SLA service credit",
+        "content": {
+          "amount": "350.00",
+          "currency": "USD",
+          "status": "valid",
+          "invoice_id": "INV_X054A"
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": false,
+      "state_validity": true,
+      "currency_validity": true,
+      "entity_support": false,
+      "credit_support": false,
+      "duplicate_risk": false,
+      "contradictions": [
+        "EMAIL_X056 names ['CR_X056A'] but proposal uses ['CR_X054A']",
+        "EMAIL_X056 states credit amount ['200'] but credit note amount is ['350.00']",
+        "remittance names credits ['CR_X056A'] but proposal uses ['CR_X054A']"
+      ],
+      "missing_required_evidence": [
+        "credit_reference",
+        "entity_relationship"
+      ],
+      "reason_codes": [
+        "financial_mismatch",
+        "unsupported_entity_relationship",
+        "unsupported_credit",
+        "email_credit_reference_mismatch"
+      ],
+      "invoice_total": "12132.00",
+      "credit_total": "350.00",
+      "calculated_total": "11782.00",
+      "payment_total": "11932.00"
+    },
+    "alternatives": [],
+    "sufficiency": {
+      "financial_validity": false,
+      "entity_support": false,
+      "credit_support": false,
+      "alternative_allocations_exist": false,
+      "evidence_disambiguates_alternatives": true,
+      "contradictions_exist": true,
+      "missing_required_evidence": [
+        "credit_reference",
+        "entity_relationship",
+        "CR_X054A"
+      ],
+      "duplicate_risk": false,
+      "safe_to_resolve": false,
+      "abstention_reason": "contradictory_evidence"
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "parent_entity_multi_invoice",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_057",
+      "date": "2026-08-03",
+      "amount": "15441.00",
+      "currency": "USD",
+      "payer_name": "EVERGREEN MOBILITY GLOBAL HOLDINGS LLC",
+      "bank_reference": "BNK-X-00057",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_057",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "multiple_financial_allocations",
+      "candidate_count": 3
+    },
+    "decision": {
+      "payment_id": "PAY_057",
+      "decision": "human_review",
+      "customer_id": "CUS_X057",
+      "invoice_ids": [
+        "INV_X057A",
+        "INV_X057B"
+      ],
+      "credit_ids": [
+        "CR_X057A"
+      ],
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "15816.00",
+        "credit_total": "375.00",
+        "calculated_total": "15441.00",
+        "payment_total": "15441.00"
+      },
+      "evidence": [
+        "EMAIL_X057",
+        "CUS_X057",
+        "INV_X057A",
+        "INV_X057B",
+        "CR_X057A"
+      ],
+      "reason": "missing_required_evidence",
+      "latency_ms": 10
+    },
+    "proposal": {
+      "payment_id": "PAY_057",
+      "proposed_customer": "CUS_X057",
+      "invoice_ids": [
+        "INV_X057A",
+        "INV_X057B"
+      ],
+      "credit_ids": [
+        "CR_X057A"
+      ],
+      "semantic_claims": [
+        {
+          "claim_id": "CLAIM_001",
+          "claim": "The remittance names the selected invoice.",
+          "evidence_ids": [
+            "EMAIL_X057"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "EMAIL_X057",
+        "CUS_X057"
+      ],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X057",
+          "legal_name": "Evergreen Mobility International Ltd",
+          "aliases": [
+            "Evergreen Mobility International",
+            "Evergreen Mobility International Ltd"
+          ],
+          "parent_entities": [
+            "EVERGREEN MOBILITY GLOBAL HOLDINGS LLC"
+          ],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E005",
+          "legal_name": "Evergreen Mobility 05 Ltd",
+          "aliases": [
+            "Evergreen Mobility 05"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E007",
+          "legal_name": "Granite Cloud 07 Ltd",
+          "aliases": [
+            "Granite Cloud 07",
+            "Granite Cloud 07 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": [
+            "Granite Cloud Global Treasury 07"
+          ]
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X057A",
+          "customer_id": "CUS_X057",
+          "amount": "8856.96",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Platform subscription",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X057B",
+          "customer_id": "CUS_X057",
+          "amount": "6959.04",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Implementation services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E005",
+          "customer_id": "CUS_E005",
+          "amount": "2785.00",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E007",
+          "customer_id": "CUS_E007",
+          "amount": "3059.00",
+          "currency": "USD",
+          "issue_date": "2026-06-13",
+          "due_date": "2026-07-13",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X057C",
+          "customer_id": "CUS_X057",
+          "amount": "9727.83",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Legacy integration",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X057D",
+          "customer_id": "CUS_X057",
+          "amount": "5713.17",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "description": "Support retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X057A",
+          "customer_id": "CUS_X057",
+          "invoice_id": "INV_X057B",
+          "amount": "375.00",
+          "currency": "USD",
+          "reason": "Approved SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        },
+        {
+          "credit_id": "CR_X057B",
+          "customer_id": "CUS_X057",
+          "invoice_id": "INV_X057B",
+          "amount": "375.00",
+          "currency": "USD",
+          "reason": "Disputed quality adjustment",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": [
+        {
+          "email_id": "EMAIL_X057",
+          "sender": "controller57@evergreenmobility.example",
+          "customer_id": "CUS_X057",
+          "date": "2026-08-02",
+          "subject": "Remittance BNK-X-00057",
+          "body": "EVERGREEN MOBILITY GLOBAL HOLDINGS LLC sent this payment for Evergreen Mobility International Ltd. Apply the USD 15441.00 receipt only to INV_X057A and INV_X057B. The other open invoices will be paid separately. Deduct the approved USD 375.00 credit CR_X057A; do not use the disputed adjustment."
+        }
+      ]
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X057A",
+        "description": "Platform subscription",
+        "amount": "8856.96",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X057B",
+        "description": "Implementation services",
+        "amount": "6959.04",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "credit",
+        "record_id": "CR_X057A",
+        "description": "Approved SLA service credit",
+        "amount": "375.00",
+        "currency": "USD",
+        "operator": "-"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EMAIL_X057",
+        "evidence_type": "remittance_email",
+        "title": "Remittance BNK-X-00057",
+        "content": "EVERGREEN MOBILITY GLOBAL HOLDINGS LLC sent this payment for Evergreen Mobility International Ltd. Apply the USD 15441.00 receipt only to INV_X057A and INV_X057B. The other open invoices will be paid separately. Deduct the approved USD 375.00 credit CR_X057A; do not use the disputed adjustment.",
+        "sender": "controller57@evergreenmobility.example",
+        "date": "2026-08-02",
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "CUS_X057",
+        "evidence_type": "customer_record",
+        "title": "Evergreen Mobility International Ltd",
+        "content": {
+          "aliases": [
+            "Evergreen Mobility International",
+            "Evergreen Mobility International Ltd"
+          ],
+          "parent_entities": [
+            "EVERGREEN MOBILITY GLOBAL HOLDINGS LLC"
+          ],
+          "known_payers": []
+        },
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "INV_X057A",
+        "evidence_type": "invoice_record",
+        "title": "Platform subscription",
+        "content": {
+          "customer_id": "CUS_X057",
+          "amount": "8856.96",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "INV_X057B",
+        "evidence_type": "invoice_record",
+        "title": "Implementation services",
+        "content": {
+          "customer_id": "CUS_X057",
+          "amount": "6959.04",
+          "currency": "USD",
+          "issue_date": "2026-06-09",
+          "due_date": "2026-07-09",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "CR_X057A",
+        "evidence_type": "credit_note",
+        "title": "Approved SLA service credit",
+        "content": {
+          "amount": "375.00",
+          "currency": "USD",
+          "status": "valid",
+          "invoice_id": "INV_X057B"
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": true,
+      "state_validity": true,
+      "currency_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "duplicate_risk": false,
+      "contradictions": [],
+      "missing_required_evidence": [],
+      "reason_codes": [],
+      "invoice_total": "15816.00",
+      "credit_total": "375.00",
+      "calculated_total": "15441.00",
+      "payment_total": "15441.00"
+    },
+    "alternatives": [
+      {
+        "customer_id": "CUS_X057",
+        "invoice_ids": [
+          "INV_X057A",
+          "INV_X057B"
+        ],
+        "credit_ids": [
+          "CR_X057A"
+        ],
+        "calculated_total": "15441.00"
+      },
+      {
+        "customer_id": "CUS_X057",
+        "invoice_ids": [
+          "INV_X057A",
+          "INV_X057B"
+        ],
+        "credit_ids": [
+          "CR_X057B"
+        ],
+        "calculated_total": "15441.00"
+      },
+      {
+        "customer_id": "CUS_X057",
+        "invoice_ids": [
+          "INV_X057C",
+          "INV_X057D"
+        ],
+        "credit_ids": [],
+        "calculated_total": "15441.00"
+      }
+    ],
+    "sufficiency": {
+      "financial_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "alternative_allocations_exist": true,
+      "evidence_disambiguates_alternatives": true,
+      "contradictions_exist": false,
+      "missing_required_evidence": [
+        "CR_X057A"
+      ],
+      "duplicate_risk": false,
+      "safe_to_resolve": false,
+      "abstention_reason": "missing_required_evidence"
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "uncertain_payer_relationship",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": false,
+    "payment": {
+      "payment_id": "PAY_058",
+      "date": "2026-08-04",
+      "amount": "12126.00",
+      "currency": "USD",
+      "payer_name": "HARBOR BRIDGE SERVICES",
+      "bank_reference": "BNK-X-00058",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_058",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "payer_not_deterministically_mapped",
+      "candidate_count": 0
+    },
+    "decision": {
+      "payment_id": "PAY_058",
+      "decision": "human_review",
+      "customer_id": "CUS_X058",
+      "invoice_ids": [
+        "INV_X058A"
+      ],
+      "credit_ids": [
+        "CR_X054A"
+      ],
+      "proof": {
+        "financial_validity": false,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": false,
+        "credit_support": false,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [
+          "entity_relationship"
+        ],
+        "reason_codes": [
+          "financial_mismatch",
+          "unsupported_entity_relationship",
+          "unsupported_credit"
+        ],
+        "invoice_total": "12126.00",
+        "credit_total": "350.00",
+        "calculated_total": "11776.00",
+        "payment_total": "12126.00"
+      },
+      "evidence": [
+        "CUS_X058",
+        "INV_X058A",
+        "CR_X054A"
+      ],
+      "reason": "unsupported_entity_relationship",
+      "latency_ms": 8
+    },
+    "proposal": {
+      "payment_id": "PAY_058",
+      "proposed_customer": "CUS_X058",
+      "invoice_ids": [
+        "INV_X058A"
+      ],
+      "credit_ids": [
+        "CR_X054A"
+      ],
+      "semantic_claims": [
+        {
+          "claim_id": "CLAIM_001",
+          "claim": "The remittance names the selected invoice.",
+          "evidence_ids": [
+            "EMAIL_EXAMPLE"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "EMAIL_EXAMPLE",
+        "CUS_X058"
+      ],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X058",
+          "legal_name": "Fableworks Media International Ltd",
+          "aliases": [
+            "Fableworks Media International",
+            "Fableworks Media International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X052",
+          "legal_name": "Deepfield AI International Ltd",
+          "aliases": [
+            "Deepfield AI International",
+            "Deepfield AI International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X054",
+          "legal_name": "Boreal Systems International Ltd",
+          "aliases": [
+            "Boreal Systems International",
+            "Boreal Systems International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X058A",
+          "customer_id": "CUS_X058",
+          "amount": "12126.00",
+          "currency": "USD",
+          "issue_date": "2026-06-10",
+          "due_date": "2026-07-10",
+          "description": "Advisory services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X052A",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region A services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X052B",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region B services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X054A",
+          "customer_id": "CUS_X054",
+          "amount": "12088.00",
+          "currency": "USD",
+          "issue_date": "2026-07-03",
+          "due_date": "2026-08-02",
+          "description": "Network retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X056A",
+          "customer_id": "CUS_X056",
+          "amount": "12132.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Quality program",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X054A",
+          "customer_id": "CUS_X054",
+          "invoice_id": "INV_X054A",
+          "amount": "350.00",
+          "currency": "USD",
+          "reason": "SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": []
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X058A",
+        "description": "Advisory services",
+        "amount": "12126.00",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "credit",
+        "record_id": "CR_X054A",
+        "description": "SLA service credit",
+        "amount": "350.00",
+        "currency": "USD",
+        "operator": "-"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "CUS_X058",
+        "evidence_type": "customer_record",
+        "title": "Fableworks Media International Ltd",
+        "content": {
+          "aliases": [
+            "Fableworks Media International",
+            "Fableworks Media International Ltd"
+          ],
+          "parent_entities": [],
+          "known_payers": []
+        },
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "INV_X058A",
+        "evidence_type": "invoice_record",
+        "title": "Advisory services",
+        "content": {
+          "customer_id": "CUS_X058",
+          "amount": "12126.00",
+          "currency": "USD",
+          "issue_date": "2026-06-10",
+          "due_date": "2026-07-10",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "CR_X054A",
+        "evidence_type": "credit_note",
+        "title": "SLA service credit",
+        "content": {
+          "amount": "350.00",
+          "currency": "USD",
+          "status": "valid",
+          "invoice_id": "INV_X054A"
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": false,
+      "state_validity": true,
+      "currency_validity": true,
+      "entity_support": false,
+      "credit_support": false,
+      "duplicate_risk": false,
+      "contradictions": [],
+      "missing_required_evidence": [
+        "entity_relationship"
+      ],
+      "reason_codes": [
+        "financial_mismatch",
+        "unsupported_entity_relationship",
+        "unsupported_credit"
+      ],
+      "invoice_total": "12126.00",
+      "credit_total": "350.00",
+      "calculated_total": "11776.00",
+      "payment_total": "12126.00"
+    },
+    "alternatives": [
+      {
+        "customer_id": "CUS_X058",
+        "invoice_ids": [
+          "INV_X058A"
+        ],
+        "credit_ids": [],
+        "calculated_total": "12126.00"
+      }
+    ],
+    "sufficiency": {
+      "financial_validity": false,
+      "entity_support": false,
+      "credit_support": false,
+      "alternative_allocations_exist": true,
+      "evidence_disambiguates_alternatives": true,
+      "contradictions_exist": false,
+      "missing_required_evidence": [
+        "entity_relationship",
+        "EMAIL_EXAMPLE",
+        "CR_X054A"
+      ],
+      "duplicate_risk": false,
+      "safe_to_resolve": false,
+      "abstention_reason": "unsupported_entity_relationship"
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "known_payer_disambiguated",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": true,
+    "payment": {
+      "payment_id": "PAY_059",
+      "date": "2026-08-05",
+      "amount": "15667.00",
+      "currency": "USD",
+      "payer_name": "GRANITE CLOUD TREASURY SERVICES LTD",
+      "bank_reference": "BNK-X-00059",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_059",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "multiple_financial_allocations",
+      "candidate_count": 2
+    },
+    "decision": {
+      "payment_id": "PAY_059",
+      "decision": "resolved",
+      "customer_id": "CUS_X059",
+      "invoice_ids": [
+        "INV_X059A",
+        "INV_X059B"
+      ],
+      "credit_ids": [],
+      "proof": {
+        "financial_validity": true,
+        "state_validity": true,
+        "currency_validity": true,
+        "entity_support": true,
+        "credit_support": true,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [],
+        "reason_codes": [],
+        "invoice_total": "15667.00",
+        "credit_total": "0.00",
+        "calculated_total": "15667.00",
+        "payment_total": "15667.00"
+      },
+      "evidence": [
+        "EMAIL_X059",
+        "CUS_X059",
+        "INV_X059A",
+        "INV_X059B"
+      ],
+      "reason": "Evidence uniquely supports the proposed allocation and every deterministic proof passed.",
+      "latency_ms": 9
+    },
+    "proposal": {
+      "payment_id": "PAY_059",
+      "proposed_customer": "CUS_X059",
+      "invoice_ids": [
+        "INV_X059A",
+        "INV_X059B"
+      ],
+      "credit_ids": [],
+      "semantic_claims": [
+        {
+          "claim_id": "CLAIM_001",
+          "claim": "The remittance names the selected invoice.",
+          "evidence_ids": [
+            "EMAIL_X059"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "EMAIL_X059",
+        "CUS_X059"
+      ],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X059",
+          "legal_name": "Granite Cloud International Ltd",
+          "aliases": [
+            "Granite Cloud International",
+            "Granite Cloud International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": [
+            "GRANITE CLOUD TREASURY SERVICES LTD"
+          ]
+        },
+        {
+          "customer_id": "CUS_E007",
+          "legal_name": "Granite Cloud 07 Ltd",
+          "aliases": [
+            "Granite Cloud 07",
+            "Granite Cloud 07 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": [
+            "Granite Cloud Global Treasury 07"
+          ]
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X059A",
+          "customer_id": "CUS_X059",
+          "amount": "8773.52",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Platform subscription",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X059B",
+          "customer_id": "CUS_X059",
+          "amount": "6893.48",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Implementation services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_E007",
+          "customer_id": "CUS_E007",
+          "amount": "3059.00",
+          "currency": "USD",
+          "issue_date": "2026-06-13",
+          "due_date": "2026-07-13",
+          "description": "Monthly software and support services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X059C",
+          "customer_id": "CUS_X059",
+          "amount": "9870.21",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Legacy integration",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X059D",
+          "customer_id": "CUS_X059",
+          "amount": "5796.79",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "description": "Support retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [],
+      "emails": [
+        {
+          "email_id": "EMAIL_X059",
+          "sender": "controller59@granitecloud.example",
+          "customer_id": "CUS_X059",
+          "date": "2026-08-04",
+          "subject": "Remittance BNK-X-00059",
+          "body": "Apply the USD 15667.00 receipt only to INV_X059A and INV_X059B. The other open invoices will be paid separately."
+        }
+      ]
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X059A",
+        "description": "Platform subscription",
+        "amount": "8773.52",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X059B",
+        "description": "Implementation services",
+        "amount": "6893.48",
+        "currency": "USD",
+        "operator": "+"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EMAIL_X059",
+        "evidence_type": "remittance_email",
+        "title": "Remittance BNK-X-00059",
+        "content": "Apply the USD 15667.00 receipt only to INV_X059A and INV_X059B. The other open invoices will be paid separately.",
+        "sender": "controller59@granitecloud.example",
+        "date": "2026-08-04",
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "CUS_X059",
+        "evidence_type": "customer_record",
+        "title": "Granite Cloud International Ltd",
+        "content": {
+          "aliases": [
+            "Granite Cloud International",
+            "Granite Cloud International Ltd"
+          ],
+          "parent_entities": [],
+          "known_payers": [
+            "GRANITE CLOUD TREASURY SERVICES LTD"
+          ]
+        },
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "INV_X059A",
+        "evidence_type": "invoice_record",
+        "title": "Platform subscription",
+        "content": {
+          "customer_id": "CUS_X059",
+          "amount": "8773.52",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "INV_X059B",
+        "evidence_type": "invoice_record",
+        "title": "Implementation services",
+        "content": {
+          "customer_id": "CUS_X059",
+          "amount": "6893.48",
+          "currency": "USD",
+          "issue_date": "2026-06-11",
+          "due_date": "2026-07-11",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": true,
+      "state_validity": true,
+      "currency_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "duplicate_risk": false,
+      "contradictions": [],
+      "missing_required_evidence": [],
+      "reason_codes": [],
+      "invoice_total": "15667.00",
+      "credit_total": "0.00",
+      "calculated_total": "15667.00",
+      "payment_total": "15667.00"
+    },
+    "alternatives": [
+      {
+        "customer_id": "CUS_X059",
+        "invoice_ids": [
+          "INV_X059A",
+          "INV_X059B"
+        ],
+        "credit_ids": [],
+        "calculated_total": "15667.00"
+      },
+      {
+        "customer_id": "CUS_X059",
+        "invoice_ids": [
+          "INV_X059C",
+          "INV_X059D"
+        ],
+        "credit_ids": [],
+        "calculated_total": "15667.00"
+      }
+    ],
+    "sufficiency": {
+      "financial_validity": true,
+      "entity_support": true,
+      "credit_support": true,
+      "alternative_allocations_exist": true,
+      "evidence_disambiguates_alternatives": true,
+      "contradictions_exist": false,
+      "missing_required_evidence": [],
+      "duplicate_risk": false,
+      "safe_to_resolve": true,
+      "abstention_reason": null
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  },
+  {
+    "exception_class": "stale_or_duplicate_candidate",
+    "is_exception": true,
+    "split": "dev",
+    "expected_should_resolve": false,
+    "payment": {
+      "payment_id": "PAY_060",
+      "date": "2026-08-06",
+      "amount": "12320.00",
+      "currency": "USD",
+      "payer_name": "Horizon Foods International Ltd",
+      "bank_reference": "BNK-X-00060",
+      "remittance_reference": "",
+      "status": "unmatched",
+      "allocated_customer_id": null
+    },
+    "baseline": {
+      "payment_id": "PAY_060",
+      "status": "unresolved",
+      "matched_invoices": [],
+      "matched_credits": [],
+      "customer_id": null,
+      "reason": "no_unique_safe_allocation",
+      "candidate_count": 0
+    },
+    "decision": {
+      "payment_id": "PAY_060",
+      "decision": "human_review",
+      "customer_id": "CUS_X060",
+      "invoice_ids": [
+        "INV_X060A"
+      ],
+      "credit_ids": [
+        "CR_X054A"
+      ],
+      "proof": {
+        "financial_validity": false,
+        "state_validity": false,
+        "currency_validity": true,
+        "entity_support": false,
+        "credit_support": false,
+        "duplicate_risk": false,
+        "contradictions": [],
+        "missing_required_evidence": [
+          "entity_relationship"
+        ],
+        "reason_codes": [
+          "financial_mismatch",
+          "invoice_not_open",
+          "unsupported_entity_relationship",
+          "unsupported_credit"
+        ],
+        "invoice_total": "12320.00",
+        "credit_total": "350.00",
+        "calculated_total": "11970.00",
+        "payment_total": "12320.00"
+      },
+      "evidence": [
+        "EMAIL_X060",
+        "CUS_X060",
+        "INV_X060A",
+        "CR_X054A"
+      ],
+      "reason": "invoice_not_open",
+      "latency_ms": 7
+    },
+    "proposal": {
+      "payment_id": "PAY_060",
+      "proposed_customer": "CUS_X060",
+      "invoice_ids": [
+        "INV_X060A"
+      ],
+      "credit_ids": [
+        "CR_X054A"
+      ],
+      "semantic_claims": [
+        {
+          "claim_id": "CLAIM_001",
+          "claim": "The remittance names the selected invoice.",
+          "evidence_ids": [
+            "EMAIL_X060"
+          ]
+        }
+      ],
+      "evidence_ids": [
+        "EMAIL_X060",
+        "CUS_X060"
+      ],
+      "unresolved_questions": []
+    },
+    "candidates": {
+      "customers": [
+        {
+          "customer_id": "CUS_X060",
+          "legal_name": "Horizon Foods International Ltd",
+          "aliases": [
+            "Horizon Foods International",
+            "Horizon Foods International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_E008",
+          "legal_name": "Horizon Foods 08 Ltd",
+          "aliases": [
+            "Horizon Foods 08",
+            "Horizon Foods 08 Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        },
+        {
+          "customer_id": "CUS_X052",
+          "legal_name": "Deepfield AI International Ltd",
+          "aliases": [
+            "Deepfield AI International",
+            "Deepfield AI International Ltd"
+          ],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "invoices": [
+        {
+          "invoice_id": "INV_X060A",
+          "customer_id": "CUS_X060",
+          "amount": "12320.00",
+          "currency": "USD",
+          "issue_date": "2026-06-12",
+          "due_date": "2026-07-12",
+          "description": "Closed implementation",
+          "status": "closed",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X052A",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region A services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X052B",
+          "customer_id": "CUS_X052",
+          "amount": "11544.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Region B services",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X054A",
+          "customer_id": "CUS_X054",
+          "amount": "12088.00",
+          "currency": "USD",
+          "issue_date": "2026-07-03",
+          "due_date": "2026-08-02",
+          "description": "Network retainer",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X056A",
+          "customer_id": "CUS_X056",
+          "amount": "12132.00",
+          "currency": "USD",
+          "issue_date": "2026-06-08",
+          "due_date": "2026-07-08",
+          "description": "Quality program",
+          "status": "open",
+          "allocated_payment_id": null
+        },
+        {
+          "invoice_id": "INV_X058A",
+          "customer_id": "CUS_X058",
+          "amount": "12126.00",
+          "currency": "USD",
+          "issue_date": "2026-06-10",
+          "due_date": "2026-07-10",
+          "description": "Advisory services",
+          "status": "open",
+          "allocated_payment_id": null
+        }
+      ],
+      "credits": [
+        {
+          "credit_id": "CR_X054A",
+          "customer_id": "CUS_X054",
+          "invoice_id": "INV_X054A",
+          "amount": "350.00",
+          "currency": "USD",
+          "reason": "SLA service credit",
+          "status": "valid",
+          "consumed_by_payment_id": null
+        }
+      ],
+      "emails": [
+        {
+          "email_id": "EMAIL_X060",
+          "sender": "ap60@stale.example",
+          "customer_id": "CUS_X060",
+          "date": "2026-08-05",
+          "subject": "Remittance BNK-X-00060",
+          "body": "Please apply BNK-X-00060 to INV_X060A."
+        }
+      ]
+    },
+    "proposed_allocation": [
+      {
+        "record_type": "invoice",
+        "record_id": "INV_X060A",
+        "description": "Closed implementation",
+        "amount": "12320.00",
+        "currency": "USD",
+        "operator": "+"
+      },
+      {
+        "record_type": "credit",
+        "record_id": "CR_X054A",
+        "description": "SLA service credit",
+        "amount": "350.00",
+        "currency": "USD",
+        "operator": "-"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "EMAIL_X060",
+        "evidence_type": "remittance_email",
+        "title": "Remittance BNK-X-00060",
+        "content": "Please apply BNK-X-00060 to INV_X060A.",
+        "sender": "ap60@stale.example",
+        "date": "2026-08-05",
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "CUS_X060",
+        "evidence_type": "customer_record",
+        "title": "Horizon Foods International Ltd",
+        "content": {
+          "aliases": [
+            "Horizon Foods International",
+            "Horizon Foods International Ltd"
+          ],
+          "parent_entities": [],
+          "known_payers": []
+        },
+        "evidence_role": "model_citation"
+      },
+      {
+        "evidence_id": "INV_X060A",
+        "evidence_type": "invoice_record",
+        "title": "Closed implementation",
+        "content": {
+          "customer_id": "CUS_X060",
+          "amount": "12320.00",
+          "currency": "USD",
+          "issue_date": "2026-06-12",
+          "due_date": "2026-07-12",
+          "status": "closed",
+          "allocated_payment_id": null
+        },
+        "evidence_role": "audit_context"
+      },
+      {
+        "evidence_id": "CR_X054A",
+        "evidence_type": "credit_note",
+        "title": "SLA service credit",
+        "content": {
+          "amount": "350.00",
+          "currency": "USD",
+          "status": "valid",
+          "invoice_id": "INV_X054A"
+        },
+        "evidence_role": "audit_context"
+      }
+    ],
+    "proof": {
+      "financial_validity": false,
+      "state_validity": false,
+      "currency_validity": true,
+      "entity_support": false,
+      "credit_support": false,
+      "duplicate_risk": false,
+      "contradictions": [],
+      "missing_required_evidence": [
+        "entity_relationship"
+      ],
+      "reason_codes": [
+        "financial_mismatch",
+        "invoice_not_open",
+        "unsupported_entity_relationship",
+        "unsupported_credit"
+      ],
+      "invoice_total": "12320.00",
+      "credit_total": "350.00",
+      "calculated_total": "11970.00",
+      "payment_total": "12320.00"
+    },
+    "alternatives": [],
+    "sufficiency": {
+      "financial_validity": false,
+      "entity_support": false,
+      "credit_support": false,
+      "alternative_allocations_exist": false,
+      "evidence_disambiguates_alternatives": true,
+      "contradictions_exist": false,
+      "missing_required_evidence": [
+        "entity_relationship",
+        "CR_X054A"
+      ],
+      "duplicate_risk": false,
+      "safe_to_resolve": false,
+      "abstention_reason": "invoice_not_open"
+    },
+    "counterfactuals": [],
+    "investigator_error": null,
+    "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241"
+  }
+]

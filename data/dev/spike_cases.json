@@ -1,0 +1,665 @@
+[
+  {
+    "case_id": "SPIKE_01",
+    "exception": "Parent company pays subsidiary invoice",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S01",
+        "date": "2026-08-05",
+        "amount": "12500.00",
+        "currency": "USD",
+        "payer_name": "NORTHSTAR GLOBAL HOLDINGS LLC",
+        "bank_reference": "WIRE-NS-8851",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S01",
+          "legal_name": "Northstar Analytics Pvt Ltd",
+          "aliases": ["Northstar Analytics"],
+          "parent_entities": ["NORTHSTAR GLOBAL HOLDINGS LLC"],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S01A",
+          "customer_id": "CUS_S01",
+          "amount": "12500.00",
+          "currency": "USD",
+          "issue_date": "2026-06-10",
+          "due_date": "2026-07-10",
+          "description": "Analytics platform subscription",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [],
+      "candidate_emails": []
+    },
+    "ground_truth": {
+      "exception_class": "parent_company_payer",
+      "correct_customer": "CUS_S01",
+      "correct_invoices": ["INV_S01A"],
+      "correct_credits": [],
+      "should_resolve": true,
+      "required_evidence": ["CUS_S01"],
+      "expected_reason": "Customer record explicitly identifies the payer as the parent entity."
+    }
+  },
+  {
+    "case_id": "SPIKE_02",
+    "exception": "Different legal payer name with supporting entity record",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S02",
+        "date": "2026-08-06",
+        "amount": "8700.00",
+        "currency": "EUR",
+        "payer_name": "BLUEWAVE TREASURY SERVICES LTD",
+        "bank_reference": "BWT-44108",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S02",
+          "legal_name": "BlueWave Software GmbH",
+          "aliases": ["BlueWave Software"],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": ["BLUEWAVE TREASURY SERVICES LTD"]
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S02A",
+          "customer_id": "CUS_S02",
+          "amount": "8700.00",
+          "currency": "EUR",
+          "issue_date": "2026-06-15",
+          "due_date": "2026-07-15",
+          "description": "Implementation services",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [],
+      "candidate_emails": []
+    },
+    "ground_truth": {
+      "exception_class": "known_payer_alias",
+      "correct_customer": "CUS_S02",
+      "correct_invoices": ["INV_S02A"],
+      "correct_credits": [],
+      "should_resolve": true,
+      "required_evidence": ["CUS_S02"],
+      "expected_reason": "The customer master explicitly lists the treasury company as a known payer."
+    }
+  },
+  {
+    "case_id": "SPIKE_03",
+    "exception": "Detached email specifies two invoices",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S03",
+        "date": "2026-08-07",
+        "amount": "10000.00",
+        "currency": "USD",
+        "payer_name": "CITIBANK N.A. OBO ORION RETAIL",
+        "bank_reference": "CITI-OR-9021",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S03",
+          "legal_name": "Orion Retail Ltd",
+          "aliases": ["Orion Retail"],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S03A",
+          "customer_id": "CUS_S03",
+          "amount": "4200.00",
+          "currency": "USD",
+          "issue_date": "2026-06-18",
+          "due_date": "2026-07-18",
+          "description": "Commerce API usage",
+          "status": "open"
+        },
+        {
+          "invoice_id": "INV_S03B",
+          "customer_id": "CUS_S03",
+          "amount": "5800.00",
+          "currency": "USD",
+          "issue_date": "2026-06-20",
+          "due_date": "2026-07-20",
+          "description": "Store migration services",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [],
+      "candidate_emails": [
+        {
+          "email_id": "EMAIL_S03",
+          "sender": "finance@orion.example",
+          "customer_id": "CUS_S03",
+          "date": "2026-08-06",
+          "subject": "Wire remittance details",
+          "body": "Our payment was sent by our treasury bank, Citibank N.A., on behalf of Orion Retail Ltd. Please apply it to INV_S03A and INV_S03B."
+        }
+      ]
+    },
+    "ground_truth": {
+      "exception_class": "detached_remittance_email",
+      "correct_customer": "CUS_S03",
+      "correct_invoices": ["INV_S03A", "INV_S03B"],
+      "correct_credits": [],
+      "should_resolve": true,
+      "required_evidence": ["EMAIL_S03", "CUS_S03"],
+      "expected_reason": "The remittance email identifies the sending bank, customer, and both invoices."
+    }
+  },
+  {
+    "case_id": "SPIKE_04",
+    "exception": "Credit deduction explained by remittance",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S04",
+        "date": "2026-08-08",
+        "amount": "14600.00",
+        "currency": "USD",
+        "payer_name": "CEDAR LABS INC",
+        "bank_reference": "CED-77812",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S04",
+          "legal_name": "Cedar Labs Inc",
+          "aliases": [],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S04A",
+          "customer_id": "CUS_S04",
+          "amount": "15000.00",
+          "currency": "USD",
+          "issue_date": "2026-06-22",
+          "due_date": "2026-07-22",
+          "description": "Annual data platform fee",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [
+        {
+          "credit_id": "CR_S04A",
+          "customer_id": "CUS_S04",
+          "invoice_id": "INV_S04A",
+          "amount": "400.00",
+          "currency": "USD",
+          "reason": "Onboarding rebate",
+          "status": "valid"
+        },
+        {
+          "credit_id": "CR_S04B",
+          "customer_id": "CUS_S04",
+          "invoice_id": "INV_S04A",
+          "amount": "400.00",
+          "currency": "USD",
+          "reason": "Disputed SLA credit",
+          "status": "valid"
+        }
+      ],
+      "candidate_emails": [
+        {
+          "email_id": "EMAIL_S04",
+          "sender": "ap@cedarlabs.example",
+          "customer_id": "CUS_S04",
+          "date": "2026-08-07",
+          "subject": "INV_S04A remittance",
+          "body": "Apply the wire to INV_S04A after deducting the approved USD 400 onboarding rebate in CR_S04A. Do not use the disputed SLA item."
+        }
+      ]
+    },
+    "ground_truth": {
+      "exception_class": "credit_deduction",
+      "correct_customer": "CUS_S04",
+      "correct_invoices": ["INV_S04A"],
+      "correct_credits": ["CR_S04A"],
+      "should_resolve": true,
+      "required_evidence": ["EMAIL_S04", "CR_S04A"],
+      "expected_reason": "The email uniquely identifies the approved credit among two equal-value notes."
+    }
+  },
+  {
+    "case_id": "SPIKE_05",
+    "exception": "Two numeric allocations, email disambiguates",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S05",
+        "date": "2026-08-09",
+        "amount": "10000.00",
+        "currency": "USD",
+        "payer_name": "HELIOS SYSTEMS INC",
+        "bank_reference": "HEL-10922",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S05",
+          "legal_name": "Helios Systems Inc",
+          "aliases": ["Helios Systems"],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S05A",
+          "customer_id": "CUS_S05",
+          "amount": "6000.00",
+          "currency": "USD",
+          "issue_date": "2026-05-01",
+          "due_date": "2026-05-31",
+          "description": "May subscription",
+          "status": "open"
+        },
+        {
+          "invoice_id": "INV_S05B",
+          "customer_id": "CUS_S05",
+          "amount": "4000.00",
+          "currency": "USD",
+          "issue_date": "2026-05-15",
+          "due_date": "2026-06-14",
+          "description": "May support services",
+          "status": "open"
+        },
+        {
+          "invoice_id": "INV_S05C",
+          "customer_id": "CUS_S05",
+          "amount": "7000.00",
+          "currency": "USD",
+          "issue_date": "2026-06-01",
+          "due_date": "2026-06-30",
+          "description": "June subscription",
+          "status": "open"
+        },
+        {
+          "invoice_id": "INV_S05D",
+          "customer_id": "CUS_S05",
+          "amount": "3000.00",
+          "currency": "USD",
+          "issue_date": "2026-06-15",
+          "due_date": "2026-07-15",
+          "description": "June support services",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [],
+      "candidate_emails": [
+        {
+          "email_id": "EMAIL_S05",
+          "sender": "controller@helios.example",
+          "customer_id": "CUS_S05",
+          "date": "2026-08-08",
+          "subject": "May invoice remittance",
+          "body": "Please allocate this USD 10,000 payment only to INV_S05A and INV_S05B. The June invoices will be paid separately."
+        }
+      ]
+    },
+    "ground_truth": {
+      "exception_class": "multiple_valid_allocations_disambiguated",
+      "correct_customer": "CUS_S05",
+      "correct_invoices": ["INV_S05A", "INV_S05B"],
+      "correct_credits": [],
+      "should_resolve": true,
+      "required_evidence": ["EMAIL_S05"],
+      "expected_reason": "Two allocations total USD 10,000; the email explicitly selects the May pair."
+    }
+  },
+  {
+    "case_id": "SPIKE_06",
+    "exception": "Same-amount invoices with no remittance",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S06",
+        "date": "2026-08-10",
+        "amount": "5000.00",
+        "currency": "USD",
+        "payer_name": "MOSAIC MEDIA LLC",
+        "bank_reference": "MOS-00991",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S06",
+          "legal_name": "Mosaic Media LLC",
+          "aliases": [],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S06A",
+          "customer_id": "CUS_S06",
+          "amount": "5000.00",
+          "currency": "USD",
+          "issue_date": "2026-06-01",
+          "due_date": "2026-07-01",
+          "description": "Campaign A services",
+          "status": "open"
+        },
+        {
+          "invoice_id": "INV_S06B",
+          "customer_id": "CUS_S06",
+          "amount": "5000.00",
+          "currency": "USD",
+          "issue_date": "2026-06-02",
+          "due_date": "2026-07-02",
+          "description": "Campaign B services",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [],
+      "candidate_emails": []
+    },
+    "ground_truth": {
+      "exception_class": "same_amount_ambiguity",
+      "correct_customer": "CUS_S06",
+      "correct_invoices": [],
+      "correct_credits": [],
+      "should_resolve": false,
+      "required_evidence": ["missing_remittance_instruction"],
+      "expected_reason": "Two equal-value invoices remain and no evidence identifies the intended one."
+    }
+  },
+  {
+    "case_id": "SPIKE_07",
+    "exception": "Email conflicts with credit note",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S07",
+        "date": "2026-08-11",
+        "amount": "9650.00",
+        "currency": "USD",
+        "payer_name": "VANTAGE NETWORKS INC",
+        "bank_reference": "VAN-76109",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S07",
+          "legal_name": "Vantage Networks Inc",
+          "aliases": [],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S07A",
+          "customer_id": "CUS_S07",
+          "amount": "10000.00",
+          "currency": "USD",
+          "issue_date": "2026-06-12",
+          "due_date": "2026-07-12",
+          "description": "Network operations retainer",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [
+        {
+          "credit_id": "CR_S07A",
+          "customer_id": "CUS_S07",
+          "invoice_id": "INV_S07A",
+          "amount": "350.00",
+          "currency": "USD",
+          "reason": "SLA service credit",
+          "status": "valid"
+        }
+      ],
+      "candidate_emails": [
+        {
+          "email_id": "EMAIL_S07",
+          "sender": "ap@vantage.example",
+          "customer_id": "CUS_S07",
+          "date": "2026-08-10",
+          "subject": "INV_S07A and CR_S07A",
+          "body": "Apply payment to INV_S07A. We deducted a USD 500 service credit under CR_S07A."
+        }
+      ]
+    },
+    "ground_truth": {
+      "exception_class": "conflicting_evidence",
+      "correct_customer": "CUS_S07",
+      "correct_invoices": [],
+      "correct_credits": [],
+      "should_resolve": false,
+      "required_evidence": ["EMAIL_S07", "CR_S07A"],
+      "expected_reason": "The email claims USD 500 while the valid credit note is USD 350."
+    }
+  },
+  {
+    "case_id": "SPIKE_08",
+    "exception": "Claimed credit but credit note missing",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S08",
+        "date": "2026-08-12",
+        "amount": "7800.00",
+        "currency": "USD",
+        "payer_name": "KINETIC FOODS LLC",
+        "bank_reference": "KIN-11800",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S08",
+          "legal_name": "Kinetic Foods LLC",
+          "aliases": [],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S08A",
+          "customer_id": "CUS_S08",
+          "amount": "8000.00",
+          "currency": "USD",
+          "issue_date": "2026-06-14",
+          "due_date": "2026-07-14",
+          "description": "Logistics optimization services",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [],
+      "candidate_emails": [
+        {
+          "email_id": "EMAIL_S08",
+          "sender": "finance@kinetic.example",
+          "customer_id": "CUS_S08",
+          "date": "2026-08-11",
+          "subject": "Short payment for INV_S08A",
+          "body": "Apply the wire to INV_S08A after our USD 200 quality credit CR_S08A. Please send the credit note copy for our files."
+        }
+      ]
+    },
+    "ground_truth": {
+      "exception_class": "missing_credit_note",
+      "correct_customer": "CUS_S08",
+      "correct_invoices": [],
+      "correct_credits": [],
+      "should_resolve": false,
+      "required_evidence": ["CR_S08A_missing"],
+      "expected_reason": "The customer claims a deduction but no valid credit note exists in the candidate records."
+    }
+  },
+  {
+    "case_id": "SPIKE_09",
+    "exception": "Payer relationship uncertain",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S09",
+        "date": "2026-08-13",
+        "amount": "6200.00",
+        "currency": "EUR",
+        "payer_name": "HARBOR BRIDGE SERVICES",
+        "bank_reference": "HBS-00620",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S09",
+          "legal_name": "Lumen Works Ltd",
+          "aliases": ["Lumen Works"],
+          "parent_entities": [],
+          "subsidiaries": [],
+          "known_payers": []
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S09A",
+          "customer_id": "CUS_S09",
+          "amount": "6200.00",
+          "currency": "EUR",
+          "issue_date": "2026-06-16",
+          "due_date": "2026-07-16",
+          "description": "Design systems engagement",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [],
+      "candidate_emails": []
+    },
+    "ground_truth": {
+      "exception_class": "uncertain_payer_relationship",
+      "correct_customer": "CUS_S09",
+      "correct_invoices": [],
+      "correct_credits": [],
+      "should_resolve": false,
+      "required_evidence": ["payer_relationship_missing"],
+      "expected_reason": "No record or remittance evidence links Harbor Bridge Services to Lumen Works."
+    }
+  },
+  {
+    "case_id": "SPIKE_10",
+    "exception": "Multi-invoice deduction with entity mismatch",
+    "input": {
+      "payment": {
+        "payment_id": "PAY_S10",
+        "date": "2026-08-14",
+        "amount": "19650.00",
+        "currency": "USD",
+        "payer_name": "ACME US HOLDINGS SPV LLC",
+        "bank_reference": "BRX0291",
+        "remittance_reference": "",
+        "status": "unmatched"
+      },
+      "candidate_customers": [
+        {
+          "customer_id": "CUS_S10",
+          "legal_name": "Acme Technologies Inc",
+          "aliases": ["Acme Tech", "Acme Technologies"],
+          "parent_entities": ["ACME US HOLDINGS SPV LLC"],
+          "subsidiaries": [],
+          "known_payers": ["ACME US HOLDINGS SPV LLC"]
+        }
+      ],
+      "candidate_invoices": [
+        {
+          "invoice_id": "INV_S10A",
+          "customer_id": "CUS_S10",
+          "amount": "10000.00",
+          "currency": "USD",
+          "issue_date": "2026-06-01",
+          "due_date": "2026-06-30",
+          "description": "Platform services",
+          "status": "open"
+        },
+        {
+          "invoice_id": "INV_S10B",
+          "customer_id": "CUS_S10",
+          "amount": "10000.00",
+          "currency": "USD",
+          "issue_date": "2026-07-01",
+          "due_date": "2026-07-31",
+          "description": "Migration services",
+          "status": "open"
+        },
+        {
+          "invoice_id": "INV_S10C",
+          "customer_id": "CUS_S10",
+          "amount": "12000.00",
+          "currency": "USD",
+          "issue_date": "2026-05-15",
+          "due_date": "2026-06-15",
+          "description": "Enterprise integration",
+          "status": "open"
+        },
+        {
+          "invoice_id": "INV_S10D",
+          "customer_id": "CUS_S10",
+          "amount": "7650.00",
+          "currency": "USD",
+          "issue_date": "2026-05-20",
+          "due_date": "2026-06-20",
+          "description": "Support retainer",
+          "status": "open"
+        }
+      ],
+      "candidate_credits": [
+        {
+          "credit_id": "CR_S10A",
+          "customer_id": "CUS_S10",
+          "invoice_id": "INV_S10B",
+          "amount": "350.00",
+          "currency": "USD",
+          "reason": "SLA service credit",
+          "status": "valid"
+        }
+      ],
+      "candidate_emails": [
+        {
+          "email_id": "EMAIL_S10",
+          "sender": "finance@acme.example",
+          "customer_id": "CUS_S10",
+          "date": "2026-08-03",
+          "subject": "August remittance",
+          "body": "ACME US HOLDINGS SPV LLC sent this payment for Acme Technologies Inc. Apply it to INV_S10A and INV_S10B after deducting the USD 350 SLA service credit CR_S10A."
+        }
+      ]
+    },
+    "ground_truth": {
+      "exception_class": "multi_invoice_credit_entity_mismatch",
+      "correct_customer": "CUS_S10",
+      "correct_invoices": ["INV_S10A", "INV_S10B"],
+      "correct_credits": ["CR_S10A"],
+      "should_resolve": true,
+      "required_evidence": ["EMAIL_S10", "CR_S10A", "CUS_S10"],
+      "expected_reason": "Parent entity pays two invoices after applying a valid SLA credit; email eliminates another numeric allocation."
+    }
+  }
+]

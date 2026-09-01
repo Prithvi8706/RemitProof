@@ -1,0 +1,196 @@
+{
+  "generated_from": "deterministic synthetic benchmark/regression evaluation",
+  "evaluation_generation_id": "766330f3d11925d70d50ea916dfd2277ab8d9378d55be599d59ee72f24db2241",
+  "evaluation_mode": "cache_only_legacy_identity_unverified_proposal_replay",
+  "partition_label": "20-record synthetic regression corpus",
+  "independent_held_out": false,
+  "model": "llama3.2",
+  "elapsed_seconds": 0.113,
+  "cache_hits": 10,
+  "cache_misses": 0,
+  "cache": {
+    "status": "cache_only",
+    "hits": 10,
+    "misses": 0,
+    "model_inference_included": false,
+    "proposal_source_identity_verified": false
+  },
+  "provenance": {
+    "evaluator_version": "remitproof-evaluator-v2",
+    "evaluation_mode": "cache_only_legacy_identity_unverified_proposal_replay",
+    "dataset_sha256": "f9c9480200ab45fa08ef6b4c0473efdd933b4b15f0b68b6179f24d88e5c688d5",
+    "proposal_cache_sha256": "680db61d379140bc61620bcb7473242fb03d9b751ca86359980f86b1ff3e7e78",
+    "investigator": {
+      "investigator_version": "remitproof-ollama-investigator-v2",
+      "model": "llama3.2",
+      "model_digest": null,
+      "timeout_seconds": 120,
+      "generation_options": {
+        "temperature": 0,
+        "seed": 42
+      },
+      "prompt_sha256": "3b7fa14df630427ad26105df67c733dbdbaef201001ca88876f7ce8e5f787d9b",
+      "proposal_schema_sha256": "1f6c56733140fa4679b59ecb54619e6778b43fd5a2be38d3f5d8d470b73bdde7",
+      "host_sha256": "b26993598dffd1f14aed97def57ef67f753518a9b773d8a12033c82b4fa545ca",
+      "identity_sha256": "fff6ec8079fc0d73a93f9f8c455e65b4ce57ae716ef68c15a130e2e0d756f2a3"
+    },
+    "proposal_source_identity_verified": false,
+    "cache_hits": 10,
+    "cache_misses": 0,
+    "live_model_calls": 0,
+    "legacy_cache_promotions": 0,
+    "unverified_legacy_cache_hits": 10,
+    "cache_entries": 10,
+    "unverified_legacy_entries": 0
+  },
+  "total_receipts": 20,
+  "matched_normally": 10,
+  "exceptions": 10,
+  "resolved_by_remitproof": 3,
+  "human_review": 7,
+  "baseline_match_rate": 0.5,
+  "exception_resolution_rate": 0.3,
+  "resolution_accuracy": 0.6,
+  "incorrect_auto_resolution_rate": 0.0,
+  "correct_abstention_rate": 1.0,
+  "false_escalation_rate": 0.4,
+  "entity_resolution_accuracy": 1.0,
+  "evidence_precision": 0.8889,
+  "arithmetic_correctness": 1.0,
+  "retrieval_accuracy": 1.0,
+  "throughput_per_minute": 10652.13,
+  "mean_latency_ms": 5.3,
+  "comparison_scope": "unresolved exception records",
+  "comparison_record_count": 10,
+  "timing_scope": "pipeline/verifier replay; cached model inference is excluded when evaluation_mode is cache_only",
+  "comparison": {
+    "baseline": {
+      "resolved": 0,
+      "correct_resolutions": 0,
+      "wrong_auto_resolutions": 0,
+      "correct_abstentions": 5,
+      "false_escalations": 5
+    },
+    "llm_only": {
+      "resolved": 10,
+      "correct_resolutions": 5,
+      "wrong_auto_resolutions": 5,
+      "correct_abstentions": 0,
+      "false_escalations": 0,
+      "mode": "proposal_only_forced_proposal_verifier_ablation",
+      "label": "Forced-proposal verifier ablation (proposal only)",
+      "standalone_llm_system": false,
+      "allows_independent_abstention": false
+    },
+    "remitproof": {
+      "resolved": 3,
+      "correct_resolutions": 3,
+      "wrong_auto_resolutions": 0,
+      "correct_abstentions": 5,
+      "false_escalations": 2
+    }
+  },
+  "synthetic_benchmark_regression": {
+    "partition_label": "synthetic benchmark/regression partition; not an independent held-out set",
+    "independent_held_out": false,
+    "total_receipts": 0,
+    "matched_normally": 0,
+    "exceptions": 0,
+    "resolved_by_remitproof": 0,
+    "human_review": 0,
+    "baseline_match_rate": 0.0,
+    "exception_resolution_rate": 0.0,
+    "resolution_accuracy": 0.0,
+    "incorrect_auto_resolution_rate": 0.0,
+    "correct_abstention_rate": 0.0,
+    "false_escalation_rate": 0.0,
+    "entity_resolution_accuracy": 0.0,
+    "evidence_precision": 0.0,
+    "arithmetic_correctness": 0.0,
+    "retrieval_accuracy": 0.0,
+    "throughput_per_minute": 0.0,
+    "mean_latency_ms": 0.0,
+    "comparison_scope": "unresolved exception records",
+    "comparison_record_count": 0,
+    "timing_scope": "pipeline/verifier replay; cached model inference is excluded when evaluation_mode is cache_only",
+    "comparison": {
+      "baseline": {
+        "resolved": 0,
+        "correct_resolutions": 0,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 0,
+        "false_escalations": 0
+      },
+      "llm_only": {
+        "resolved": 0,
+        "correct_resolutions": 0,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 0,
+        "false_escalations": 0,
+        "mode": "proposal_only_forced_proposal_verifier_ablation",
+        "label": "Forced-proposal verifier ablation (proposal only)",
+        "standalone_llm_system": false,
+        "allows_independent_abstention": false
+      },
+      "remitproof": {
+        "resolved": 0,
+        "correct_resolutions": 0,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 0,
+        "false_escalations": 0
+      }
+    }
+  },
+  "held_out": {
+    "legacy_key": true,
+    "partition_label": "synthetic benchmark/regression partition; not an independent held-out set",
+    "independent_held_out": false,
+    "total_receipts": 0,
+    "matched_normally": 0,
+    "exceptions": 0,
+    "resolved_by_remitproof": 0,
+    "human_review": 0,
+    "baseline_match_rate": 0.0,
+    "exception_resolution_rate": 0.0,
+    "resolution_accuracy": 0.0,
+    "incorrect_auto_resolution_rate": 0.0,
+    "correct_abstention_rate": 0.0,
+    "false_escalation_rate": 0.0,
+    "entity_resolution_accuracy": 0.0,
+    "evidence_precision": 0.0,
+    "arithmetic_correctness": 0.0,
+    "retrieval_accuracy": 0.0,
+    "throughput_per_minute": 0.0,
+    "mean_latency_ms": 0.0,
+    "comparison_scope": "unresolved exception records",
+    "comparison_record_count": 0,
+    "timing_scope": "pipeline/verifier replay; cached model inference is excluded when evaluation_mode is cache_only",
+    "comparison": {
+      "baseline": {
+        "resolved": 0,
+        "correct_resolutions": 0,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 0,
+        "false_escalations": 0
+      },
+      "llm_only": {
+        "resolved": 0,
+        "correct_resolutions": 0,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 0,
+        "false_escalations": 0,
+        "mode": "proposal_only_forced_proposal_verifier_ablation",
+        "label": "Forced-proposal verifier ablation (proposal only)",
+        "standalone_llm_system": false,
+        "allows_independent_abstention": false
+      },
+      "remitproof": {
+        "resolved": 0,
+        "correct_resolutions": 0,
+        "wrong_auto_resolutions": 0,
+        "correct_abstentions": 0,
+        "false_escalations": 0
+      }
+    }
+  }
+}
