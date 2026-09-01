@@ -1,0 +1,11 @@
+case_id,exception,expected_should_resolve,baseline_decision,baseline_correct_resolution,llm_only_decision,llm_only_correct_resolution,remitproof_decision,remitproof_correct_resolution,abstention_reason,model_latency_ms,investigator_error
+SPIKE_01,Parent company pays subsidiary invoice,True,resolve,True,resolve,True,resolve,True,,0,
+SPIKE_02,Different legal payer name with supporting entity record,True,resolve,True,resolve,True,resolve,True,,0,
+SPIKE_03,Detached email specifies two invoices,True,abstain,False,resolve,True,resolve,True,,0,
+SPIKE_04,Credit deduction explained by remittance,True,abstain,False,resolve,False,abstain,False,financial_mismatch,0,
+SPIKE_05,"Two numeric allocations, email disambiguates",True,abstain,False,resolve,True,resolve,True,,0,
+SPIKE_06,Same-amount invoices with no remittance,False,abstain,False,resolve,False,abstain,False,multiple_financially_valid_explanations,0,
+SPIKE_07,Email conflicts with credit note,False,abstain,False,resolve,False,abstain,False,contradictory_evidence,0,
+SPIKE_08,Claimed credit but credit note missing,False,abstain,False,resolve,False,abstain,False,missing_credit_note,0,
+SPIKE_09,Payer relationship uncertain,False,abstain,False,resolve,False,abstain,False,unsupported_entity_relationship,0,
+SPIKE_10,Multi-invoice deduction with entity mismatch,True,abstain,False,resolve,True,abstain,False,missing_required_evidence,0,

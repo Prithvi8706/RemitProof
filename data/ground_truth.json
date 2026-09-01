@@ -1,0 +1,1924 @@
+[
+  {
+    "payment_id": "PAY_001",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E001",
+    "correct_invoices": [
+      "INV_E001"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E001",
+      "INV_E001"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E001",
+      "INV_E001"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_002",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E002",
+    "correct_invoices": [
+      "INV_E002"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E002",
+      "INV_E002"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E002",
+      "INV_E002"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_003",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E003",
+    "correct_invoices": [
+      "INV_E003"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E003",
+      "INV_E003"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E003",
+      "INV_E003"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_004",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E004",
+    "correct_invoices": [
+      "INV_E004"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E004",
+      "INV_E004"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E004",
+      "INV_E004"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_005",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E005",
+    "correct_invoices": [
+      "INV_E005"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E005",
+      "INV_E005"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E005",
+      "INV_E005"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_006",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E006",
+    "correct_invoices": [
+      "INV_E006"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E006",
+      "INV_E006"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E006",
+      "INV_E006"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_007",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E007",
+    "correct_invoices": [
+      "INV_E007"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E007",
+      "INV_E007"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E007",
+      "INV_E007"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_008",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E008",
+    "correct_invoices": [
+      "INV_E008"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E008",
+      "INV_E008"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E008",
+      "INV_E008"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_009",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E009",
+    "correct_invoices": [
+      "INV_E009"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E009",
+      "INV_E009"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E009",
+      "INV_E009"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_010",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E010",
+    "correct_invoices": [
+      "INV_E010"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E010",
+      "INV_E010"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E010",
+      "INV_E010"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_011",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E011",
+    "correct_invoices": [
+      "INV_E011"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E011",
+      "INV_E011"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E011",
+      "INV_E011"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_012",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E012",
+    "correct_invoices": [
+      "INV_E012"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E012",
+      "INV_E012"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E012",
+      "INV_E012"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_013",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E013",
+    "correct_invoices": [
+      "INV_E013"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E013",
+      "INV_E013"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E013",
+      "INV_E013"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_014",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E014",
+    "correct_invoices": [
+      "INV_E014"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E014",
+      "INV_E014"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E014",
+      "INV_E014"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_015",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E015",
+    "correct_invoices": [
+      "INV_E015"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E015",
+      "INV_E015"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E015",
+      "INV_E015"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_016",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E016",
+    "correct_invoices": [
+      "INV_E016"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E016",
+      "INV_E016"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E016",
+      "INV_E016"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_017",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E017",
+    "correct_invoices": [
+      "INV_E017"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E017",
+      "INV_E017"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E017",
+      "INV_E017"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_018",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E018",
+    "correct_invoices": [
+      "INV_E018"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E018",
+      "INV_E018"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E018",
+      "INV_E018"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_019",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E019",
+    "correct_invoices": [
+      "INV_E019"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E019",
+      "INV_E019"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E019",
+      "INV_E019"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_020",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E020",
+    "correct_invoices": [
+      "INV_E020"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E020",
+      "INV_E020"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E020",
+      "INV_E020"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_021",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E021",
+    "correct_invoices": [
+      "INV_E021"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E021",
+      "INV_E021"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E021",
+      "INV_E021"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_022",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E022",
+    "correct_invoices": [
+      "INV_E022"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E022",
+      "INV_E022"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E022",
+      "INV_E022"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_023",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E023",
+    "correct_invoices": [
+      "INV_E023"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E023",
+      "INV_E023"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E023",
+      "INV_E023"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_024",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E024",
+    "correct_invoices": [
+      "INV_E024"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E024",
+      "INV_E024"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E024",
+      "INV_E024"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_025",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E025",
+    "correct_invoices": [
+      "INV_E025"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E025",
+      "INV_E025"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E025",
+      "INV_E025"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_026",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E026",
+    "correct_invoices": [
+      "INV_E026"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E026",
+      "INV_E026"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E026",
+      "INV_E026"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_027",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E027",
+    "correct_invoices": [
+      "INV_E027"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E027",
+      "INV_E027"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E027",
+      "INV_E027"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_028",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E028",
+    "correct_invoices": [
+      "INV_E028"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E028",
+      "INV_E028"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E028",
+      "INV_E028"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_029",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E029",
+    "correct_invoices": [
+      "INV_E029"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E029",
+      "INV_E029"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E029",
+      "INV_E029"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_030",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E030",
+    "correct_invoices": [
+      "INV_E030"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E030",
+      "INV_E030"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E030",
+      "INV_E030"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_031",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E031",
+    "correct_invoices": [
+      "INV_E031"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E031",
+      "INV_E031"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E031",
+      "INV_E031"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_032",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E032",
+    "correct_invoices": [
+      "INV_E032"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E032",
+      "INV_E032"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E032",
+      "INV_E032"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_033",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E033",
+    "correct_invoices": [
+      "INV_E033"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E033",
+      "INV_E033"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E033",
+      "INV_E033"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_034",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E034",
+    "correct_invoices": [
+      "INV_E034"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E034",
+      "INV_E034"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E034",
+      "INV_E034"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_035",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E035",
+    "correct_invoices": [
+      "INV_E035"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E035",
+      "INV_E035"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E035",
+      "INV_E035"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_036",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E036",
+    "correct_invoices": [
+      "INV_E036"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E036",
+      "INV_E036"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E036",
+      "INV_E036"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_037",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E037",
+    "correct_invoices": [
+      "INV_E037"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E037",
+      "INV_E037"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E037",
+      "INV_E037"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_038",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E038",
+    "correct_invoices": [
+      "INV_E038"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E038",
+      "INV_E038"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E038",
+      "INV_E038"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_039",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E039",
+    "correct_invoices": [
+      "INV_E039"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E039",
+      "INV_E039"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E039",
+      "INV_E039"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_040",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E040",
+    "correct_invoices": [
+      "INV_E040"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E040",
+      "INV_E040"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E040",
+      "INV_E040"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_041",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E041",
+    "correct_invoices": [
+      "INV_E041"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E041",
+      "INV_E041"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E041",
+      "INV_E041"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_042",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E042",
+    "correct_invoices": [
+      "INV_E042"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E042",
+      "INV_E042"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E042",
+      "INV_E042"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_043",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E043",
+    "correct_invoices": [
+      "INV_E043"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E043",
+      "INV_E043"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E043",
+      "INV_E043"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_044",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E044",
+    "correct_invoices": [
+      "INV_E044"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E044",
+      "INV_E044"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E044",
+      "INV_E044"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_045",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E045",
+    "correct_invoices": [
+      "INV_E045"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E045",
+      "INV_E045"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E045",
+      "INV_E045"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_046",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E046",
+    "correct_invoices": [
+      "INV_E046"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E046",
+      "INV_E046"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E046",
+      "INV_E046"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_047",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E047",
+    "correct_invoices": [
+      "INV_E047"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E047",
+      "INV_E047"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E047",
+      "INV_E047"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_048",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E048",
+    "correct_invoices": [
+      "INV_E048"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E048",
+      "INV_E048"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E048",
+      "INV_E048"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_049",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E049",
+    "correct_invoices": [
+      "INV_E049"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E049",
+      "INV_E049"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E049",
+      "INV_E049"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_050",
+    "exception_class": "conventional_exact_reference",
+    "correct_customer": "CUS_E050",
+    "correct_invoices": [
+      "INV_E050"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "CUS_E050",
+      "INV_E050"
+    ],
+    "required_retrieval_ids": [
+      "CUS_E050",
+      "INV_E050"
+    ],
+    "expected_reason": "Explicit invoice reference, supported payer identity, currency, and amount agree.",
+    "is_exception": false,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_051",
+    "exception_class": "detached_remittance_email",
+    "correct_customer": "CUS_X051",
+    "correct_invoices": [
+      "INV_X051A",
+      "INV_X051B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X051",
+      "CUS_X051"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X051",
+      "INV_X051A",
+      "INV_X051B",
+      "INV_X051C",
+      "INV_X051D",
+      "EMAIL_X051"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_052",
+    "exception_class": "same_amount_ambiguity",
+    "correct_customer": "CUS_X052",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [],
+    "required_retrieval_ids": [
+      "CUS_X052",
+      "INV_X052A",
+      "INV_X052B"
+    ],
+    "expected_reason": "Two same-amount invoices remain and no remittance instruction disambiguates them.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_053",
+    "exception_class": "credit_deduction",
+    "correct_customer": "CUS_X053",
+    "correct_invoices": [
+      "INV_X053A",
+      "INV_X053B"
+    ],
+    "correct_credits": [
+      "CR_X053A"
+    ],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X053",
+      "CUS_X053",
+      "CR_X053A"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X053",
+      "INV_X053A",
+      "INV_X053B",
+      "INV_X053C",
+      "INV_X053D",
+      "CR_X053A",
+      "CR_X053B",
+      "EMAIL_X053"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_054",
+    "exception_class": "conflicting_evidence",
+    "correct_customer": "CUS_X054",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [
+      "EMAIL_X054"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X054",
+      "INV_X054A",
+      "CR_X054A",
+      "EMAIL_X054"
+    ],
+    "expected_reason": "The remittance credit amount conflicts with the valid credit note.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_055",
+    "exception_class": "multiple_allocations_email",
+    "correct_customer": "CUS_X055",
+    "correct_invoices": [
+      "INV_X055A",
+      "INV_X055B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X055",
+      "CUS_X055"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X055",
+      "INV_X055A",
+      "INV_X055B",
+      "INV_X055C",
+      "INV_X055D",
+      "EMAIL_X055"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_056",
+    "exception_class": "missing_credit_note",
+    "correct_customer": "CUS_X056",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [
+      "EMAIL_X056"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X056",
+      "INV_X056A",
+      "EMAIL_X056"
+    ],
+    "expected_reason": "A deduction is claimed but the required valid credit note is absent.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_057",
+    "exception_class": "parent_entity_multi_invoice",
+    "correct_customer": "CUS_X057",
+    "correct_invoices": [
+      "INV_X057A",
+      "INV_X057B"
+    ],
+    "correct_credits": [
+      "CR_X057A"
+    ],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X057",
+      "CUS_X057",
+      "CR_X057A"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X057",
+      "INV_X057A",
+      "INV_X057B",
+      "INV_X057C",
+      "INV_X057D",
+      "CR_X057A",
+      "CR_X057B",
+      "EMAIL_X057"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_058",
+    "exception_class": "uncertain_payer_relationship",
+    "correct_customer": "CUS_X058",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [],
+    "required_retrieval_ids": [
+      "CUS_X058",
+      "INV_X058A"
+    ],
+    "expected_reason": "No customer record or remittance evidence supports the payer relationship.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_059",
+    "exception_class": "known_payer_disambiguated",
+    "correct_customer": "CUS_X059",
+    "correct_invoices": [
+      "INV_X059A",
+      "INV_X059B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X059",
+      "CUS_X059"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X059",
+      "INV_X059A",
+      "INV_X059B",
+      "INV_X059C",
+      "INV_X059D",
+      "EMAIL_X059"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_060",
+    "exception_class": "stale_or_duplicate_candidate",
+    "correct_customer": "CUS_X060",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [
+      "EMAIL_X060"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X060",
+      "INV_X060A",
+      "EMAIL_X060"
+    ],
+    "expected_reason": "The only proposed invoice is closed.",
+    "is_exception": true,
+    "split": "dev",
+    "partition_label": "synthetic development regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_061",
+    "exception_class": "multi_invoice_remittance",
+    "correct_customer": "CUS_X061",
+    "correct_invoices": [
+      "INV_X061A",
+      "INV_X061B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X061",
+      "CUS_X061"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X061",
+      "INV_X061A",
+      "INV_X061B",
+      "INV_X061C",
+      "INV_X061D",
+      "EMAIL_X061"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_062",
+    "exception_class": "unsupported_currency_or_short_pay",
+    "correct_customer": "CUS_X062",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [],
+    "required_retrieval_ids": [
+      "CUS_X062",
+      "INV_X062A"
+    ],
+    "expected_reason": "Payment and invoice currencies differ; FX is outside MVP scope.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_063",
+    "exception_class": "semantic_credit_reason",
+    "correct_customer": "CUS_X063",
+    "correct_invoices": [
+      "INV_X063A",
+      "INV_X063B"
+    ],
+    "correct_credits": [
+      "CR_X063A"
+    ],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X063",
+      "CUS_X063",
+      "CR_X063A"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X063",
+      "INV_X063A",
+      "INV_X063B",
+      "INV_X063C",
+      "INV_X063D",
+      "CR_X063A",
+      "CR_X063B",
+      "EMAIL_X063"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_064",
+    "exception_class": "treasury_bank_on_behalf",
+    "correct_customer": "CUS_X064",
+    "correct_invoices": [
+      "INV_X064A",
+      "INV_X064B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X064",
+      "CUS_X064"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X064",
+      "INV_X064A",
+      "INV_X064B",
+      "INV_X064C",
+      "INV_X064D",
+      "EMAIL_X064"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_065",
+    "exception_class": "alternative_allocation_email",
+    "correct_customer": "CUS_X065",
+    "correct_invoices": [
+      "INV_X065A",
+      "INV_X065B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X065",
+      "CUS_X065"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X065",
+      "INV_X065A",
+      "INV_X065B",
+      "INV_X065C",
+      "INV_X065D",
+      "EMAIL_X065"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_066",
+    "exception_class": "detached_remittance_email",
+    "correct_customer": "CUS_X066",
+    "correct_invoices": [
+      "INV_X066A",
+      "INV_X066B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X066",
+      "CUS_X066"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X066",
+      "INV_X066A",
+      "INV_X066B",
+      "INV_X066C",
+      "INV_X066D",
+      "EMAIL_X066"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_067",
+    "exception_class": "same_amount_ambiguity",
+    "correct_customer": "CUS_X067",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [],
+    "required_retrieval_ids": [
+      "CUS_X067",
+      "INV_X067A",
+      "INV_X067B"
+    ],
+    "expected_reason": "Two same-amount invoices remain and no remittance instruction disambiguates them.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_068",
+    "exception_class": "credit_deduction",
+    "correct_customer": "CUS_X068",
+    "correct_invoices": [
+      "INV_X068A",
+      "INV_X068B"
+    ],
+    "correct_credits": [
+      "CR_X068A"
+    ],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X068",
+      "CUS_X068",
+      "CR_X068A"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X068",
+      "INV_X068A",
+      "INV_X068B",
+      "INV_X068C",
+      "INV_X068D",
+      "CR_X068A",
+      "CR_X068B",
+      "EMAIL_X068"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_069",
+    "exception_class": "conflicting_evidence",
+    "correct_customer": "CUS_X069",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [
+      "EMAIL_X069"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X069",
+      "INV_X069A",
+      "CR_X069A",
+      "EMAIL_X069"
+    ],
+    "expected_reason": "The remittance credit amount conflicts with the valid credit note.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_070",
+    "exception_class": "multiple_allocations_email",
+    "correct_customer": "CUS_X070",
+    "correct_invoices": [
+      "INV_X070A",
+      "INV_X070B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X070",
+      "CUS_X070"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X070",
+      "INV_X070A",
+      "INV_X070B",
+      "INV_X070C",
+      "INV_X070D",
+      "EMAIL_X070"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_071",
+    "exception_class": "missing_credit_note",
+    "correct_customer": "CUS_X071",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [
+      "EMAIL_X071"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X071",
+      "INV_X071A",
+      "EMAIL_X071"
+    ],
+    "expected_reason": "A deduction is claimed but the required valid credit note is absent.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_072",
+    "exception_class": "parent_entity_multi_invoice",
+    "correct_customer": "CUS_X072",
+    "correct_invoices": [
+      "INV_X072A",
+      "INV_X072B"
+    ],
+    "correct_credits": [
+      "CR_X072A"
+    ],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X072",
+      "CUS_X072",
+      "CR_X072A"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X072",
+      "INV_X072A",
+      "INV_X072B",
+      "INV_X072C",
+      "INV_X072D",
+      "CR_X072A",
+      "CR_X072B",
+      "EMAIL_X072"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_073",
+    "exception_class": "uncertain_payer_relationship",
+    "correct_customer": "CUS_X073",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [],
+    "required_retrieval_ids": [
+      "CUS_X073",
+      "INV_X073A"
+    ],
+    "expected_reason": "No customer record or remittance evidence supports the payer relationship.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_074",
+    "exception_class": "known_payer_disambiguated",
+    "correct_customer": "CUS_X074",
+    "correct_invoices": [
+      "INV_X074A",
+      "INV_X074B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X074",
+      "CUS_X074"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X074",
+      "INV_X074A",
+      "INV_X074B",
+      "INV_X074C",
+      "INV_X074D",
+      "EMAIL_X074"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_075",
+    "exception_class": "stale_or_duplicate_candidate",
+    "correct_customer": "CUS_X075",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [
+      "EMAIL_X075"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X075",
+      "INV_X075A",
+      "EMAIL_X075"
+    ],
+    "expected_reason": "The invoice already has an allocation, creating duplicate risk.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_076",
+    "exception_class": "multi_invoice_remittance",
+    "correct_customer": "CUS_X076",
+    "correct_invoices": [
+      "INV_X076A",
+      "INV_X076B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X076",
+      "CUS_X076"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X076",
+      "INV_X076A",
+      "INV_X076B",
+      "INV_X076C",
+      "INV_X076D",
+      "EMAIL_X076"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_077",
+    "exception_class": "unsupported_currency_or_short_pay",
+    "correct_customer": "CUS_X077",
+    "correct_invoices": [],
+    "correct_credits": [],
+    "should_resolve": false,
+    "required_evidence": [],
+    "required_retrieval_ids": [
+      "CUS_X077",
+      "INV_X077A"
+    ],
+    "expected_reason": "The short payment has no credit note or remittance explanation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_078",
+    "exception_class": "semantic_credit_reason",
+    "correct_customer": "CUS_X078",
+    "correct_invoices": [
+      "INV_X078A",
+      "INV_X078B"
+    ],
+    "correct_credits": [
+      "CR_X078A"
+    ],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X078",
+      "CUS_X078",
+      "CR_X078A"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X078",
+      "INV_X078A",
+      "INV_X078B",
+      "INV_X078C",
+      "INV_X078D",
+      "CR_X078A",
+      "CR_X078B",
+      "EMAIL_X078"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_079",
+    "exception_class": "treasury_bank_on_behalf",
+    "correct_customer": "CUS_X079",
+    "correct_invoices": [
+      "INV_X079A",
+      "INV_X079B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X079",
+      "CUS_X079"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X079",
+      "INV_X079A",
+      "INV_X079B",
+      "INV_X079C",
+      "INV_X079D",
+      "EMAIL_X079"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  },
+  {
+    "payment_id": "PAY_080",
+    "exception_class": "alternative_allocation_email",
+    "correct_customer": "CUS_X080",
+    "correct_invoices": [
+      "INV_X080A",
+      "INV_X080B"
+    ],
+    "correct_credits": [],
+    "should_resolve": true,
+    "required_evidence": [
+      "EMAIL_X080",
+      "CUS_X080"
+    ],
+    "required_retrieval_ids": [
+      "CUS_X080",
+      "INV_X080A",
+      "INV_X080B",
+      "INV_X080C",
+      "INV_X080D",
+      "EMAIL_X080"
+    ],
+    "expected_reason": "Remittance evidence uniquely selects one financially valid allocation.",
+    "is_exception": true,
+    "split": "benchmark",
+    "partition_label": "synthetic benchmark/regression partition",
+    "independent_held_out": false
+  }
+]

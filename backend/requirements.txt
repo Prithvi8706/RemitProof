@@ -1,0 +1,3 @@
+# Compatibility entry point for runtime installs.
+# The included lock is fully pinned and hash-verified.
+-r requirements.lock

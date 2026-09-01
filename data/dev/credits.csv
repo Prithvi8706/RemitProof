@@ -1,0 +1,6 @@
+credit_id,customer_id,invoice_id,amount,currency,reason,status,consumed_by_payment_id
+CR_X053A,CUS_X053,INV_X053B,375.00,USD,Approved SLA service credit,valid,
+CR_X053B,CUS_X053,INV_X053B,375.00,USD,Disputed quality adjustment,valid,
+CR_X054A,CUS_X054,INV_X054A,350.00,USD,SLA service credit,valid,
+CR_X057A,CUS_X057,INV_X057B,375.00,USD,Approved SLA service credit,valid,
+CR_X057B,CUS_X057,INV_X057B,375.00,USD,Disputed quality adjustment,valid,

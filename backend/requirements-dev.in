@@ -1,0 +1,4 @@
+# Direct development dependencies. Runtime dependencies are included so one
+# dev lock creates a complete test environment.
+-r requirements.in
+pytest==8.3.5

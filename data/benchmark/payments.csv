@@ -1,0 +1,61 @@
+payment_id,date,amount,currency,payer_name,bank_reference,remittance_reference,status
+PAY_011,2026-08-11,3607.00,USD,Keystone Retail 11 Ltd,BNK-E-00011,INV_E011,unmatched
+PAY_012,2026-08-12,3744.00,EUR,Lattice Health 12 Ltd,BNK-E-00012,INV_E012,unmatched
+PAY_013,2026-08-13,3881.00,USD,Meridian Robotics 13 Ltd,BNK-E-00013,INV_E013,unmatched
+PAY_014,2026-08-14,4018.00,USD,Northwind Digital Global Treasury 14,BNK-E-00014,INV_E014,unmatched
+PAY_015,2026-08-15,4155.00,USD,Oakline Software 15,BNK-E-00015,INV_E015,unmatched
+PAY_016,2026-08-16,4292.00,EUR,Pioneer Logistics 16 Ltd,BNK-E-00016,INV_E016,unmatched
+PAY_017,2026-08-17,4429.00,USD,Quartz Financial 17 Ltd,BNK-E-00017,INV_E017,unmatched
+PAY_018,2026-08-18,4566.00,USD,Redwood Energy 18 Ltd,BNK-E-00018,INV_E018,unmatched
+PAY_019,2026-08-19,4703.00,USD,Summit Learning 19 Ltd,BNK-E-00019,INV_E019,unmatched
+PAY_020,2026-08-20,4840.00,EUR,Tidalwave Travel 20,BNK-E-00020,INV_E020,unmatched
+PAY_021,2026-08-21,4977.00,USD,Umber Design Global Treasury 21,BNK-E-00021,INV_E021,unmatched
+PAY_022,2026-08-22,5114.00,USD,Vector Manufacturing 22 Ltd,BNK-E-00022,INV_E022,unmatched
+PAY_023,2026-08-23,5251.00,USD,Westbridge Telecom 23 Ltd,BNK-E-00023,INV_E023,unmatched
+PAY_024,2026-08-24,5388.00,EUR,Xenon Biotech 24 Ltd,BNK-E-00024,INV_E024,unmatched
+PAY_025,2026-08-25,5525.00,USD,Yellowfin Markets 25,BNK-E-00025,INV_E025,unmatched
+PAY_026,2026-08-26,5662.00,USD,Zenith Operations 26 Ltd,BNK-E-00026,INV_E026,unmatched
+PAY_027,2026-08-27,5799.00,USD,Arcadia Studios 27 Ltd,BNK-E-00027,INV_E027,unmatched
+PAY_028,2026-08-01,5936.00,EUR,Brightpath Security Global Treasury 28,BNK-E-00028,INV_E028,unmatched
+PAY_029,2026-08-02,6073.00,USD,Copperleaf Foods 29 Ltd,BNK-E-00029,INV_E029,unmatched
+PAY_030,2026-08-03,6210.00,USD,Deepfield AI 30,BNK-E-00030,INV_E030,unmatched
+PAY_031,2026-08-04,6347.00,USD,Asteria Commerce 31 Ltd,BNK-E-00031,INV_E031,unmatched
+PAY_032,2026-08-05,6484.00,EUR,Boreal Systems 32 Ltd,BNK-E-00032,INV_E032,unmatched
+PAY_033,2026-08-06,6621.00,USD,Cobalt Ridge 33 Ltd,BNK-E-00033,INV_E033,unmatched
+PAY_034,2026-08-07,6758.00,USD,Driftwood Analytics 34 Ltd,BNK-E-00034,INV_E034,unmatched
+PAY_035,2026-08-08,6895.00,USD,Evergreen Mobility 35,BNK-E-00035,INV_E035,unmatched
+PAY_036,2026-08-09,7032.00,EUR,Fableworks Media 36 Ltd,BNK-E-00036,INV_E036,unmatched
+PAY_037,2026-08-10,7169.00,USD,Granite Cloud 37 Ltd,BNK-E-00037,INV_E037,unmatched
+PAY_038,2026-08-11,7306.00,USD,Horizon Foods 38 Ltd,BNK-E-00038,INV_E038,unmatched
+PAY_039,2026-08-12,7443.00,USD,Indigo Networks 39 Ltd,BNK-E-00039,INV_E039,unmatched
+PAY_040,2026-08-13,7580.00,EUR,Juniper Labs 40,BNK-E-00040,INV_E040,unmatched
+PAY_041,2026-08-14,7717.00,USD,Keystone Retail 41 Ltd,BNK-E-00041,INV_E041,unmatched
+PAY_042,2026-08-15,7854.00,USD,Lattice Health Global Treasury 42,BNK-E-00042,INV_E042,unmatched
+PAY_043,2026-08-16,7991.00,USD,Meridian Robotics 43 Ltd,BNK-E-00043,INV_E043,unmatched
+PAY_044,2026-08-17,8128.00,EUR,Northwind Digital 44 Ltd,BNK-E-00044,INV_E044,unmatched
+PAY_045,2026-08-18,8265.00,USD,Oakline Software 45,BNK-E-00045,INV_E045,unmatched
+PAY_046,2026-08-19,8402.00,USD,Pioneer Logistics 46 Ltd,BNK-E-00046,INV_E046,unmatched
+PAY_047,2026-08-20,8539.00,USD,Quartz Financial 47 Ltd,BNK-E-00047,INV_E047,unmatched
+PAY_048,2026-08-21,8676.00,EUR,Redwood Energy 48 Ltd,BNK-E-00048,INV_E048,unmatched
+PAY_049,2026-08-22,8813.00,USD,Summit Learning Global Treasury 49,BNK-E-00049,INV_E049,unmatched
+PAY_050,2026-08-23,8950.00,USD,Tidalwave Travel 50,BNK-E-00050,INV_E050,unmatched
+PAY_061,2026-08-07,15893.00,USD,Indigo Networks International Ltd,BNK-X-00061,,unmatched
+PAY_062,2026-08-08,12514.00,USD,Juniper Labs International Ltd,BNK-X-00062,INV_X062A,unmatched
+PAY_063,2026-08-09,16119.00,USD,Keystone Retail International Ltd,BNK-X-00063,,unmatched
+PAY_064,2026-08-10,16232.00,USD,CITIBANK N.A. OBO LATTICE HEALTH,BNK-X-00064,,unmatched
+PAY_065,2026-08-11,16345.00,USD,Meridian Robotics International Ltd,BNK-X-00065,,unmatched
+PAY_066,2026-08-12,16458.00,EUR,CITIBANK N.A. OBO NORTHWIND DIGITAL,BNK-X-00066,,unmatched
+PAY_067,2026-08-13,12999.00,USD,Oakline Software International Ltd,BNK-X-00067,,unmatched
+PAY_068,2026-08-14,16684.00,USD,Pioneer Logistics International Ltd,BNK-X-00068,,unmatched
+PAY_069,2026-08-15,13193.00,USD,Quartz Financial International Ltd,BNK-X-00069,,unmatched
+PAY_070,2026-08-16,16910.00,USD,Redwood Energy International Ltd,BNK-X-00070,,unmatched
+PAY_071,2026-08-17,13387.00,USD,Summit Learning International Ltd,BNK-X-00071,,unmatched
+PAY_072,2026-08-18,17136.00,EUR,TIDALWAVE TRAVEL GLOBAL HOLDINGS LLC,BNK-X-00072,,unmatched
+PAY_073,2026-08-19,13581.00,USD,UNKNOWN ORIGINATOR,BNK-X-00073,,unmatched
+PAY_074,2026-08-20,17362.00,USD,VECTOR MANUFACTURING TREASURY SERVICES LTD,BNK-X-00074,,unmatched
+PAY_075,2026-08-21,13775.00,USD,Westbridge Telecom International Ltd,BNK-X-00075,,unmatched
+PAY_076,2026-08-22,17588.00,USD,Xenon Biotech International Ltd,BNK-X-00076,,unmatched
+PAY_077,2026-08-23,13969.00,USD,Yellowfin Markets International Ltd,BNK-X-00077,,unmatched
+PAY_078,2026-08-24,17814.00,EUR,Zenith Operations International Ltd,BNK-X-00078,,unmatched
+PAY_079,2026-08-25,17927.00,USD,CITIBANK N.A. OBO ARCADIA STUDIOS,BNK-X-00079,,unmatched
+PAY_080,2026-08-26,18040.00,USD,Brightpath Security International Ltd,BNK-X-00080,,unmatched

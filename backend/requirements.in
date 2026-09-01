@@ -1,0 +1,6 @@
+# Direct runtime dependencies. Regenerate requirements.lock with the command
+# recorded in that file after changing this manifest.
+fastapi==0.115.12
+httpx==0.28.1
+pydantic==2.11.5
+uvicorn==0.34.2

@@ -1,0 +1,21 @@
+payment_id,date,amount,currency,payer_name,bank_reference,remittance_reference,status
+PAY_001,2026-08-01,2237.00,USD,Asteria Commerce 01 Ltd,BNK-E-00001,INV_E001,unmatched
+PAY_002,2026-08-02,2374.00,USD,Boreal Systems 02 Ltd,BNK-E-00002,INV_E002,unmatched
+PAY_003,2026-08-03,2511.00,USD,Cobalt Ridge 03 Ltd,BNK-E-00003,INV_E003,unmatched
+PAY_004,2026-08-04,2648.00,EUR,Driftwood Analytics 04 Ltd,BNK-E-00004,INV_E004,unmatched
+PAY_005,2026-08-05,2785.00,USD,Evergreen Mobility 05,BNK-E-00005,INV_E005,unmatched
+PAY_006,2026-08-06,2922.00,USD,Fableworks Media 06 Ltd,BNK-E-00006,INV_E006,unmatched
+PAY_007,2026-08-07,3059.00,USD,Granite Cloud Global Treasury 07,BNK-E-00007,INV_E007,unmatched
+PAY_008,2026-08-08,3196.00,EUR,Horizon Foods 08 Ltd,BNK-E-00008,INV_E008,unmatched
+PAY_009,2026-08-09,3333.00,USD,Indigo Networks 09 Ltd,BNK-E-00009,INV_E009,unmatched
+PAY_010,2026-08-10,3470.00,USD,Juniper Labs 10,BNK-E-00010,INV_E010,unmatched
+PAY_051,2026-08-24,14763.00,USD,CITIBANK N.A. OBO COPPERLEAF FOODS,BNK-X-00051,,unmatched
+PAY_052,2026-08-25,11544.00,USD,Deepfield AI International Ltd,BNK-X-00052,,unmatched
+PAY_053,2026-08-26,14989.00,USD,Asteria Commerce International Ltd,BNK-X-00053,,unmatched
+PAY_054,2026-08-27,11738.00,USD,Boreal Systems International Ltd,BNK-X-00054,,unmatched
+PAY_055,2026-08-01,15215.00,USD,Cobalt Ridge International Ltd,BNK-X-00055,,unmatched
+PAY_056,2026-08-02,11932.00,USD,Driftwood Analytics International Ltd,BNK-X-00056,,unmatched
+PAY_057,2026-08-03,15441.00,USD,EVERGREEN MOBILITY GLOBAL HOLDINGS LLC,BNK-X-00057,,unmatched
+PAY_058,2026-08-04,12126.00,USD,HARBOR BRIDGE SERVICES,BNK-X-00058,,unmatched
+PAY_059,2026-08-05,15667.00,USD,GRANITE CLOUD TREASURY SERVICES LTD,BNK-X-00059,,unmatched
+PAY_060,2026-08-06,12320.00,USD,Horizon Foods International Ltd,BNK-X-00060,,unmatched

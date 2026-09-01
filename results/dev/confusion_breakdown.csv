@@ -1,0 +1,12 @@
+exception_class,records,resolved,correct_resolutions,human_review,wrong_auto_resolutions,false_escalations
+conflicting_evidence,1,0,0,1,0,0
+conventional_exact_reference,10,10,10,0,0,0
+credit_deduction,1,0,0,1,0,1
+detached_remittance_email,1,1,1,0,0,0
+known_payer_disambiguated,1,1,1,0,0,0
+missing_credit_note,1,0,0,1,0,0
+multiple_allocations_email,1,1,1,0,0,0
+parent_entity_multi_invoice,1,0,0,1,0,1
+same_amount_ambiguity,1,0,0,1,0,0
+stale_or_duplicate_candidate,1,0,0,1,0,0
+uncertain_payer_relationship,1,0,0,1,0,0
