@@ -6,6 +6,7 @@ Run the API on port 8001 and the frontend on port 3000. Open the dashboard, then
 
 - resolved exception: `http://localhost:3000/exceptions/PAY_051`
 - human review: `http://localhost:3000/exceptions/PAY_052`
+- contradicted proposal: `http://localhost:3000/exceptions/PAY_056`
 
 Do not imply that the prototype writes to Razorpay or an accounting system.
 
@@ -38,7 +39,7 @@ Show:
 
 Say: “The model produced a proposal, not a decision. Code recomputed the money, checked state and entity support, found the competing allocation, and authorized only because the remittance evidence cleared that conflict.”
 
-## 2:15–3:00 — Abstention
+## 2:15–2:55 — Ambiguous proposal
 
 Open `PAY_052`.
 
@@ -48,7 +49,15 @@ Say: “Both explanations are plausible. Neither is justified strongly enough to
 
 Point to `HUMAN REVIEW` and the missing/disambiguating evidence message.
 
-## 3:00–3:45 — Architecture
+## 2:55–3:25 — Contradicted proposal
+
+Open `PAY_056`.
+
+Show the financially plausible deduction, then the structured contradiction record and blocked-decision artifact.
+
+Say: “Arithmetic can make a proposal plausible. Authoritative evidence can still make it unsafe. The contradiction is a successful control outcome, not a processing error.”
+
+## 3:25–3:55 — Architecture
 
 Open `docs/architecture.md` or use the dashboard pipeline.
 
@@ -56,7 +65,7 @@ Say: “The trust boundary is AI equals semantic investigation; code equals fina
 
 Mention the fail-closed path: invalid model output, failed arithmetic, state conflicts, duplicate risk, unsupported entities, contradictory credits, and non-unique explanations all route to review.
 
-## 3:45–4:35 — Benchmark
+## 3:55–4:35 — Benchmark
 
 Return to the dashboard comparison.
 

@@ -28,6 +28,9 @@ export function DecisionPanel({ detail }: { detail: ExceptionDetail }) {
       }`}
     >
       <DecisionBadge decision={detail.decision.decision} />
+      <p className="mt-5 text-xs font-semibold text-muted">
+        {detail.resolution_proof ? "RESOLUTION PROOF ARTIFACT" : "BLOCKED DECISION ARTIFACT"}
+      </p>
       <Icon
         className={`mt-8 size-9 ${isResolved ? "text-primary-dark" : "text-warning"}`}
         strokeWidth={1.8}
@@ -50,6 +53,12 @@ export function DecisionPanel({ detail }: { detail: ExceptionDetail }) {
           <div className="col-span-2">
             <dt className="text-xs font-medium text-muted">Financially valid allocations found</dt>
             <dd className="numeric mt-1 font-semibold text-ink">{detail.alternatives.length}</dd>
+          </div>
+        )}
+        {detail.conflict && (
+          <div className="col-span-2">
+            <dt className="text-xs font-medium text-muted">Conflict category</dt>
+            <dd className="mt-1 font-semibold text-ink">{titleCase(detail.conflict.type)}</dd>
           </div>
         )}
       </dl>

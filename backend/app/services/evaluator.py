@@ -19,6 +19,18 @@ SYNTHETIC_BENCHMARK_LABEL = (
     "synthetic benchmark/regression partition; not an independent held-out set"
 )
 
+ALTERNATIVE_SEARCH_CLASSES = {
+    "detached_remittance_email",
+    "same_amount_ambiguity",
+    "credit_deduction",
+    "multiple_allocations_email",
+    "parent_entity_multi_invoice",
+    "known_payer_disambiguated",
+    "multi_invoice_remittance",
+    "alternative_allocation_email",
+}
+CONTRADICTION_CLASSES = {"conflicting_evidence"}
+
 
 def _sha256_json(value: object) -> str:
     encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -271,6 +283,18 @@ def _row_from_result(
         or (result.decision.decision == "resolved" and proof and proof.financial_validity)
         or result.decision.decision == "human_review"
     )
+    alternatives_expected = truth["exception_class"] in ALTERNATIVE_SEARCH_CLASSES
+    alternatives_detected = len(result.alternatives) > 1
+    ambiguity_expected = truth["exception_class"] == "same_amount_ambiguity"
+    ambiguity_detected = bool(
+        alternatives_detected
+        and result.sufficiency
+        and not result.sufficiency.evidence_disambiguates_alternatives
+    )
+    contradiction_expected = truth["exception_class"] in CONTRADICTION_CLASSES
+    contradiction_detected = bool(result.proof and result.proof.contradictions)
+    critical_expected = bool(truth["should_resolve"] and alternatives_expected)
+    critical_detected = any(item.decision_critical for item in result.counterfactuals)
 
     return {
         "payment_id": result.decision.payment_id,
@@ -304,6 +328,10 @@ def _row_from_result(
         "evidence_relevant_count": len(cited_ids.intersection(relevant_evidence_ids)),
         "arithmetic_correct": arithmetic_correct,
         "retrieval_correct": required_retrieval_ids.issubset(candidate_ids),
+        "alternative_detection_correct": alternatives_detected == alternatives_expected,
+        "ambiguity_detection_correct": ambiguity_detected == ambiguity_expected,
+        "contradiction_detection_correct": contradiction_detected == contradiction_expected,
+        "decision_critical_evidence_correct": critical_detected == critical_expected,
         "reason": result.decision.reason,
         "latency_ms": result.decision.latency_ms,
         "investigator_error": result.investigator_error or "",
@@ -412,6 +440,22 @@ def _metrics_for_rows(
         ),
         "retrieval_accuracy": _ratio(
             sum(bool(row["retrieval_correct"]) for row in rows), len(rows)
+        ),
+        "alternative_detection_accuracy": _ratio(
+            sum(bool(row.get("alternative_detection_correct", True)) for row in exceptions),
+            len(exceptions),
+        ),
+        "ambiguity_detection_accuracy": _ratio(
+            sum(bool(row.get("ambiguity_detection_correct", True)) for row in exceptions),
+            len(exceptions),
+        ),
+        "contradiction_detection_accuracy": _ratio(
+            sum(bool(row.get("contradiction_detection_correct", True)) for row in exceptions),
+            len(exceptions),
+        ),
+        "decision_critical_evidence_accuracy": _ratio(
+            sum(bool(row.get("decision_critical_evidence_correct", True)) for row in exceptions),
+            len(exceptions),
         ),
         "throughput_per_minute": round(
             len(rows) / (elapsed_seconds / 60), 2

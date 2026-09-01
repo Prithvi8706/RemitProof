@@ -1,5 +1,19 @@
 # RemitProof
 
+> **A financial reconciliation can be mathematically valid and still be wrong.**
+
+If two invoice allocations both equal the received payment, arithmetic cannot establish what the payer intended. RemitProof investigates those cases. AI proposes an explanation, deterministic code verifies the financial constraints, and the verifier searches for competing explanations. Evidence must uniquely support one allocation before automation is authorized.
+
+If it does not, RemitProof refuses to act.
+
+```text
+PLAUSIBLE
+    ≠
+JUSTIFIED
+```
+
+**AI proposes. RemitProof verifies.**
+
 Normal reconciliation is deterministic.
 
 ```text
@@ -72,7 +86,11 @@ RemitProof adds value only on semantic ambiguity, fragmented evidence, contradic
 - A local Ollama investigator returning strict Pydantic-validated JSON.
 - Decimal-based financial proof, state checks, duplicate prevention, and contradiction detection.
 - Exhaustive alternative-allocation search over the bounded candidate set.
-- Evidence-sufficiency gating with explicit abstention.
+- Structured conflict records with cleared or unresolved status.
+- Evidence-versus-alternative assessments and explicit evidence-sufficiency gating.
+- Counterfactual tests that identify decision-critical evidence.
+- Reusable resolution-proof and blocked-decision artifacts.
+- Explicit abstention when alternatives survive or evidence contradicts a proposal.
 - An 80-receipt synthetic dataset, a 10-case kill spike, a 60-record synthetic benchmark/regression subset, and three-way evaluation.
 - A FastAPI read API and a responsive Next.js dashboard with resolved and human-review detail states.
 

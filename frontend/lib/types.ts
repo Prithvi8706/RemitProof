@@ -58,6 +58,10 @@ export interface BenchmarkData {
   evidence_precision: number;
   arithmetic_correctness: number;
   retrieval_accuracy: number;
+  alternative_detection_accuracy: number;
+  ambiguity_detection_accuracy: number;
+  contradiction_detection_accuracy: number;
+  decision_critical_evidence_accuracy: number;
   throughput_per_minute: number;
   mean_latency_ms: number;
   evaluation_mode: string;
@@ -143,6 +147,10 @@ export interface SufficiencyRecord {
   credit_support: boolean;
   alternative_allocations_exist: boolean;
   evidence_disambiguates_alternatives: boolean;
+  chosen_proposal_supported: boolean;
+  alternatives_eliminated: boolean;
+  uniquely_distinguishing_evidence: string[];
+  evidence_alternative_matrix: EvidenceAlternativeAssessment[];
   contradictions_exist: boolean;
   missing_required_evidence: string[];
   duplicate_risk: boolean;
@@ -170,10 +178,37 @@ export interface EvidenceRecord {
 }
 
 export interface AlternativeRecord {
+  allocation_id: string;
   customer_id: string;
   invoice_ids: string[];
   credit_ids: string[];
   calculated_total: string;
+  financially_valid: boolean;
+}
+
+export interface EvidenceAlternativeAssessment {
+  evidence_id: string;
+  allocation_id: string;
+  relationship: "supports" | "contradicts" | "shared_fact" | "irrelevant";
+  reason: string;
+}
+
+export interface ConflictRecord {
+  conflict_id: string;
+  payment_id: string;
+  type: string;
+  allocation_ids: string[];
+  reason: string;
+  required_disambiguation: string[];
+  status: "cleared" | "unresolved";
+}
+
+export interface CounterfactualRecord {
+  evidence_id: string;
+  decision_with_evidence: "resolved" | "human_review";
+  decision_without_evidence: "resolved" | "human_review";
+  decision_critical: boolean;
+  reason: string;
 }
 
 export interface ExceptionDetail {
@@ -189,7 +224,10 @@ export interface ExceptionDetail {
   audit_records: EvidenceRecord[];
   proof: ProofRecord | null;
   alternatives: AlternativeRecord[];
+  conflict: ConflictRecord | null;
   sufficiency: SufficiencyRecord | null;
-  counterfactuals: Array<Record<string, unknown>>;
+  counterfactuals: CounterfactualRecord[];
+  resolution_proof: Record<string, unknown> | null;
+  blocked_decision: Record<string, unknown> | null;
   investigator_error: string | null;
 }

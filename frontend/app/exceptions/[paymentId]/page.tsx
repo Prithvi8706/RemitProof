@@ -5,6 +5,7 @@ import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
 import { DecisionPanel } from "@/components/DecisionPanel";
 import { EvidencePanel } from "@/components/EvidencePanel";
+import { EvidenceAlternativeMatrix } from "@/components/EvidenceAlternativeMatrix";
 import { InvestigationPath } from "@/components/InvestigationPath";
 import { PaymentPanel } from "@/components/PaymentPanel";
 import { ProposalPanel } from "@/components/ProposalPanel";
@@ -83,6 +84,8 @@ export default async function ExceptionDetailPage({
             claims={detail.proposal?.semantic_claims ?? []}
           />
         </div>
+
+        <EvidenceAlternativeMatrix detail={detail} />
 
         <div className="mt-12 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)] lg:items-start">
           <AlternativesPanel

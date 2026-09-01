@@ -3,6 +3,7 @@ from typing import List, Set, Tuple
 from app.models import (
     AlternativeAllocation,
     CandidateBundle,
+    EvidenceAlternativeAssessment,
     InvestigationProposal,
     ProofResult,
     SufficiencyResult,
@@ -99,6 +100,64 @@ def _evidence_disambiguates(
     return len(supported) == 1 and _proposal_matches(proposal, supported[0])
 
 
+def _evidence_matrix(
+    bundle: CandidateBundle,
+    proposal: InvestigationProposal,
+    alternatives: List[AlternativeAllocation],
+) -> List[EvidenceAlternativeAssessment]:
+    """Explain how each cited record bears on every financially valid allocation."""
+
+    emails = {email.email_id: email for email in bundle.candidate_emails}
+    customers = {customer.customer_id for customer in bundle.candidate_customers}
+    invoices = {invoice.invoice_id for invoice in bundle.candidate_invoices}
+    credits = {credit.credit_id for credit in bundle.candidate_credits}
+    rows: List[EvidenceAlternativeAssessment] = []
+    for evidence_id in proposal.evidence_ids:
+        for allocation in alternatives:
+            relationship = "irrelevant"
+            reason = "The record does not distinguish this allocation."
+            if evidence_id in emails:
+                email = emails[evidence_id]
+                semantics = classify_document_semantics(f"{email.subject} {email.body}")
+                allocation_invoices = set(allocation.invoice_ids)
+                allocation_credits = set(allocation.credit_ids)
+                prohibited = bool(
+                    allocation_invoices.intersection(semantics.prohibited_invoice_ids)
+                    or allocation_invoices.intersection(semantics.noncurrent_invoice_ids)
+                    or allocation_credits.intersection(semantics.prohibited_credit_ids)
+                )
+                exact_invoice_support = bool(semantics.affirmative_invoice_ids) and (
+                    allocation_invoices == set(semantics.affirmative_invoice_ids)
+                )
+                credit_support = not semantics.affirmative_credit_ids or (
+                    allocation_credits == set(semantics.affirmative_credit_ids)
+                )
+                if prohibited:
+                    relationship = "contradicts"
+                    reason = "The remittance explicitly prohibits a selected record."
+                elif exact_invoice_support and credit_support:
+                    relationship = "supports"
+                    reason = "The remittance explicitly identifies this allocation."
+            elif evidence_id in customers and evidence_id == allocation.customer_id:
+                relationship = "shared_fact"
+                reason = "The customer record supports entity validity, not payer intent."
+            elif evidence_id in invoices and evidence_id in allocation.invoice_ids:
+                relationship = "shared_fact"
+                reason = "The invoice supports financial validity, not payer intent."
+            elif evidence_id in credits and evidence_id in allocation.credit_ids:
+                relationship = "shared_fact"
+                reason = "The credit note supports deduction validity, not payer intent."
+            rows.append(
+                EvidenceAlternativeAssessment(
+                    evidence_id=evidence_id,
+                    allocation_id=allocation.allocation_id,
+                    relationship=relationship,
+                    reason=reason,
+                )
+            )
+    return rows
+
+
 def _abstention_reason(
     proof: ProofResult,
     ambiguous: bool,
@@ -138,6 +197,32 @@ def evaluate_evidence_sufficiency(
         dict.fromkeys([*proof.missing_required_evidence, *evidence_issues])
     )
     evidence_disambiguates = _evidence_disambiguates(bundle, proposal, alternatives)
+    evidence_matrix = _evidence_matrix(bundle, proposal, alternatives)
+    proposal_ids = {
+        allocation.allocation_id
+        for allocation in proposal_alternatives
+    }
+    distinguishing_evidence = sorted(
+        {
+            row.evidence_id
+            for row in evidence_matrix
+            if row.allocation_id in proposal_ids
+            and row.relationship == "supports"
+            and not any(
+                other.evidence_id == row.evidence_id
+                and other.allocation_id not in proposal_ids
+                and other.relationship == "supports"
+                for other in evidence_matrix
+            )
+        }
+    )
+    chosen_semantically_supported = bool(proposal_alternatives) and (
+        not competing_alternatives
+        or any(
+            row.allocation_id in proposal_ids and row.relationship == "supports"
+            for row in evidence_matrix
+        )
+    )
     ambiguous = bool(competing_alternatives) and not evidence_disambiguates
 
     safe_to_resolve = all(
@@ -161,6 +246,10 @@ def evaluate_evidence_sufficiency(
         credit_support=proof.credit_support,
         alternative_allocations_exist=bool(competing_alternatives),
         evidence_disambiguates_alternatives=evidence_disambiguates,
+        chosen_proposal_supported=chosen_semantically_supported and not evidence_issues,
+        alternatives_eliminated=not competing_alternatives or evidence_disambiguates,
+        uniquely_distinguishing_evidence=distinguishing_evidence,
+        evidence_alternative_matrix=evidence_matrix,
         contradictions_exist=bool(proof.contradictions),
         missing_required_evidence=missing_required_evidence,
         duplicate_risk=proof.duplicate_risk,

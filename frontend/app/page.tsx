@@ -157,17 +157,17 @@ export default async function DashboardPage() {
         <section className="mx-auto max-w-[1440px] px-4 pb-14 sm:px-6 sm:pb-16" aria-labelledby="demo-cases-title">
           <div className="mb-5">
             <h2 id="demo-cases-title" className="text-2xl font-semibold tracking-[-0.025em] text-ink">
-              Two cases explain the product.
+              Three cases explain the verifier.
             </h2>
             <p className="mt-2 max-w-[68ch] text-sm leading-6 text-muted">
-              One conflict is cleared by remittance evidence. The other remains blocked because payer intent cannot be proven.
+              A justified resolution, an unresolved ambiguity, and a contradiction show why arithmetic is only the first gate.
             </p>
           </div>
           <div className="border-y border-line">
             <Link href="/exceptions/PAY_051" className="group grid gap-4 border-b border-line py-5 hover:bg-surface sm:grid-cols-[180px_minmax(0,1fr)_auto] sm:items-center sm:px-4">
               <div className="flex items-center gap-2 text-sm font-semibold text-primary-dark">
                 <CheckCircle2 className="size-4" aria-hidden="true" />
-                CONFLICT CLEARED
+                CASE A · JUSTIFIED
               </div>
               <div>
                 <div className="numeric text-sm font-semibold text-ink">PAY_051</div>
@@ -178,10 +178,10 @@ export default async function DashboardPage() {
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </span>
             </Link>
-            <Link href="/exceptions/PAY_052" className="group grid gap-4 py-5 hover:bg-surface sm:grid-cols-[180px_minmax(0,1fr)_auto] sm:items-center sm:px-4">
+            <Link href="/exceptions/PAY_052" className="group grid gap-4 border-b border-line py-5 hover:bg-surface sm:grid-cols-[180px_minmax(0,1fr)_auto] sm:items-center sm:px-4">
               <div className="flex items-center gap-2 text-sm font-semibold text-warning">
                 <CircleStop className="size-4" aria-hidden="true" />
-                DECISION BLOCKED
+                CASE B · AMBIGUOUS
               </div>
               <div>
                 <div className="numeric text-sm font-semibold text-ink">PAY_052</div>
@@ -192,6 +192,42 @@ export default async function DashboardPage() {
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </span>
             </Link>
+            <Link href="/exceptions/PAY_056" className="group grid gap-4 py-5 hover:bg-surface sm:grid-cols-[180px_minmax(0,1fr)_auto] sm:items-center sm:px-4">
+              <div className="flex items-center gap-2 text-sm font-semibold text-danger">
+                <CircleStop className="size-4" aria-hidden="true" />
+                CASE C · CONTRADICTED
+              </div>
+              <div>
+                <div className="numeric text-sm font-semibold text-ink">PAY_056</div>
+                <p className="mt-1 text-sm leading-6 text-muted">The proposed deduction balances, but authoritative remittance evidence contradicts it.</p>
+              </div>
+              <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                Inspect contradiction
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </span>
+            </Link>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-[1440px] px-4 pb-14 sm:px-6 sm:pb-16" aria-labelledby="verifier-metrics-title">
+          <div className="border-y border-line">
+            <div className="py-5">
+              <h2 id="verifier-metrics-title" className="text-xl font-semibold tracking-[-0.02em] text-ink">Adversarial verifier metrics</h2>
+              <p className="mt-1 max-w-[68ch] text-sm leading-6 text-muted">Measured on the synthetic regression corpus. These scores are reported as observed, including misses.</p>
+            </div>
+            <dl className="grid border-t border-line sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                ["Alternative detection", benchmark.alternative_detection_accuracy],
+                ["Ambiguity detection", benchmark.ambiguity_detection_accuracy],
+                ["Contradiction detection", benchmark.contradiction_detection_accuracy],
+                ["Critical evidence", benchmark.decision_critical_evidence_accuracy],
+              ].map(([label, value]) => (
+                <div key={String(label)} className="border-b border-line px-5 py-5 sm:border-r lg:border-b-0 last:border-r-0">
+                  <dt className="text-xs font-medium text-muted">{label}</dt>
+                  <dd className="numeric mt-2 text-2xl font-semibold text-ink">{formatPercent(Number(value), 1)}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </section>
 

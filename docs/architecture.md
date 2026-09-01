@@ -47,7 +47,9 @@ The proposal is untrusted. The proof engine independently checks:
 - credits belong to selected invoices and are valid;
 - remittance claims do not contradict credit-note amounts or identifiers.
 
-The alternative finder exhaustively enumerates financially valid subsets inside the bounded candidate set. Evidence sufficiency authorizes only when the proposal itself passes proof and the available evidence uniquely identifies it. A second viable explanation without disambiguating evidence is a mandatory abstention.
+The alternative finder exhaustively enumerates financially valid subsets inside the bounded candidate set and assigns each one a stable allocation ID. Evidence sufficiency creates an evidence-versus-allocation matrix, distinguishing records that support, contradict, establish a shared financial fact, or have no bearing on each hypothesis. It authorizes only when the proposal itself passes proof and the available evidence uniquely identifies it. A second viable explanation without disambiguating evidence is a mandatory abstention.
+
+For evidence that uniquely distinguishes a resolved proposal, the pipeline removes that record and reruns proof and sufficiency. A decision change marks the record as decision-critical. The pipeline emits one reusable artifact: a `resolution_proof` for authorized cases or a `blocked_decision` for abstentions. Structured conflict records preserve the conflict type, surviving allocations, required disambiguation, and whether evidence cleared the conflict.
 
 ## Decision policy
 
@@ -69,6 +71,7 @@ No branch performs production write-back. Decisions are serialized into benchmar
 | `proof_engine.py` | Independent arithmetic, state, currency, entity, credit, and contradiction checks |
 | `alternative_finder.py` | Exhaustive financial hypotheses within candidates |
 | `evidence_sufficiency.py` | Final authorization/abstention policy |
+| `decision_artifacts.py` | Conflict, counterfactual, resolution-proof, and blocked-decision artifacts |
 | `pipeline.py` | Single payment orchestration |
 | `evaluator.py` | Three-way comparisons and generated metrics |
 

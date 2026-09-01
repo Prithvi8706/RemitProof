@@ -210,6 +210,10 @@ def _validate_metric_set(metrics: Dict[str, object], location: str) -> None:
             "evidence_precision": _validate_rate,
             "arithmetic_correctness": _validate_rate,
             "retrieval_accuracy": _validate_rate,
+            "alternative_detection_accuracy": _validate_rate,
+            "ambiguity_detection_accuracy": _validate_rate,
+            "contradiction_detection_accuracy": _validate_rate,
+            "decision_critical_evidence_accuracy": _validate_rate,
             "throughput_per_minute": lambda item: _is_number(item) and float(item) >= 0,
             "mean_latency_ms": lambda item: _is_number(item) and float(item) >= 0,
             "comparison_scope": _is_string,
@@ -619,6 +623,7 @@ def _validate_sufficiency(value: object, location: str) -> None:
             "financial_validity", "entity_support", "credit_support",
             "alternative_allocations_exist", "evidence_disambiguates_alternatives",
             "contradictions_exist", "duplicate_risk", "safe_to_resolve",
+            "chosen_proposal_supported", "alternatives_eliminated",
         )
     }
     _require_fields(
@@ -628,6 +633,9 @@ def _validate_sufficiency(value: object, location: str) -> None:
         {
             **bool_fields,
             "missing_required_evidence": _is_string_list,
+            "uniquely_distinguishing_evidence": _is_string_list,
+            "evidence_alternative_matrix": lambda candidate: isinstance(candidate, list)
+            and all(isinstance(row, dict) for row in candidate),
             "abstention_reason": _is_nullable_string,
         },
     )
@@ -657,8 +665,11 @@ def _validate_detail(raw: object, index: int) -> Dict[str, object]:
             "evidence": lambda item: isinstance(item, list),
             "proof": lambda item: item is None or isinstance(item, dict),
             "alternatives": lambda item: isinstance(item, list),
+            "conflict": lambda item: item is None or isinstance(item, dict),
             "sufficiency": lambda item: item is None or isinstance(item, dict),
             "counterfactuals": lambda item: isinstance(item, list),
+            "resolution_proof": lambda item: item is None or isinstance(item, dict),
+            "blocked_decision": lambda item: item is None or isinstance(item, dict),
             "investigator_error": _is_nullable_string,
         },
     )
@@ -713,9 +724,11 @@ def _validate_detail(raw: object, index: int) -> Dict[str, object]:
             alternative_location,
             {
                 "customer_id": _is_string,
+                "allocation_id": _is_string,
                 "invoice_ids": _is_string_list,
                 "credit_ids": _is_string_list,
                 "calculated_total": _is_positive_amount,
+                "financially_valid": lambda item: isinstance(item, bool),
             },
         )
     _validate_sufficiency(detail["sufficiency"], f"{location}.sufficiency")

@@ -37,10 +37,52 @@ class ProofResult(BaseModel):
 class AlternativeAllocation(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    allocation_id: str = ""
     customer_id: str
     invoice_ids: List[str]
     credit_ids: List[str] = Field(default_factory=list)
     calculated_total: Decimal
+    financially_valid: bool = True
+
+
+class EvidenceAlternativeAssessment(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    evidence_id: str
+    allocation_id: str
+    relationship: Literal["supports", "contradicts", "shared_fact", "irrelevant"]
+    reason: str
+
+
+class Conflict(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    conflict_id: str
+    payment_id: str
+    type: Literal[
+        "multiple_valid_allocations",
+        "entity_identity_conflict",
+        "credit_application_conflict",
+        "contradictory_remittance",
+        "missing_required_evidence",
+        "currency_conflict",
+        "state_conflict",
+        "duplicate_allocation_conflict",
+    ]
+    allocation_ids: List[str] = Field(default_factory=list)
+    reason: str
+    required_disambiguation: List[str] = Field(default_factory=list)
+    status: Literal["cleared", "unresolved"]
+
+
+class CounterfactualEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    evidence_id: str
+    decision_with_evidence: Literal["resolved", "human_review"]
+    decision_without_evidence: Literal["resolved", "human_review"]
+    decision_critical: bool
+    reason: str
 
 
 class SufficiencyResult(BaseModel):
@@ -51,6 +93,10 @@ class SufficiencyResult(BaseModel):
     credit_support: bool
     alternative_allocations_exist: bool
     evidence_disambiguates_alternatives: bool
+    chosen_proposal_supported: bool = False
+    alternatives_eliminated: bool = False
+    uniquely_distinguishing_evidence: List[str] = Field(default_factory=list)
+    evidence_alternative_matrix: List[EvidenceAlternativeAssessment] = Field(default_factory=list)
     contradictions_exist: bool
     missing_required_evidence: List[str] = Field(default_factory=list)
     duplicate_risk: bool
@@ -84,6 +130,9 @@ class ProcessingResult(BaseModel):
     evidence: List[Dict[str, object]] = Field(default_factory=list)
     proof: Optional[ProofResult] = None
     alternatives: List[AlternativeAllocation] = Field(default_factory=list)
+    conflict: Optional[Conflict] = None
     sufficiency: Optional[SufficiencyResult] = None
-    counterfactuals: List[Dict[str, object]] = Field(default_factory=list)
+    counterfactuals: List[CounterfactualEvidence] = Field(default_factory=list)
+    resolution_proof: Optional[Dict[str, object]] = None
+    blocked_decision: Optional[Dict[str, object]] = None
     investigator_error: Optional[str] = None

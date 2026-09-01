@@ -93,8 +93,11 @@ def test_exception_detail_api_has_an_explicit_non_evaluator_shape():
             "model_cited_evidence",
             "proof",
         "alternatives",
+        "conflict",
         "sufficiency",
         "counterfactuals",
+        "resolution_proof",
+        "blocked_decision",
         "investigator_error",
     }
 

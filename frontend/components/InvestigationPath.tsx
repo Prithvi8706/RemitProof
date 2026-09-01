@@ -24,6 +24,9 @@ export function InvestigationPath({ detail }: { detail: ExceptionDetail }) {
     alternativesFound && detail.sufficiency?.evidence_disambiguates_alternatives,
   );
   const resolved = detail.decision.decision === "resolved";
+  const unresolvedNonAllocationConflict = Boolean(
+    detail.conflict?.status === "unresolved" && !alternativesFound,
+  );
   const steps: Array<{ label: string; detail: string; state: StepState }> = [
     {
       label: "Normal match stopped",
@@ -41,20 +44,46 @@ export function InvestigationPath({ detail }: { detail: ExceptionDetail }) {
       state: proofPassed ? "complete" : "blocked",
     },
     {
-      label: alternativesFound ? "Conflict detected" : "Conflict search complete",
-      detail: alternativesFound
-        ? `${detail.alternatives.length} financially valid allocations found`
-        : "No competing allocation survived",
-      state: alternativesFound ? "attention" : "complete",
+      label: "Alternative search",
+      detail: "Financially valid competing allocations enumerated",
+      state: "complete",
     },
     {
-      label: conflictCleared ? "Conflict cleared" : alternativesFound ? "Evidence insufficient" : "Evidence checked",
+      label: alternativesFound
+        ? `${detail.alternatives.length} explanations found`
+        : detail.proof?.financial_validity
+          ? "Unique financial solution"
+          : "No valid allocation",
+      detail: alternativesFound
+        ? "Arithmetic alone cannot authorize the proposal"
+        : detail.proof?.financial_validity
+          ? "No competing allocation survived"
+          : "The proposal failed financial constraints",
+      state: alternativesFound ? "attention" : detail.proof?.financial_validity ? "complete" : "blocked",
+    },
+    {
+      label: "Evidence compared",
+      detail: detail.sufficiency?.chosen_proposal_supported
+        ? "Proposal support evaluated against every alternative"
+        : "Proposal support is incomplete or contradicted",
+      state: detail.sufficiency?.chosen_proposal_supported ? "complete" : "blocked",
+    },
+    {
+      label: conflictCleared
+        ? "Conflict cleared"
+        : alternativesFound
+          ? "Conflict remains"
+          : unresolvedNonAllocationConflict
+            ? "Contradiction found"
+            : "No conflict remains",
       detail: conflictCleared
         ? "Cited evidence uniquely selects the proposal"
         : alternativesFound
           ? "Available evidence does not establish one intent"
-          : "No unresolved alternative requires disambiguation",
-      state: conflictCleared || !alternativesFound ? "complete" : "blocked",
+          : unresolvedNonAllocationConflict
+            ? detail.conflict?.reason ?? "Evidence conflicts with the proposal"
+            : "No unresolved alternative requires disambiguation",
+      state: conflictCleared || (!alternativesFound && !unresolvedNonAllocationConflict) ? "complete" : "blocked",
     },
     {
       label: resolved ? "Safe to resolve" : "Decision blocked",
@@ -69,7 +98,7 @@ export function InvestigationPath({ detail }: { detail: ExceptionDetail }) {
         <LockKeyhole className="size-4 text-primary" aria-hidden="true" />
         <h2 id="investigation-path-title" className="text-sm font-semibold text-ink">Investigation path</h2>
       </div>
-      <ol className="grid border-t border-line sm:grid-cols-2 xl:grid-cols-6">
+      <ol className="grid border-t border-line sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
         {steps.map((step, index) => (
           <li key={step.label} className="relative border-b border-line px-4 py-4 sm:border-r xl:border-b-0 last:border-r-0">
             <div className="flex items-center gap-2">
