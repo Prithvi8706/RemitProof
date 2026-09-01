@@ -278,4 +278,3 @@ The remaining work is optional future production hardening:
 - persistent transactional duplicate protection
 - a fresh identity-verified live-model benchmark
 - retention and cleanup policy for old immutable result generations
-
