@@ -224,6 +224,150 @@ Final resolution:
 - Verified all active manifest hashes still matched.
 - Fresh Linux CI and the Windows simulation both passed.
 
+## Vercel demonstration deployment addendum
+
+The later Proposal/Proof/Conflict refinement was developed on
+`refinement/proposal-proof-conflict` and opened as PR #3 against `dev`. The
+judge-facing site was then deployed to Vercel so the visual demonstration and
+the existing investigation routes could be reviewed outside the local
+development environment.
+
+- Website: https://remitproof-demo.vercel.app
+- Read-only API: https://remitproof-api-preview.vercel.app
+- PR: https://github.com/Prithvi8706/RemitProof/pull/3
+
+`main` was not checked out, modified, or used as a deployment source.
+
+### 16. Vercel required an interactive device login
+
+The workspace had the Vercel CLI but no stored account credentials. The first
+deployment command paused in an interactive device-authentication flow instead
+of deploying.
+
+Resolution:
+
+- Used Vercel's one-time device authorization flow.
+- Waited for explicit account approval before continuing.
+- Did not print or persist an access token in repository files or command
+  output.
+
+### 17. A frontend-only deployment would have rendered a server error
+
+The Next.js application is dynamic and loads dashboard, benchmark, queue, and
+case data from FastAPI. Its local fallback URL is `http://127.0.0.1:8001`.
+There was no existing hosted RemitProof API or production API environment
+variable in the Vercel account. Deploying only `frontend/` would therefore
+have produced a visually deployed site whose server-rendered routes failed at
+runtime.
+
+Resolution:
+
+- Deployed a separate read-only FastAPI service containing the committed
+  evaluation artifacts.
+- Configured the Vercel frontend runtime and build to use the public API URL.
+- Verified the real dashboard response before accepting the frontend
+  deployment: 80 receipts, 30 exceptions, 9 RemitProof resolutions, and 21
+  human-review decisions.
+
+### 18. Backend packaging changed the repository-root calculation
+
+The first FastAPI package copied `backend/app` to the deployment root as
+`app`. The results loader intentionally locates repository artifacts relative
+to `backend/app/utils/results.py`. Flattening the package by one directory
+made that calculation point above the deployed project, so `/api/dashboard`
+returned a controlled 503 reporting that `metrics.json` was missing even
+though the artifacts had been uploaded.
+
+Resolution:
+
+- Probed the deployed dashboard endpoint before deploying the frontend.
+- Identified that only the temporary Vercel package layout differed from the
+  repository layout.
+- Adjusted the root calculation in the temporary deployment adapter, leaving
+  the reviewed repository implementation unchanged.
+- Redeployed and confirmed the endpoint returned JSON with HTTP 200.
+
+### 19. Protected preview URLs returned a login page with HTTP 200
+
+The corrected FastAPI preview URL was protected by the Vercel account's
+preview authentication. A basic status-code check was misleading because the
+request followed a redirect and ended on a Vercel login page with HTTP 200 and
+`text/html`, not the expected API JSON.
+
+Resolution:
+
+- Validated the response content type and final response URL in addition to
+  the status code.
+- Promoted the read-only backend deployment to its public project alias.
+- Re-ran JSON parsing and checked specific dashboard fields before wiring the
+  frontend to it.
+
+Lesson:
+
+An HTTP 200 does not prove an API deployment is healthy. Deployment smoke
+tests must also verify content type, schema, and representative values.
+
+### 20. Vercel created local project-link files during deployment
+
+The CLI created `.vercel/` metadata and a new `frontend/.gitignore`. The
+temporary backend packaging directory also appeared as untracked content.
+These files were deployment-machine state and did not belong in the product
+PR.
+
+Resolution:
+
+- Kept credentials and Vercel project metadata out of Git.
+- Moved temporary deployment staging and project-link metadata outside the
+  repository after deployment.
+- Removed the CLI-generated untracked `.gitignore`.
+- Rechecked that the feature branch worktree was clean.
+
+### 21. Cleanup commands were constrained by destructive-operation policy
+
+An attempted recursive cleanup command was rejected by the execution safety
+policy even though the target had been validated. Retrying with broader or
+less explicit deletion would have been unsafe.
+
+Resolution:
+
+- Did not weaken the path checks or retry an ambiguous recursive delete.
+- Verified the exact absolute source and destination paths.
+- Moved the temporary directories outside the repository instead, preserving
+  a clean Git worktree without risking repository data.
+
+### 22. The demonstration and operational screens still use two visual systems
+
+The deployed judge-facing homepage uses the new near-black scientific visual
+language. The preserved `/exceptions` and `/exceptions/[paymentId]`
+operational routes still use the earlier light green interface. The routes are
+functional and their data is correct, but navigating from the demonstration
+into a case creates a visible design discontinuity.
+
+Status:
+
+- This was not a deployment blocker and was not hidden by the deployment.
+- It remains a focused frontend refinement opportunity: migrate the existing
+  operational components to shared typography, color, navigation, and surface
+  tokens without changing their financial behavior or expanding product
+  scope.
+
+### Deployment validation performed
+
+- Vercel backend build on Python 3.12 - passed
+- Public `/api/dashboard` request - HTTP 200 JSON
+- Vercel Next.js 16 production build - passed
+- Next.js TypeScript validation during deployment - passed
+- Mobile homepage at 375 by 812 - rendered successfully
+- `PAY_051` detail route - rendered the complete proposal, proof, evidence,
+  alternative, and authorization record
+- PR #3 - open, mergeable, and targeted to `dev`
+- Git worktree after deployment cleanup - clean
+
+The deployment adapter is intentionally separate from the product branch. A
+future permanent deployment setup should codify the frontend/API project
+linkage and environment variables in reviewed infrastructure configuration
+rather than relying on a temporary packaging directory.
+
 ## Validation performed
 
 The final repair state was validated with:
