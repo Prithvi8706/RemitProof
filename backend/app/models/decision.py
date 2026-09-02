@@ -50,7 +50,7 @@ class EvidenceAlternativeAssessment(BaseModel):
 
     evidence_id: str
     allocation_id: str
-    relationship: Literal["supports", "contradicts", "shared_fact", "irrelevant"]
+    relationship: Literal["supports", "contradicts", "shared_fact", "superseded", "irrelevant"]
     reason: str
 
 

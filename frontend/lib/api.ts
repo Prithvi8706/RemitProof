@@ -1,4 +1,10 @@
-import type { BenchmarkData, DashboardData, ExceptionDetail, ExceptionSummary } from "@/lib/types";
+import type {
+  BenchmarkCasesData,
+  BenchmarkData,
+  DashboardData,
+  ExceptionDetail,
+  ExceptionSummary,
+} from "@/lib/types";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL ?? "http://127.0.0.1:8001";
@@ -27,6 +33,10 @@ export function getDashboard(): Promise<DashboardData> {
 
 export function getBenchmark(): Promise<BenchmarkData> {
   return getJson<BenchmarkData>("/api/benchmark");
+}
+
+export function getBenchmarkCases(): Promise<BenchmarkCasesData> {
+  return getJson<BenchmarkCasesData>("/api/benchmark/cases");
 }
 
 export function getException(paymentId: string): Promise<ExceptionDetail> {

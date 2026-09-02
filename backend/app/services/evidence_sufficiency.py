@@ -8,7 +8,10 @@ from app.models import (
     ProofResult,
     SufficiencyResult,
 )
-from app.utils.remittance_semantics import classify_document_semantics
+from app.utils.remittance_semantics import (
+    classify_document_semantics,
+    superseded_allocation_email_ids,
+)
 
 
 def _candidate_evidence_ids(bundle: CandidateBundle) -> Set[str]:
@@ -81,8 +84,9 @@ def _evidence_disambiguates(
     invoice_references = set(payment_semantics.affirmative_invoice_ids)
     credit_references = set(payment_semantics.affirmative_credit_ids)
     cited_ids = set(proposal.evidence_ids)
+    superseded_ids = superseded_allocation_email_ids(bundle.candidate_emails)
     for email in bundle.candidate_emails:
-        if email.email_id not in cited_ids:
+        if email.email_id not in cited_ids or email.email_id in superseded_ids:
             continue
         semantics = classify_document_semantics(f"{email.subject} {email.body}")
         invoice_references.update(semantics.affirmative_invoice_ids)
@@ -111,6 +115,7 @@ def _evidence_matrix(
     customers = {customer.customer_id for customer in bundle.candidate_customers}
     invoices = {invoice.invoice_id for invoice in bundle.candidate_invoices}
     credits = {credit.credit_id for credit in bundle.candidate_credits}
+    superseded_ids = superseded_allocation_email_ids(bundle.candidate_emails)
     rows: List[EvidenceAlternativeAssessment] = []
     for evidence_id in proposal.evidence_ids:
         for allocation in alternatives:
@@ -135,6 +140,9 @@ def _evidence_matrix(
                 if prohibited:
                     relationship = "contradicts"
                     reason = "The remittance explicitly prohibits a selected record."
+                elif evidence_id in superseded_ids:
+                    relationship = "superseded"
+                    reason = "A later explicit correction from the same customer replaces this instruction."
                 elif exact_invoice_support and credit_support:
                     relationship = "supports"
                     reason = "The remittance explicitly identifies this allocation."

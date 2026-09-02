@@ -3,6 +3,7 @@ import Link from "next/link";
 import { AlternativesPanel } from "@/components/AlternativesPanel";
 import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
+import { CaseSystemComparison } from "@/components/CaseSystemComparison";
 import { DecisionPanel } from "@/components/DecisionPanel";
 import { EvidencePanel } from "@/components/EvidencePanel";
 import { EvidenceAlternativeMatrix } from "@/components/EvidenceAlternativeMatrix";
@@ -10,7 +11,7 @@ import { InvestigationPath } from "@/components/InvestigationPath";
 import { PaymentPanel } from "@/components/PaymentPanel";
 import { ProposalPanel } from "@/components/ProposalPanel";
 import { ProofPanel } from "@/components/ProofPanel";
-import { ApiError, getException } from "@/lib/api";
+import { ApiError, getBenchmarkCases, getException } from "@/lib/api";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +22,7 @@ export default async function ExceptionDetailPage({
   params: Promise<{ paymentId: string }>;
 }) {
   const { paymentId } = await params;
+  const comparisonDataPromise = getBenchmarkCases().catch(() => null);
   let detail;
   try {
     detail = await getException(paymentId);
@@ -30,6 +32,8 @@ export default async function ExceptionDetailPage({
     }
     throw error;
   }
+  const comparisonData = await comparisonDataPromise;
+  const comparison = comparisonData?.cases.find((row) => row.payment_id === paymentId) ?? null;
   const isResolved = detail.decision.decision === "resolved";
   const missingEvidenceIds = Array.from(
     new Set([
@@ -67,6 +71,8 @@ export default async function ExceptionDetailPage({
             Read-only prototype decision
           </div>
         </header>
+
+        {comparison && <CaseSystemComparison comparison={comparison} />}
 
         <InvestigationPath detail={detail} />
 

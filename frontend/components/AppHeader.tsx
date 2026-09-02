@@ -26,6 +26,9 @@ export function AppHeader() {
             <Link className="rounded-md px-2.5 py-2 text-muted hover:bg-surface-raised hover:text-ink" href="/exceptions">
               Exception queue
             </Link>
+            <Link className="rounded-md px-2.5 py-2 text-muted hover:bg-surface-raised hover:text-ink" href="/benchmark">
+              Benchmark
+            </Link>
           </nav>
           <div className="hidden items-center gap-2 text-xs font-medium text-muted lg:flex">
             <span className="size-2 rounded-full bg-primary" aria-hidden="true" />

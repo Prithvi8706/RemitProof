@@ -85,6 +85,7 @@ RemitProof adds value only on semantic ambiguity, fragmented evidence, contradic
 - Deterministic candidate retrieval with bounded customer, invoice, credit, and email sets.
 - A local Ollama investigator returning strict Pydantic-validated JSON.
 - Decimal-based financial proof, state checks, duplicate prevention, and contradiction detection.
+- Temporal instruction handling: a strictly later, explicitly marked correction from the same customer supersedes an older allocation instruction; conflicting instructions without one remain contradictions and force human review.
 - Exhaustive alternative-allocation search over the bounded candidate set.
 - Structured conflict records with cleared or unresolved status.
 - Evidence-versus-alternative assessments and explicit evidence-sufficiency gating.

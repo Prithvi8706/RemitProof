@@ -118,6 +118,9 @@ export function ResearchHome({ dashboard, benchmark }: { dashboard: DashboardDat
             })}
             <figcaption><span>FIGURE 03</span> Comparison restricted to {benchmark.comparison_record_count} unresolved exceptions.</figcaption>
           </figure>
+          <div className="research-hero-actions" style={{ marginTop: "2rem" }}>
+            <Link href="/benchmark" className="research-primary-cta">Open the full benchmark report <ArrowRight className="size-4" /></Link>
+          </div>
         </section>
 
         <section className="research-cases" aria-labelledby="cases-title">

@@ -5,6 +5,7 @@ const relationshipLabel = {
   supports: "Supports",
   contradicts: "Contradicts",
   shared_fact: "Shared fact",
+  superseded: "Superseded",
   irrelevant: "No bearing",
 } as const;
 

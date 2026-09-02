@@ -65,6 +65,13 @@ _NEGATED_CREDIT_AMOUNT = re.compile(
     r"(?:USD|EUR|GBP|\$|€|£)\s*[0-9]",
     re.IGNORECASE,
 )
+_CORRECTION_LANGUAGE = re.compile(
+    r"\bcorrection\b|\bcorrigendum\b|\bcorrected\s+(?:instruction|remittance|allocation)\b|"
+    r"\b(?:please\s+)?disregard\s+(?:our|the|my)\s+(?:previous|earlier|prior)\b|"
+    r"\bignore\s+(?:our|the|my)\s+(?:previous|earlier|prior)\b|"
+    r"\bsupersedes?\b|\bthis\s+replaces\s+(?:our|the|my)\s+(?:previous|earlier|prior)\b",
+    re.IGNORECASE,
+)
 _SENDER_ADDRESS = re.compile(
     r"^(?P<local>[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+)@"
     r"(?P<domain>[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?)$"
@@ -225,6 +232,49 @@ class DocumentSemantics:
     noncurrent_invoice_ids: Set[str] = field(default_factory=set)
     affirmative_credit_amounts: Set[Decimal] = field(default_factory=set)
     prohibited_credit_amounts: Set[Decimal] = field(default_factory=set)
+
+
+def is_correction_instruction(text: str) -> bool:
+    return bool(_CORRECTION_LANGUAGE.search(text or ""))
+
+
+def superseded_allocation_email_ids(emails) -> Set[str]:
+    """Identify emails whose affirmative allocation instruction is superseded.
+
+    An instruction is superseded only under the narrowest defensible rule: a
+    strictly later email from the same customer carries explicit correction
+    language and its own differing affirmative instruction. Prohibitions in a
+    superseded email remain active safety input, and conflicting instructions
+    without an explicit dated correction stay contradictions.
+    """
+
+    analyzed = []
+    for email in emails:
+        text = f"{email.subject} {email.body}"
+        analyzed.append(
+            (email, classify_document_semantics(text), is_correction_instruction(text))
+        )
+    superseded: Set[str] = set()
+    for email, semantics, _ in analyzed:
+        if not semantics.affirmative_invoice_ids:
+            continue
+        for other, other_semantics, other_is_correction in analyzed:
+            if other.email_id == email.email_id or not other_is_correction:
+                continue
+            if other.customer_id != email.customer_id:
+                continue
+            if other.date <= email.date:
+                continue
+            if not other_semantics.affirmative_invoice_ids:
+                continue
+            if (
+                other_semantics.affirmative_invoice_ids == semantics.affirmative_invoice_ids
+                and other_semantics.affirmative_credit_ids == semantics.affirmative_credit_ids
+            ):
+                continue
+            superseded.add(email.email_id)
+            break
+    return superseded
 
 
 def classify_document_semantics(

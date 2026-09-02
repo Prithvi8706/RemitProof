@@ -1,5 +1,7 @@
+import csv
 import hashlib
 import hmac
+import io
 import json
 import re
 from datetime import date
@@ -801,7 +803,7 @@ def _validate_manifest(
     return contents, manifest
 
 
-def _load_snapshot() -> Tuple[object, object, Dict[str, object]]:
+def _load_snapshot() -> Tuple[object, object, Dict[str, object], Dict[str, bytes]]:
     pointer_path = RESULTS_DIR / POINTER_FILENAME
     if pointer_path.exists():
         pointer_bytes = _read_bytes(pointer_path, POINTER_FILENAME)
@@ -844,13 +846,13 @@ def _load_snapshot() -> Tuple[object, object, Dict[str, object]]:
 
     metrics_raw = _decode_json(contents["metrics.json"], "metrics.json")
     details_raw = _decode_json(contents["details.json"], "details.json")
-    return metrics_raw, details_raw, manifest
+    return metrics_raw, details_raw, manifest, contents
 
 
 def load_results() -> Tuple[Dict[str, object], List[Dict[str, object]]]:
     """Load and validate exactly one content-addressed result publication."""
 
-    metrics_raw, details_raw, manifest = _load_snapshot()
+    metrics_raw, details_raw, manifest, _ = _load_snapshot()
     metrics = _validate_metrics(metrics_raw)
     details = _validate_details(details_raw)
     generation_id = str(metrics["evaluation_generation_id"])
@@ -889,6 +891,166 @@ def load_results() -> Tuple[Dict[str, object], List[Dict[str, object]]]:
                 "metrics.json/details.json", f"{metric} counts disagree"
             )
     return metrics, details
+
+
+_CASE_CSV_COLUMNS = {
+    "payment_id",
+    "split",
+    "is_exception",
+    "exception_class",
+    "payer",
+    "amount",
+    "currency",
+    "baseline_decision",
+    "llm_only_decision",
+    "llm_only_correct_resolution",
+    "comparator_mode",
+    "decision",
+    "final_correct_resolution",
+    "expected_should_resolve",
+    "correct_abstention",
+    "false_escalation",
+    "wrong_auto_resolution",
+    "reason",
+}
+_CLASS_CSV_COLUMNS = {
+    "exception_class",
+    "records",
+    "resolved",
+    "correct_resolutions",
+    "human_review",
+    "wrong_auto_resolutions",
+    "false_escalations",
+}
+
+
+def _csv_bool(row: Dict[str, str], column: str, filename: str) -> bool:
+    value = row.get(column)
+    if value not in {"True", "False"}:
+        raise _artifact_error(filename, f"column {column} has a non-boolean value")
+    return value == "True"
+
+
+def _csv_rows(content: bytes, filename: str, required_columns: set) -> List[Dict[str, str]]:
+    try:
+        reader = csv.DictReader(io.StringIO(content.decode("utf-8")))
+    except UnicodeError as exc:
+        raise _artifact_error(filename, "file is unreadable or malformed") from exc
+    if reader.fieldnames is None or not required_columns.issubset(set(reader.fieldnames)):
+        raise _artifact_error(filename, "required columns are missing")
+    return list(reader)
+
+
+def load_case_comparisons() -> Dict[str, object]:
+    """Serve per-case baseline/ablation/RemitProof outcomes from the published CSVs.
+
+    The CSV bytes are already hash-verified against the generation manifest.
+    Derived aggregates are additionally cross-checked against the validated
+    metrics comparison so an inconsistent publication fails closed instead of
+    serving numbers the committed metrics do not support.
+    """
+
+    metrics_raw, _, manifest, contents = _load_snapshot()
+    metrics = _validate_metrics(metrics_raw)
+    generation_id = str(metrics["evaluation_generation_id"])
+    if generation_id != manifest["evaluation_generation_id"]:
+        raise _artifact_error("metrics.json", "generation ID disagrees with manifest")
+
+    rows = _csv_rows(contents["results.csv"], "results.csv", _CASE_CSV_COLUMNS)
+    cases: List[Dict[str, object]] = []
+    for row in rows:
+        if row["baseline_decision"] not in {"resolve", "abstain"}:
+            raise _artifact_error("results.csv", "baseline_decision has an unsupported value")
+        if row["llm_only_decision"] not in {"resolve", "abstain"}:
+            raise _artifact_error("results.csv", "llm_only_decision has an unsupported value")
+        if row["decision"] not in DECISIONS:
+            raise _artifact_error("results.csv", "decision has an unsupported value")
+        if row["baseline_decision"] != "abstain":
+            continue
+        llm_only_resolved = row["llm_only_decision"] == "resolve"
+        llm_only_correct = _csv_bool(row, "llm_only_correct_resolution", "results.csv")
+        final_correct = _csv_bool(row, "final_correct_resolution", "results.csv")
+        cases.append(
+            {
+                "payment_id": row["payment_id"],
+                "split": row["split"],
+                "exception_class": row["exception_class"],
+                "payer": row["payer"],
+                "amount": row["amount"],
+                "currency": row["currency"],
+                "expected_should_resolve": _csv_bool(row, "expected_should_resolve", "results.csv"),
+                "baseline_decision": "human_review",
+                "llm_only_decision": row["llm_only_decision"],
+                "llm_only_wrong_resolution": llm_only_resolved and not llm_only_correct,
+                "remitproof_decision": row["decision"],
+                "remitproof_correct_resolution": row["decision"] == "resolved" and final_correct,
+                "correct_abstention": _csv_bool(row, "correct_abstention", "results.csv"),
+                "false_escalation": _csv_bool(row, "false_escalation", "results.csv"),
+                "wrong_auto_resolution": _csv_bool(row, "wrong_auto_resolution", "results.csv"),
+                "recovered_from_baseline": row["decision"] == "resolved" and final_correct,
+                "reason": row["reason"],
+            }
+        )
+
+    comparison = metrics["comparison"]
+    summary = {
+        "comparison_record_count": len(cases),
+        "llm_only_wrong_resolutions": sum(1 for case in cases if case["llm_only_wrong_resolution"]),
+        "remitproof_wrong_auto_resolutions": sum(1 for case in cases if case["wrong_auto_resolution"]),
+        "recovered_from_baseline": sum(1 for case in cases if case["recovered_from_baseline"]),
+        "correct_abstentions": sum(1 for case in cases if case["correct_abstention"]),
+        "false_escalations": sum(1 for case in cases if case["false_escalation"]),
+    }
+    consistency = (
+        summary["comparison_record_count"] == metrics["comparison_record_count"],
+        summary["llm_only_wrong_resolutions"] == comparison["llm_only"]["wrong_auto_resolutions"],
+        summary["remitproof_wrong_auto_resolutions"] == comparison["remitproof"]["wrong_auto_resolutions"],
+        summary["recovered_from_baseline"] == comparison["remitproof"]["correct_resolutions"],
+        summary["correct_abstentions"] == comparison["remitproof"]["correct_abstentions"],
+        summary["false_escalations"] == comparison["remitproof"]["false_escalations"],
+    )
+    if not all(consistency):
+        raise _artifact_error(
+            "results.csv", "per-case outcomes disagree with the published metrics comparison"
+        )
+
+    class_rows = _csv_rows(
+        contents["confusion_breakdown.csv"], "confusion_breakdown.csv", _CLASS_CSV_COLUMNS
+    )
+    by_class: List[Dict[str, object]] = []
+    for row in class_rows:
+        try:
+            by_class.append(
+                {
+                    "exception_class": row["exception_class"],
+                    "records": int(row["records"]),
+                    "resolved": int(row["resolved"]),
+                    "correct_resolutions": int(row["correct_resolutions"]),
+                    "human_review": int(row["human_review"]),
+                    "wrong_auto_resolutions": int(row["wrong_auto_resolutions"]),
+                    "false_escalations": int(row["false_escalations"]),
+                }
+            )
+        except (KeyError, ValueError) as exc:
+            raise _artifact_error(
+                "confusion_breakdown.csv", "class breakdown row is malformed"
+            ) from exc
+    if sum(item["records"] for item in by_class) != metrics["total_receipts"]:
+        raise _artifact_error(
+            "confusion_breakdown.csv", "class record counts disagree with total receipts"
+        )
+
+    return {
+        "evaluation_generation_id": generation_id,
+        "result_status": metrics["result_status"],
+        "evaluation_mode": metrics["evaluation_mode"],
+        "comparison_scope": metrics["comparison_scope"],
+        "comparator_mode": comparison["llm_only"]["mode"],
+        "comparator_label": comparison["llm_only"]["label"],
+        "summary": summary,
+        "cases": cases,
+        "by_class": by_class,
+    }
 
 
 def load_metrics() -> Dict[str, object]:

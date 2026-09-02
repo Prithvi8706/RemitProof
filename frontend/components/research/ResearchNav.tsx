@@ -37,7 +37,7 @@ export function ResearchNav() {
 
   const links = open === "evidence"
     ? [["Case library", "/exceptions"], ["PAY_051 proof", "/exceptions/PAY_051"], ["PAY_052 conflict", "/exceptions/PAY_052"], ["PAY_056 contradiction", "/exceptions/PAY_056"]]
-    : [["Method", "#method"], ["Benchmark", "#benchmark"], ["Integrity", "#integrity"]];
+    : [["Method", "#method"], ["Benchmark report", "/benchmark"], ["Integrity", "#integrity"]];
 
   return (
     <>
