@@ -39,20 +39,20 @@ export default async function ExceptionDetailPage({
   );
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="case-site min-h-screen bg-canvas">
       <AppHeader />
       <main className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 sm:py-10">
         <nav aria-label="Breadcrumb">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-md py-1 text-sm font-semibold text-muted hover:text-primary"
+            className="case-back-link inline-flex items-center gap-2 rounded-md py-1 text-sm font-semibold text-muted hover:text-primary"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />
             Back to dashboard
           </Link>
         </nav>
 
-        <header className="mt-7 flex flex-col gap-5 border-b border-line pb-8 sm:flex-row sm:items-end sm:justify-between">
+        <header className="case-page-heading mt-7 flex flex-col gap-5 border-b border-line pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-primary">Exception investigation</p>
             <h1 className="numeric mt-2 text-3xl font-semibold tracking-[-0.035em] text-ink sm:text-4xl">

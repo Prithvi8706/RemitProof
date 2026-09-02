@@ -2,7 +2,7 @@ import { AppHeader } from "@/components/AppHeader";
 
 export default function ExceptionQueueLoading() {
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="case-site min-h-screen bg-canvas">
       <AppHeader />
       <main className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6" aria-busy="true" aria-label="Loading exception queue">
         <p className="sr-only" role="status">Loading exception queue</p>

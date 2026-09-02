@@ -335,21 +335,22 @@ Resolution:
 - Moved the temporary directories outside the repository instead, preserving
   a clean Git worktree without risking repository data.
 
-### 22. The demonstration and operational screens still use two visual systems
+### 22. The demonstration and operational screens used two visual systems
 
-The deployed judge-facing homepage uses the new near-black scientific visual
-language. The preserved `/exceptions` and `/exceptions/[paymentId]`
-operational routes still use the earlier light green interface. The routes are
-functional and their data is correct, but navigating from the demonstration
-into a case creates a visible design discontinuity.
+The first deployment paired the new near-black judge-facing homepage with the
+earlier light green `/exceptions` and `/exceptions/[paymentId]` interface.
+Both surfaces were functional, but navigating into a case created a visible
+design discontinuity.
 
-Status:
+Resolution:
 
-- This was not a deployment blocker and was not hidden by the deployment.
-- It remains a focused frontend refinement opportunity: migrate the existing
-  operational components to shared typography, color, navigation, and surface
-  tokens without changing their financial behavior or expanding product
-  scope.
+- Added a shared operational theme for the queue, detail, loading, error, and
+  not-found routes.
+- Reused the near-black, off-white, graphite, and emerald visual language
+  without copying the homepage's cinematic layout or scroll choreography.
+- Kept the queue as a dense case ledger and the detail page as an evidence
+  dossier, preserving the information architecture and financial behavior.
+- Verified resolved and blocked cases at desktop and mobile widths.
 
 ### Deployment validation performed
 

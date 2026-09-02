@@ -5,7 +5,7 @@ import { AppHeader } from "@/components/AppHeader";
 
 export default function ExceptionDetailError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="case-site min-h-screen bg-canvas">
       <AppHeader />
       <main className="mx-auto max-w-[760px] px-4 py-20 sm:px-6">
         <div className="border border-danger/25 bg-danger-soft p-7 sm:p-9">

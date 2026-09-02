@@ -124,7 +124,7 @@ export function ProofPanel({ detail }: { detail: ExceptionDetail }) {
         ))}
       </ul>
       {proof?.contradictions && proof.contradictions.length > 0 && (
-        <div className="mt-4 border border-danger/25 bg-danger-soft p-4 text-sm leading-6 text-[oklch(0.38_0.12_28)]">
+        <div className="mt-4 border border-danger/25 bg-danger-soft p-4 text-sm leading-6 text-danger">
           {proof.contradictions.map((item) => <p key={item}>{item}</p>)}
         </div>
       )}
