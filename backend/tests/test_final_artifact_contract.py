@@ -105,7 +105,14 @@ def test_mixed_generation_and_hash_tampering_fail_all_artifact_endpoints(
     )
     monkeypatch.setattr(results, "RESULTS_DIR", tmp_path)
 
-    for path in ("/ready", "/health", "/api/dashboard", "/api/benchmark", "/api/exceptions"):
+    for path in (
+        "/ready",
+        "/health",
+        "/api/dashboard",
+        "/api/benchmark",
+        "/api/benchmark/cases",
+        "/api/exceptions",
+    ):
         response = client.get(path)
         assert response.status_code == 503
         assert "generation ID disagrees" in response.json()["detail"]
@@ -144,6 +151,7 @@ def test_contract_invalid_artifacts_return_controlled_503(
     assert client.get("/health").status_code == 503
     assert client.get("/api/dashboard").status_code == 503
     assert client.get("/api/benchmark").status_code == 503
+    assert client.get("/api/benchmark/cases").status_code == 503
     assert client.get("/api/exceptions/PAY_051").status_code == 503
 
 

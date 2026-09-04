@@ -84,7 +84,10 @@ def _evidence_disambiguates(
     invoice_references = set(payment_semantics.affirmative_invoice_ids)
     credit_references = set(payment_semantics.affirmative_credit_ids)
     cited_ids = set(proposal.evidence_ids)
-    superseded_ids = superseded_allocation_email_ids(bundle.candidate_emails)
+    superseded_ids = superseded_allocation_email_ids(
+        bundle.candidate_emails,
+        payment=bundle.payment,
+    )
     for email in bundle.candidate_emails:
         if email.email_id not in cited_ids or email.email_id in superseded_ids:
             continue
@@ -115,7 +118,10 @@ def _evidence_matrix(
     customers = {customer.customer_id for customer in bundle.candidate_customers}
     invoices = {invoice.invoice_id for invoice in bundle.candidate_invoices}
     credits = {credit.credit_id for credit in bundle.candidate_credits}
-    superseded_ids = superseded_allocation_email_ids(bundle.candidate_emails)
+    superseded_ids = superseded_allocation_email_ids(
+        bundle.candidate_emails,
+        payment=bundle.payment,
+    )
     rows: List[EvidenceAlternativeAssessment] = []
     for evidence_id in proposal.evidence_ids:
         for allocation in alternatives:

@@ -199,6 +199,7 @@ python -m pytest -q backend\tests
 
 Set-Location frontend
 npm ci
+npm test
 npm run lint
 .\node_modules\.bin\tsc.cmd --noEmit
 npm run build
@@ -217,6 +218,7 @@ GitHub Actions runs these checks from clean, lockfile-driven environments on eve
 | `GET /api/exceptions` | Exception queue |
 | `GET /api/exceptions/{payment_id}` | Payment, proposal, evidence, proof, and alternatives |
 | `GET /api/benchmark` | Full generated benchmark metrics |
+| `GET /api/benchmark/cases` | Per-case comparison outcomes and exception-class breakdown |
 
 These endpoints are read-only. The prototype does not post allocations to an accounting system.
 

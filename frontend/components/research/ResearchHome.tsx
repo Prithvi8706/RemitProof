@@ -1,10 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
+import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Check, CircleAlert, GitCompareArrows, ShieldCheck, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { describeBenchmarkRun } from "@/lib/benchmark-provenance";
 import type { BenchmarkData, DashboardData } from "@/lib/types";
 import { formatPercent } from "@/lib/format";
 import { ResearchNav } from "./ResearchNav";
@@ -27,6 +28,8 @@ function EvidenceFallback() {
 
 export function ResearchHome({ dashboard, benchmark }: { dashboard: DashboardData; benchmark: BenchmarkData }) {
   const [webgl, setWebgl] = useState(false);
+  const shouldReduceMotion = useReducedMotion() === true;
+  const benchmarkRun = describeBenchmarkRun(benchmark);
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
       const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -48,11 +51,12 @@ export function ResearchHome({ dashboard, benchmark }: { dashboard: DashboardDat
   ];
 
   return (
-    <div className="research-site" id="top">
-      <a href="#main-content" className="research-skip">Skip to content</a>
-      <ResearchRuntime />
-      <ResearchNav />
-      <main id="main-content">
+    <MotionConfig reducedMotion="user" skipAnimations={shouldReduceMotion}>
+      <div className="research-site" id="top">
+        <a href="#main-content" className="research-skip">Skip to content</a>
+        <ResearchRuntime />
+        <ResearchNav />
+        <main id="main-content">
         <section className="research-hero" aria-labelledby="research-title">
           <div className="research-hero-inner">
             <motion.div className="research-hero-left" initial="hidden" animate="show" variants={{ hidden:{}, show:{ transition:{ staggerChildren:0.14, delayChildren:0.15 } } }}>
@@ -104,7 +108,7 @@ export function ResearchHome({ dashboard, benchmark }: { dashboard: DashboardDat
         </section>
 
         <section className="research-benchmark" id="benchmark" aria-labelledby="benchmark-title">
-          <header><p className="research-kicker">FROZEN SYNTHETIC REGRESSION CORPUS</p><h2 id="benchmark-title">Measured safety behavior.</h2><p>Values below come from the committed evaluator artifacts. Cached proposal replay excludes model inference time.</p></header>
+          <header><p className="research-kicker">{benchmarkRun.kickerLabel}</p><h2 id="benchmark-title">Measured safety behavior.</h2><p>Values below come from the committed evaluator artifacts. {benchmarkRun.description}</p></header>
           <div className="research-metric-ledger">
             <div><span>Incorrect auto-resolution</span><strong>{formatPercent(benchmark.incorrect_auto_resolution_rate,1)}</strong></div>
             <div><span>Correct abstention</span><strong>{formatPercent(benchmark.correct_abstention_rate,1)}</strong></div>
@@ -137,9 +141,10 @@ export function ResearchHome({ dashboard, benchmark }: { dashboard: DashboardDat
           <blockquote>RemitProof does not choose the most likely answer. It proves a financial action is justified, or it blocks it.</blockquote>
           <p>{dashboard.total_receipts} synthetic receipts. {dashboard.matched_normally} resolved normally. {dashboard.exceptions} investigated exceptions. No production posting or settlement.</p>
         </section>
-      </main>
-      <footer className="research-footer"><div><h2>Inspect the evidence.</h2><Link href="/exceptions">Open exception library</Link></div><p>All displayed values come from committed synthetic benchmark artifacts. The model proposes; deterministic code authorizes.</p></footer>
-    </div>
+        </main>
+        <footer className="research-footer"><div><h2>Inspect the evidence.</h2><Link href="/exceptions">Open exception library</Link></div><p>All displayed values come from committed synthetic benchmark artifacts. The model proposes; deterministic code authorizes.</p></footer>
+      </div>
+    </MotionConfig>
   );
 }
 

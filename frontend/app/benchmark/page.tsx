@@ -5,6 +5,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { BenchmarkCaseExplorer } from "@/components/BenchmarkCaseExplorer";
 import { SafetyFrontier } from "@/components/SafetyFrontier";
 import { getBenchmark, getBenchmarkCases } from "@/lib/api";
+import { describeBenchmarkRun } from "@/lib/benchmark-provenance";
 import { explainReason, formatMoney, formatPercent, titleCase } from "@/lib/format";
 import type { BenchmarkCaseRow } from "@/lib/types";
 
@@ -59,11 +60,11 @@ export default async function BenchmarkPage() {
   const prevented = caseData.cases.filter((row) => row.llm_only_wrong_resolution);
   const recovered = caseData.cases.filter((row) => row.recovered_from_baseline);
   const escalated = caseData.cases.filter((row) => row.false_escalation);
-  const offline = benchmark.result_status === "offline_verifier_regression_only";
+  const benchmarkRun = describeBenchmarkRun(benchmark);
 
   return (
     <div className="case-site min-h-screen bg-canvas">
-      <AppHeader />
+      <AppHeader benchmark={benchmark} />
       <main className="mx-auto min-w-0 max-w-[1440px] px-4 py-8 sm:px-6 sm:py-10">
         <nav aria-label="Breadcrumb">
           <Link className="case-back-link inline-flex items-center gap-2 rounded-md py-1 text-sm font-semibold text-muted hover:text-primary" href="/">
@@ -87,7 +88,7 @@ export default async function BenchmarkPage() {
               </div>
             </div>
             <span className="rounded-full border border-warning/40 bg-warning-soft px-3 py-1.5 text-xs font-semibold text-ink">
-              {offline ? "Offline verifier regression" : "Model-backed benchmark"}
+              {benchmarkRun.badgeLabel}
             </span>
           </div>
           <dl className="mt-6 grid gap-x-8 gap-y-3 text-xs sm:grid-cols-2 lg:grid-cols-3">
@@ -112,13 +113,9 @@ export default async function BenchmarkPage() {
               <dd className="mt-0.5 text-ink">{benchmark.timing_scope}</dd>
             </div>
           </dl>
-          {offline && (
-            <p className="mt-4 max-w-[80ch] rounded-[10px] bg-surface px-4 py-3 text-xs leading-5 text-muted">
-              This run replays cached model proposals to evaluate verifier behavior without re-running model
-              inference. Throughput and latency exclude model time, and the run does not claim end-to-end benchmark
-              eligibility.
-            </p>
-          )}
+          <p className="mt-4 max-w-[80ch] rounded-[10px] bg-surface px-4 py-3 text-xs leading-5 text-muted">
+            {benchmarkRun.description}
+          </p>
           <details className="mt-4 rounded-[10px] border border-line bg-surface">
             <summary className="cursor-pointer px-4 py-3 text-xs font-semibold text-ink hover:bg-surface-raised">
               Result provenance and cache metadata
@@ -323,8 +320,7 @@ export default async function BenchmarkPage() {
           </div>
           <p className="mt-4 text-xs leading-5 text-muted">
             Throughput ({benchmark.throughput_per_minute.toLocaleString("en-US")} decisions/min, mean{" "}
-            {benchmark.mean_latency_ms} ms) measures verifier and pipeline replay only in this run; model inference
-            was not attempted.
+            {benchmark.mean_latency_ms} ms) {benchmarkRun.timingDescription}
           </p>
         </section>
 
@@ -336,7 +332,7 @@ export default async function BenchmarkPage() {
             <li>All transactions, invoices, credits, and emails are synthetic records modeled on the target workflow.</li>
             <li>No live Razorpay, bank, Gmail, ERP, or settlement integration; the API is read-only.</li>
             <li>No accounting write-back, production authentication, or FX engine.</li>
-            <li>The committed run replays cached proposals; it is a verifier regression, not a live end-to-end benchmark.</li>
+            <li>{benchmarkRun.systemLimitNote}</li>
             <li>The corpus is not an independent held-out set; the benchmark partition shares generation machinery with development data.</li>
             <li>False escalations above are real conservative misses, not presentation choices.</li>
           </ul>

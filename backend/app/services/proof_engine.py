@@ -339,7 +339,10 @@ def verify_candidate(
     selected_credit_amounts = {credit.amount for credit in selected_credits}
     affirmative_credit_references = set()
     affirmative_credit_amounts = set()
-    superseded_email_ids = superseded_allocation_email_ids(bundle.candidate_emails)
+    superseded_email_ids = superseded_allocation_email_ids(
+        bundle.candidate_emails,
+        payment=bundle.payment,
+    )
     for email in bundle.candidate_emails:
         if proposed_customer and email.customer_id != proposed_customer.customer_id:
             continue

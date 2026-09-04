@@ -235,8 +235,8 @@ def _validate_metric_set(metrics: Dict[str, object], location: str) -> None:
         metrics["resolved_by_remitproof"] + metrics["human_review"]
     ):
         raise _artifact_error("metrics.json", f"{location} exception counts disagree")
-    if metrics["comparison_record_count"] != metrics["exceptions"]:
-        raise _artifact_error("metrics.json", f"{location} comparison count disagrees")
+    if metrics["comparison_record_count"] > metrics["exceptions"]:
+        raise _artifact_error("metrics.json", f"{location} comparison count exceeds exception count")
     for name, item in metrics["comparison"].items():
         if item["resolved"] != (
             item["correct_resolutions"] + item["wrong_auto_resolutions"]
@@ -244,7 +244,7 @@ def _validate_metric_set(metrics: Dict[str, object], location: str) -> None:
             raise _artifact_error(
                 "metrics.json", f"{location}.comparison.{name} resolution counts disagree"
             )
-        if metrics["exceptions"] != (
+        if metrics["comparison_record_count"] != (
             item["resolved"] + item["correct_abstentions"] + item["false_escalations"]
         ):
             raise _artifact_error(
@@ -849,10 +849,13 @@ def _load_snapshot() -> Tuple[object, object, Dict[str, object], Dict[str, bytes
     return metrics_raw, details_raw, manifest, contents
 
 
-def load_results() -> Tuple[Dict[str, object], List[Dict[str, object]]]:
-    """Load and validate exactly one content-addressed result publication."""
+def _validate_snapshot(
+    metrics_raw: object,
+    details_raw: object,
+    manifest: Dict[str, object],
+) -> Tuple[Dict[str, object], List[Dict[str, object]]]:
+    """Validate the metrics/details pair selected by one immutable snapshot."""
 
-    metrics_raw, details_raw, manifest, _ = _load_snapshot()
     metrics = _validate_metrics(metrics_raw)
     details = _validate_details(details_raw)
     generation_id = str(metrics["evaluation_generation_id"])
@@ -891,6 +894,13 @@ def load_results() -> Tuple[Dict[str, object], List[Dict[str, object]]]:
                 "metrics.json/details.json", f"{metric} counts disagree"
             )
     return metrics, details
+
+
+def load_results() -> Tuple[Dict[str, object], List[Dict[str, object]]]:
+    """Load and validate exactly one content-addressed result publication."""
+
+    metrics_raw, details_raw, manifest, _ = _load_snapshot()
+    return _validate_snapshot(metrics_raw, details_raw, manifest)
 
 
 _CASE_CSV_COLUMNS = {
@@ -950,11 +960,9 @@ def load_case_comparisons() -> Dict[str, object]:
     serving numbers the committed metrics do not support.
     """
 
-    metrics_raw, _, manifest, contents = _load_snapshot()
-    metrics = _validate_metrics(metrics_raw)
+    metrics_raw, details_raw, manifest, contents = _load_snapshot()
+    metrics, _ = _validate_snapshot(metrics_raw, details_raw, manifest)
     generation_id = str(metrics["evaluation_generation_id"])
-    if generation_id != manifest["evaluation_generation_id"]:
-        raise _artifact_error("metrics.json", "generation ID disagrees with manifest")
 
     rows = _csv_rows(contents["results.csv"], "results.csv", _CASE_CSV_COLUMNS)
     cases: List[Dict[str, object]] = []
@@ -965,7 +973,8 @@ def load_case_comparisons() -> Dict[str, object]:
             raise _artifact_error("results.csv", "llm_only_decision has an unsupported value")
         if row["decision"] not in DECISIONS:
             raise _artifact_error("results.csv", "decision has an unsupported value")
-        if row["baseline_decision"] != "abstain":
+        is_exception = _csv_bool(row, "is_exception", "results.csv")
+        if not is_exception or row["baseline_decision"] != "abstain":
             continue
         llm_only_resolved = row["llm_only_decision"] == "resolve"
         llm_only_correct = _csv_bool(row, "llm_only_correct_resolution", "results.csv")

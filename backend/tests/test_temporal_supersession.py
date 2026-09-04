@@ -87,10 +87,17 @@ def _decide(bundle: CandidateBundle, proposal: InvestigationProposal):
     return proof, alternatives, sufficiency
 
 
+def _superseded(bundle: CandidateBundle):
+    return superseded_allocation_email_ids(
+        bundle.candidate_emails,
+        payment=bundle.payment,
+    )
+
+
 def test_newer_instruction_can_supersede_old_instruction():
     bundle = _bundle(
-        old_email_body="Please apply the payment to INV_201.",
-        new_email_body="Correction: please apply the payment to INV_202.",
+        old_email_body="For PAY_TEST, please apply the payment to INV_201.",
+        new_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
     )
     proposal = _proposal(
         invoice_ids=["INV_202"],
@@ -99,17 +106,17 @@ def test_newer_instruction_can_supersede_old_instruction():
 
     proof, alternatives, sufficiency = _decide(bundle, proposal)
 
-    assert superseded_allocation_email_ids(bundle.candidate_emails) == {"EMAIL_OLD"}
+    assert _superseded(bundle) == {"EMAIL_OLD"}
     assert proof.contradictions == []
     assert len(alternatives) == 2
     assert sufficiency.evidence_disambiguates_alternatives is True
     assert sufficiency.safe_to_resolve is True
 
 
-def test_conflicting_instructions_without_correction_language_force_review():
+def test_unrelated_later_correction_cannot_supersede_current_instruction():
     bundle = _bundle(
-        old_email_body="Please apply the payment to INV_201.",
-        new_email_body="Please apply the payment to INV_202.",
+        old_email_body="For PAY_TEST, please apply the payment to INV_201.",
+        new_email_body="Correction for PAY_OTHER: please apply the payment to INV_202.",
     )
     proposal = _proposal(
         invoice_ids=["INV_202"],
@@ -118,7 +125,25 @@ def test_conflicting_instructions_without_correction_language_force_review():
 
     proof, _, sufficiency = _decide(bundle, proposal)
 
-    assert superseded_allocation_email_ids(bundle.candidate_emails) == set()
+    assert _superseded(bundle) == set()
+    assert proof.contradictions
+    assert sufficiency.safe_to_resolve is False
+    assert sufficiency.abstention_reason == "contradictory_evidence"
+
+
+def test_conflicting_instructions_without_correction_language_force_review():
+    bundle = _bundle(
+        old_email_body="For PAY_TEST, please apply the payment to INV_201.",
+        new_email_body="For PAY_TEST, please apply the payment to INV_202.",
+    )
+    proposal = _proposal(
+        invoice_ids=["INV_202"],
+        evidence_ids=["CUS_TEST", "INV_202", "EMAIL_NEW"],
+    )
+
+    proof, _, sufficiency = _decide(bundle, proposal)
+
+    assert _superseded(bundle) == set()
     assert proof.contradictions
     assert sufficiency.safe_to_resolve is False
     assert sufficiency.abstention_reason == "contradictory_evidence"
@@ -126,8 +151,8 @@ def test_conflicting_instructions_without_correction_language_force_review():
 
 def test_older_correction_cannot_supersede_newer_instruction():
     bundle = _bundle(
-        old_email_body="Correction: please apply the payment to INV_202.",
-        new_email_body="Please apply the payment to INV_201.",
+        old_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
+        new_email_body="For PAY_TEST, please apply the payment to INV_201.",
     )
     proposal = _proposal(
         invoice_ids=["INV_202"],
@@ -136,15 +161,15 @@ def test_older_correction_cannot_supersede_newer_instruction():
 
     proof, _, sufficiency = _decide(bundle, proposal)
 
-    assert superseded_allocation_email_ids(bundle.candidate_emails) == set()
+    assert _superseded(bundle) == set()
     assert proof.contradictions
     assert sufficiency.safe_to_resolve is False
 
 
 def test_same_day_correction_does_not_supersede():
     bundle = _bundle(
-        old_email_body="Please apply the payment to INV_201.",
-        new_email_body="Correction: please apply the payment to INV_202.",
+        old_email_body="For PAY_TEST, please apply the payment to INV_201.",
+        new_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
         old_date=date(2026, 1, 10),
         new_date=date(2026, 1, 10),
     )
@@ -155,15 +180,15 @@ def test_same_day_correction_does_not_supersede():
 
     proof, _, sufficiency = _decide(bundle, proposal)
 
-    assert superseded_allocation_email_ids(bundle.candidate_emails) == set()
+    assert _superseded(bundle) == set()
     assert proof.contradictions
     assert sufficiency.safe_to_resolve is False
 
 
 def test_superseded_email_prohibition_remains_active():
     bundle = _bundle(
-        old_email_body="Please apply the payment to INV_201. Do not apply INV_202.",
-        new_email_body="Correction: please apply the payment to INV_202.",
+        old_email_body="For PAY_TEST, please apply the payment to INV_201. Do not apply INV_202.",
+        new_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
     )
     proposal = _proposal(
         invoice_ids=["INV_202"],
@@ -172,15 +197,15 @@ def test_superseded_email_prohibition_remains_active():
 
     proof, _, sufficiency = _decide(bundle, proposal)
 
-    assert superseded_allocation_email_ids(bundle.candidate_emails) == {"EMAIL_OLD"}
+    assert _superseded(bundle) == {"EMAIL_OLD"}
     assert proof.contradictions
     assert sufficiency.safe_to_resolve is False
 
 
 def test_superseded_cited_email_is_labeled_in_evidence_matrix():
     bundle = _bundle(
-        old_email_body="Please apply the payment to INV_201.",
-        new_email_body="Correction: please apply the payment to INV_202.",
+        old_email_body="For PAY_TEST, please apply the payment to INV_201.",
+        new_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
     )
     proposal = _proposal(
         invoice_ids=["INV_202"],

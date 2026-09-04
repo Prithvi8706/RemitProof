@@ -1,8 +1,9 @@
 import re
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Iterable, Set
+from typing import Iterable, Optional, Set
 
+from app.models.payment import Payment
 from app.utils.normalization import extract_credit_amounts, extract_document_ids
 
 
@@ -238,27 +239,67 @@ def is_correction_instruction(text: str) -> bool:
     return bool(_CORRECTION_LANGUAGE.search(text or ""))
 
 
-def superseded_allocation_email_ids(emails) -> Set[str]:
+def _payment_reference_values(payment: Optional[Payment]) -> Set[str]:
+    if payment is None:
+        return set()
+    return {
+        value.strip()
+        for value in (
+            payment.payment_id,
+            payment.bank_reference,
+            payment.remittance_reference,
+        )
+        if isinstance(value, str) and value.strip()
+    }
+
+
+def _email_payment_references(text: str, payment: Optional[Payment]) -> Set[str]:
+    return {
+        reference
+        for reference in _payment_reference_values(payment)
+        if contains_token_phrase(text, reference)
+    }
+
+
+def superseded_allocation_email_ids(
+    emails,
+    *,
+    payment: Optional[Payment] = None,
+) -> Set[str]:
     """Identify emails whose affirmative allocation instruction is superseded.
 
     An instruction is superseded only under the narrowest defensible rule: a
     strictly later email from the same customer carries explicit correction
-    language and its own differing affirmative instruction. Prohibitions in a
-    superseded email remain active safety input, and conflicting instructions
-    without an explicit dated correction stay contradictions.
+    language, its own differing affirmative instruction, and an explicit
+    reference to the same payment context as the older instruction. The
+    payment context is supplied by the caller because an email's customer and
+    invoice IDs alone do not identify which payment the correction replaces.
+    Prohibitions in a superseded email remain active safety input, and
+    conflicting instructions without an explicit dated correction stay
+    contradictions.
+
+    ``payment`` is intentionally optional for callers that only need the
+    semantic classifier. Without it, no allocation can be superseded: a
+    customer-level correction with no payment, bank, or remittance reference
+    is not sufficient authority to rewrite an unrelated payment's evidence.
     """
 
     analyzed = []
     for email in emails:
         text = f"{email.subject} {email.body}"
         analyzed.append(
-            (email, classify_document_semantics(text), is_correction_instruction(text))
+            (
+                email,
+                classify_document_semantics(text),
+                is_correction_instruction(text),
+                _email_payment_references(text, payment),
+            )
         )
     superseded: Set[str] = set()
-    for email, semantics, _ in analyzed:
+    for email, semantics, _, email_references in analyzed:
         if not semantics.affirmative_invoice_ids:
             continue
-        for other, other_semantics, other_is_correction in analyzed:
+        for other, other_semantics, other_is_correction, other_references in analyzed:
             if other.email_id == email.email_id or not other_is_correction:
                 continue
             if other.customer_id != email.customer_id:
@@ -266,6 +307,14 @@ def superseded_allocation_email_ids(emails) -> Set[str]:
             if other.date <= email.date:
                 continue
             if not other_semantics.affirmative_invoice_ids:
+                continue
+            # Both sides must identify the current payment through a stable
+            # payment/bank/remittance reference. They may use different fields
+            # (for example, the original email has the bank reference while
+            # the correction has the payment ID). This prevents a later
+            # generic correction for another payment from superseding this
+            # instruction.
+            if not email_references or not other_references:
                 continue
             if (
                 other_semantics.affirmative_invoice_ids == semantics.affirmative_invoice_ids
