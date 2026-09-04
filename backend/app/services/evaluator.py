@@ -13,7 +13,7 @@ from app.utils.loaders import Dataset
 
 
 CACHE_FORMAT_VERSION = 2
-EVALUATOR_VERSION = "remitproof-evaluator-v3"
+EVALUATOR_VERSION = "remitproof-evaluator-v4"
 PROPOSAL_ABLATION_MODE = "proposal_only_forced_proposal_verifier_ablation"
 SYNTHETIC_BENCHMARK_LABEL = (
     "synthetic benchmark/regression partition; not an independent held-out set"
@@ -27,6 +27,8 @@ ALTERNATIVE_SEARCH_CLASSES = {
     "parent_entity_multi_invoice",
     "known_payer_disambiguated",
     "multi_invoice_remittance",
+    "semantic_credit_reason",
+    "treasury_bank_on_behalf",
     "alternative_allocation_email",
 }
 CONTRADICTION_CLASSES = {"conflicting_evidence"}

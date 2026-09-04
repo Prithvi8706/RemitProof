@@ -12,6 +12,7 @@ from app.utils.remittance_semantics import (
     payer_identity_phrases,
     sender_is_trusted_for_relationship,
     superseded_allocation_email_ids,
+    trusted_remittance_sender_ids,
 )
 
 
@@ -342,6 +343,12 @@ def verify_candidate(
     superseded_email_ids = superseded_allocation_email_ids(
         bundle.candidate_emails,
         payment=bundle.payment,
+        trusted_sender_ids=trusted_remittance_sender_ids(
+            bundle.candidate_emails,
+            bundle.payment,
+            bundle.candidate_customers,
+            customer_id=proposed_customer.customer_id if proposed_customer else None,
+        ),
     )
     for email in bundle.candidate_emails:
         if proposed_customer and email.customer_id != proposed_customer.customer_id:

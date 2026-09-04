@@ -261,10 +261,50 @@ def _email_payment_references(text: str, payment: Optional[Payment]) -> Set[str]
     }
 
 
+def trusted_remittance_sender_ids(
+    emails,
+    payment: Payment,
+    customers,
+    *,
+    customer_id: Optional[str] = None,
+) -> Set[str]:
+    """Return sender identities trusted for the candidate customer context.
+
+    Email records carry no thread or authentication metadata. Until that
+    metadata exists, a correction may rely on a sender only when the existing
+    identity-alignment rule recognizes that sender for the payment's payer and
+    the email's customer. Callers still pass the resulting set explicitly so
+    this helper cannot silently trust arbitrary candidate email addresses.
+    """
+
+    customers_by_id = {customer.customer_id: customer for customer in customers}
+    trusted: Set[str] = set()
+    for email in emails:
+        if customer_id is not None and email.customer_id != customer_id:
+            continue
+        customer = customers_by_id.get(email.customer_id)
+        if customer is None:
+            continue
+        customer_names = (
+            customer.legal_name,
+            *customer.aliases,
+            *customer.parent_entities,
+            *customer.subsidiaries,
+        )
+        if sender_is_trusted_for_relationship(
+            email.sender,
+            payment.payer_name,
+            customer_names,
+        ):
+            trusted.add(email.sender.casefold())
+    return trusted
+
+
 def superseded_allocation_email_ids(
     emails,
     *,
     payment: Optional[Payment] = None,
+    trusted_sender_ids: Optional[Iterable[str]] = None,
 ) -> Set[str]:
     """Identify emails whose affirmative allocation instruction is superseded.
 
@@ -282,8 +322,17 @@ def superseded_allocation_email_ids(
     semantic classifier. Without it, no allocation can be superseded: a
     customer-level correction with no payment, bank, or remittance reference
     is not sufficient authority to rewrite an unrelated payment's evidence.
+    ``trusted_sender_ids`` must contain both email sources before a correction
+    can rewrite an allocation. The current email model has no authenticated
+    thread metadata, so callers should leave this set empty when source trust
+    cannot be established and the function fails closed.
     """
 
+    trusted_senders = {
+        sender.casefold()
+        for sender in (trusted_sender_ids or ())
+        if isinstance(sender, str) and sender.strip()
+    }
     analyzed = []
     for email in emails:
         text = f"{email.subject} {email.body}"
@@ -317,8 +366,15 @@ def superseded_allocation_email_ids(
             if not email_references or not other_references:
                 continue
             if (
+                email.sender.casefold() not in trusted_senders
+                or other.sender.casefold() not in trusted_senders
+            ):
+                continue
+            if (
                 other_semantics.affirmative_invoice_ids == semantics.affirmative_invoice_ids
                 and other_semantics.affirmative_credit_ids == semantics.affirmative_credit_ids
+                and other_semantics.affirmative_credit_amounts
+                == semantics.affirmative_credit_amounts
             ):
                 continue
             superseded.add(email.email_id)

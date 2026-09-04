@@ -47,7 +47,14 @@ def _active_payloads():
 
 
 def _write_valid_snapshot(
-    base: Path, metrics, details, *, generation_id=None, mixed_detail_generation=None
+    base: Path,
+    metrics,
+    details,
+    *,
+    generation_id=None,
+    mixed_detail_generation=None,
+    results_csv=None,
+    confusion_breakdown_csv=None,
 ):
     generation = generation_id or metrics["evaluation_generation_id"]
     metrics = copy.deepcopy(metrics)
@@ -63,8 +70,16 @@ def _write_valid_snapshot(
     )
     source_dir = RESULTS_DIR / "generations" / source_pointer["publication_id"]
     artifacts = {
-        "results.csv": (source_dir / "results.csv").read_bytes(),
-        "confusion_breakdown.csv": (source_dir / "confusion_breakdown.csv").read_bytes(),
+        "results.csv": (
+            results_csv
+            if results_csv is not None
+            else (source_dir / "results.csv").read_bytes()
+        ),
+        "confusion_breakdown.csv": (
+            confusion_breakdown_csv
+            if confusion_breakdown_csv is not None
+            else (source_dir / "confusion_breakdown.csv").read_bytes()
+        ),
         "metrics.json": (json.dumps(metrics, indent=2) + "\n").encode(),
         "details.json": (json.dumps(details, indent=2) + "\n").encode(),
     }
@@ -91,6 +106,42 @@ def _write_valid_snapshot(
     }
     (base / results.POINTER_FILENAME).write_text(json.dumps(pointer), encoding="utf-8")
     return generation_dir
+
+
+def test_benchmark_cases_reject_duplicate_or_missing_payment_ids(monkeypatch, tmp_path):
+    rows, metrics, details = _active_payloads()
+    rows[1]["payment_id"] = rows[0]["payment_id"]
+    _write_valid_snapshot(tmp_path, metrics, details, results_csv=_csv_bytes(rows))
+    monkeypatch.setattr(results, "RESULTS_DIR", tmp_path)
+
+    response = client.get("/api/benchmark/cases")
+
+    assert response.status_code == 503
+    assert "payment IDs" in response.json()["detail"]
+
+
+def test_benchmark_cases_reject_tampered_class_aggregates(monkeypatch, tmp_path):
+    _, metrics, details = _active_payloads()
+    class_rows = list(
+        csv.DictReader(
+            (RESULTS_DIR / "confusion_breakdown.csv")
+            .read_text(encoding="utf-8")
+            .splitlines()
+        )
+    )
+    class_rows[0]["resolved"] = str(int(class_rows[0]["resolved"]) + 1)
+    _write_valid_snapshot(
+        tmp_path,
+        metrics,
+        details,
+        confusion_breakdown_csv=_csv_bytes(class_rows),
+    )
+    monkeypatch.setattr(results, "RESULTS_DIR", tmp_path)
+
+    response = client.get("/api/benchmark/cases")
+
+    assert response.status_code == 503
+    assert "class aggregates" in response.json()["detail"]
 
 
 def test_mixed_generation_and_hash_tampering_fail_all_artifact_endpoints(

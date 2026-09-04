@@ -1,11 +1,12 @@
 import { CircleCheck, CircleMinus, ShieldAlert } from "lucide-react";
 import Link from "next/link";
+import { describeProposalOnlyOutcome, describeRemitProofOutcome } from "@/lib/case-comparison";
 import { explainReason } from "@/lib/format";
 import type { BenchmarkCaseRow } from "@/lib/types";
 
 export function CaseSystemComparison({ comparison }: { comparison: BenchmarkCaseRow }) {
-  const remitproofResolved = comparison.remitproof_decision === "resolved";
-  const remitproofCorrect = comparison.remitproof_correct_resolution || comparison.correct_abstention;
+  const proposalOnly = describeProposalOnlyOutcome(comparison);
+  const remitproof = describeRemitProofOutcome(comparison);
 
   return (
     <section className="mt-8 overflow-hidden rounded-[12px] border border-line" aria-labelledby="system-comparison-title">
@@ -35,32 +36,26 @@ export function CaseSystemComparison({ comparison }: { comparison: BenchmarkCase
         />
         <PolicyDecision
           title="Proposal only"
-          decision={comparison.llm_only_decision === "resolve" ? "Resolve" : "Abstain"}
-          verdict={comparison.llm_only_wrong_resolution ? "Wrong automatic resolution" : "Correct proposal"}
+          decision={proposalOnly.decision}
+          verdict={proposalOnly.verdict}
           description={
             comparison.llm_only_wrong_resolution
               ? "The semantic hypothesis would be treated as authorization without deterministic proof or conflict testing."
+              : comparison.llm_only_decision === "abstain"
+                ? comparison.expected_should_resolve
+                  ? "The proposal-only path declined a case that the benchmark ground truth marks as resolvable."
+                  : "The proposal-only path correctly preserved an ambiguous or unsafe case for review."
               : "The proposal is correct on this case, but no independent verifier owns the authorization boundary."
           }
-          tone={comparison.llm_only_wrong_resolution ? "danger" : "neutral"}
+          tone={proposalOnly.tone}
           icon={<ShieldAlert className="size-5" aria-hidden="true" />}
         />
         <PolicyDecision
           title="RemitProof"
-          decision={remitproofResolved ? "Resolve with proof" : "Human review"}
-          verdict={
-            comparison.remitproof_correct_resolution
-              ? "Supported resolution"
-              : comparison.correct_abstention
-                ? "Correct safety control"
-                : comparison.false_escalation
-                  ? "Conservative miss"
-                  : remitproofCorrect
-                    ? "Correct decision"
-                    : "Review required"
-          }
+          decision={remitproof.decision}
+          verdict={remitproof.verdict}
           description={explainReason(comparison.reason)}
-          tone={comparison.wrong_auto_resolution ? "danger" : remitproofCorrect ? "good" : "warning"}
+          tone={remitproof.tone}
           icon={<CircleCheck className="size-5" aria-hidden="true" />}
           emphasized
         />

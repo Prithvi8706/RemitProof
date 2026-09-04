@@ -15,6 +15,7 @@ from app.models import (
 from app.services.alternative_finder import find_valid_alternatives
 from app.services.baseline_matcher import baseline_match
 from app.services.evidence_sufficiency import evaluate_evidence_sufficiency
+from app.services.evidence_sufficiency import _evidence_matrix
 from app.services.pipeline import process_payment
 from app.services.proof_engine import verify_candidate
 from app.utils.loaders import Dataset
@@ -347,6 +348,29 @@ def test_positive_amount_credit_instruction_remains_supported():
     assert proof.credit_support is True
     assert proof.contradictions == []
     assert sufficiency.safe_to_resolve is True
+
+
+def test_evidence_matrix_marks_prohibited_credit_amount_as_contradiction():
+    bundle = _bundle(
+        amount="90.00",
+        remittance_reference="INV_AUTH CR_AUTH",
+        email_body="Do not deduct the USD 10 credit for PAY_AUTH.",
+        invoices=[_invoice("INV_AUTH", "100.00")],
+        credits=[_credit("CR_AUTH", "INV_AUTH", "10.00")],
+    )
+    proposal = _proposal(credit_ids=["CR_AUTH"])
+    rows = _evidence_matrix(bundle, proposal, find_valid_alternatives(bundle))
+    email_rows = [row for row in rows if row.evidence_id == "EMAIL_AUTH"]
+    assert email_rows and all(row.relationship == "contradicts" for row in email_rows)
+
+
+def test_cross_customer_email_cannot_support_allocation():
+    bundle = _bundle(email_body="Apply PAY_AUTH to INV_AUTH.")
+    bundle.candidate_emails[0].customer_id = "CUS_OTHER"
+    proposal = _proposal()
+    rows = _evidence_matrix(bundle, proposal, find_valid_alternatives(bundle))
+    email_row = next(row for row in rows if row.evidence_id == "EMAIL_AUTH")
+    assert email_row.relationship != "supports"
 
 
 @pytest.mark.parametrize(

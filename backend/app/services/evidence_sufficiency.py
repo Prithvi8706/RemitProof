@@ -11,6 +11,7 @@ from app.models import (
 from app.utils.remittance_semantics import (
     classify_document_semantics,
     superseded_allocation_email_ids,
+    trusted_remittance_sender_ids,
 )
 
 
@@ -87,6 +88,12 @@ def _evidence_disambiguates(
     superseded_ids = superseded_allocation_email_ids(
         bundle.candidate_emails,
         payment=bundle.payment,
+        trusted_sender_ids=trusted_remittance_sender_ids(
+            bundle.candidate_emails,
+            bundle.payment,
+            bundle.candidate_customers,
+            customer_id=proposal.proposed_customer,
+        ),
     )
     for email in bundle.candidate_emails:
         if email.email_id not in cited_ids or email.email_id in superseded_ids:
@@ -118,9 +125,16 @@ def _evidence_matrix(
     customers = {customer.customer_id for customer in bundle.candidate_customers}
     invoices = {invoice.invoice_id for invoice in bundle.candidate_invoices}
     credits = {credit.credit_id for credit in bundle.candidate_credits}
+    credit_amounts = {credit.credit_id: credit.amount for credit in bundle.candidate_credits}
     superseded_ids = superseded_allocation_email_ids(
         bundle.candidate_emails,
         payment=bundle.payment,
+        trusted_sender_ids=trusted_remittance_sender_ids(
+            bundle.candidate_emails,
+            bundle.payment,
+            bundle.candidate_customers,
+            customer_id=proposal.proposed_customer,
+        ),
     )
     rows: List[EvidenceAlternativeAssessment] = []
     for evidence_id in proposal.evidence_ids:
@@ -132,13 +146,21 @@ def _evidence_matrix(
                 semantics = classify_document_semantics(f"{email.subject} {email.body}")
                 allocation_invoices = set(allocation.invoice_ids)
                 allocation_credits = set(allocation.credit_ids)
+                selected_credit_amounts = {
+                    credit_amounts[credit_id]
+                    for credit_id in allocation_credits
+                    if credit_id in credit_amounts
+                }
                 prohibited = bool(
                     allocation_invoices.intersection(semantics.prohibited_invoice_ids)
                     or allocation_invoices.intersection(semantics.noncurrent_invoice_ids)
                     or allocation_credits.intersection(semantics.prohibited_credit_ids)
+                    or selected_credit_amounts.intersection(semantics.prohibited_credit_amounts)
                 )
-                exact_invoice_support = bool(semantics.affirmative_invoice_ids) and (
-                    allocation_invoices == set(semantics.affirmative_invoice_ids)
+                exact_invoice_support = (
+                    email.customer_id == allocation.customer_id
+                    and bool(semantics.affirmative_invoice_ids)
+                    and allocation_invoices == set(semantics.affirmative_invoice_ids)
                 )
                 credit_support = not semantics.affirmative_credit_ids or (
                     allocation_credits == set(semantics.affirmative_credit_ids)

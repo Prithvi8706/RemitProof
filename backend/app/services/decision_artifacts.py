@@ -168,7 +168,13 @@ def build_decision_artifact(
         "surviving_alternatives": [item.model_dump(mode="json") for item in alternatives],
         "missing_disambiguation": sufficiency.missing_required_evidence,
         "proof_status": {
-            "financial_constraints": "pass_for_multiple_options" if len(alternatives) > 1 else "failed",
+            "financial_constraints": (
+                "pass_for_multiple_options"
+                if len(alternatives) > 1
+                else "pass"
+                if alternatives
+                else "failed"
+            ),
             "entity_support": "pass" if proof.entity_support else "fail",
             "contradictions": proof.contradictions,
             "uniqueness": "fail" if len(alternatives) > 1 else "not_established",

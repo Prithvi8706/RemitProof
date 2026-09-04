@@ -4,7 +4,10 @@ from app.models import CandidateBundle, InvestigationProposal
 from app.services.alternative_finder import find_valid_alternatives
 from app.services.evidence_sufficiency import evaluate_evidence_sufficiency
 from app.services.proof_engine import verify_candidate
-from app.utils.remittance_semantics import superseded_allocation_email_ids
+from app.utils.remittance_semantics import (
+    superseded_allocation_email_ids,
+    trusted_remittance_sender_ids,
+)
 
 
 def _bundle(
@@ -13,6 +16,8 @@ def _bundle(
     new_email_body: str,
     bank_reference: str = "",
     remittance_reference: str = "",
+    old_sender: str = "treasury@acme.example",
+    new_sender: str = "treasury@acme.example",
     old_date=date(2026, 1, 5),
     new_date=date(2026, 1, 10),
 ) -> CandidateBundle:
@@ -59,7 +64,7 @@ def _bundle(
             "candidate_emails": [
                 {
                     "email_id": "EMAIL_OLD",
-                    "sender": "treasury@acmecorp.example",
+                    "sender": old_sender,
                     "customer_id": "CUS_TEST",
                     "date": old_date,
                     "subject": "Payment instruction",
@@ -67,7 +72,7 @@ def _bundle(
                 },
                 {
                     "email_id": "EMAIL_NEW",
-                    "sender": "treasury@acmecorp.example",
+                    "sender": new_sender,
                     "customer_id": "CUS_TEST",
                     "date": new_date,
                     "subject": "Payment instruction update",
@@ -99,6 +104,12 @@ def _superseded(bundle: CandidateBundle):
     return superseded_allocation_email_ids(
         bundle.candidate_emails,
         payment=bundle.payment,
+        trusted_sender_ids=trusted_remittance_sender_ids(
+            bundle.candidate_emails,
+            bundle.payment,
+            bundle.candidate_customers,
+            customer_id="CUS_TEST",
+        ),
     )
 
 
@@ -139,10 +150,42 @@ def test_correction_can_switch_between_current_payment_reference_fields():
     assert sufficiency.safe_to_resolve is True
 
 
+def test_credit_amount_correction_supersedes_older_amount_claim():
+    bundle = _bundle(
+        old_email_body=(
+            "For PAY_TEST, apply the payment to INV_201 after deducting USD 10.00 credit."
+        ),
+        new_email_body=(
+            "Correction for PAY_TEST: apply the payment to INV_201 after deducting USD 20.00 credit."
+        ),
+    )
+
+    assert _superseded(bundle) == {"EMAIL_OLD"}
+
+
 def test_unrelated_later_correction_cannot_supersede_current_instruction():
     bundle = _bundle(
         old_email_body="For PAY_TEST, please apply the payment to INV_201.",
         new_email_body="Correction for PAY_OTHER: please apply the payment to INV_202.",
+    )
+    proposal = _proposal(
+        invoice_ids=["INV_202"],
+        evidence_ids=["CUS_TEST", "INV_202", "EMAIL_NEW"],
+    )
+
+    proof, _, sufficiency = _decide(bundle, proposal)
+
+    assert _superseded(bundle) == set()
+    assert proof.contradictions
+    assert sufficiency.safe_to_resolve is False
+    assert sufficiency.abstention_reason == "contradictory_evidence"
+
+
+def test_untrusted_later_correction_cannot_supersede_current_instruction():
+    bundle = _bundle(
+        old_email_body="For PAY_TEST, please apply the payment to INV_201.",
+        new_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
+        new_sender="attacker@evil.example",
     )
     proposal = _proposal(
         invoice_ids=["INV_202"],

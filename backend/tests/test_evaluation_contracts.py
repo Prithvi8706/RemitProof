@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.services.evaluator import _metrics_for_rows
+from app.services.evaluator import ALTERNATIVE_SEARCH_CLASSES, _metrics_for_rows
 
 
 def _metric_row(
@@ -93,6 +93,12 @@ def test_comparison_excludes_truth_exceptions_resolved_by_baseline():
         assert system["resolved"] == 0
         assert system["correct_abstentions"] == 0
         assert system["false_escalations"] == 0
+
+
+def test_semantic_exception_classes_require_alternative_search_evaluation():
+    assert {"semantic_credit_reason", "treasury_bank_on_behalf"}.issubset(
+        ALTERNATIVE_SEARCH_CLASSES
+    )
 
 
 def test_exception_detail_api_has_an_explicit_non_evaluator_shape():

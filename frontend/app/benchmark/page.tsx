@@ -4,7 +4,7 @@ import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
 import { BenchmarkCaseExplorer } from "@/components/BenchmarkCaseExplorer";
 import { SafetyFrontier } from "@/components/SafetyFrontier";
-import { getBenchmark, getBenchmarkCases } from "@/lib/api";
+import { getConsistentBenchmarkPublication } from "@/lib/api";
 import { describeBenchmarkRun } from "@/lib/benchmark-provenance";
 import { explainReason, formatMoney, formatPercent, titleCase } from "@/lib/format";
 import type { BenchmarkCaseRow } from "@/lib/types";
@@ -55,7 +55,7 @@ const METRIC_DEFINITIONS: Array<{ key: string; label: string; definition: string
 ];
 
 export default async function BenchmarkPage() {
-  const [benchmark, caseData] = await Promise.all([getBenchmark(), getBenchmarkCases()]);
+  const { benchmark, caseData } = await getConsistentBenchmarkPublication();
   const comparison = benchmark.comparison;
   const prevented = caseData.cases.filter((row) => row.llm_only_wrong_resolution);
   const recovered = caseData.cases.filter((row) => row.recovered_from_baseline);

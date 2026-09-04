@@ -4,6 +4,7 @@ import hmac
 import io
 import json
 import re
+from collections import defaultdict
 from datetime import date
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -951,6 +952,36 @@ def _csv_rows(content: bytes, filename: str, required_columns: set) -> List[Dict
     return list(reader)
 
 
+_CASE_BOOLEAN_COLUMNS = {
+    "is_exception",
+    "llm_only_correct_resolution",
+    "final_correct_resolution",
+    "expected_should_resolve",
+    "correct_abstention",
+    "false_escalation",
+    "wrong_auto_resolution",
+}
+_CLASS_AGGREGATE_COLUMNS = (
+    "records",
+    "resolved",
+    "correct_resolutions",
+    "human_review",
+    "wrong_auto_resolutions",
+    "false_escalations",
+)
+
+
+def _csv_nonnegative_int(row: Dict[str, str], column: str, filename: str) -> int:
+    value = row.get(column)
+    try:
+        parsed = int(value) if value is not None else -1
+    except (TypeError, ValueError) as exc:
+        raise _artifact_error(filename, f"column {column} has a non-integer value") from exc
+    if parsed < 0:
+        raise _artifact_error(filename, f"column {column} must be non-negative")
+    return parsed
+
+
 def load_case_comparisons() -> Dict[str, object]:
     """Serve per-case baseline/ablation/RemitProof outcomes from the published CSVs.
 
@@ -961,10 +992,30 @@ def load_case_comparisons() -> Dict[str, object]:
     """
 
     metrics_raw, details_raw, manifest, contents = _load_snapshot()
-    metrics, _ = _validate_snapshot(metrics_raw, details_raw, manifest)
+    metrics, details = _validate_snapshot(metrics_raw, details_raw, manifest)
     generation_id = str(metrics["evaluation_generation_id"])
 
     rows = _csv_rows(contents["results.csv"], "results.csv", _CASE_CSV_COLUMNS)
+    detail_payment_ids = {
+        str(detail["payment"]["payment_id"])
+        for detail in details
+    }
+    result_payment_ids = []
+    for row in rows:
+        payment_id = row.get("payment_id", "")
+        if not isinstance(payment_id, str) or not payment_id.strip():
+            raise _artifact_error("results.csv", "payment_id is missing or blank")
+        result_payment_ids.append(payment_id)
+        for column in _CASE_BOOLEAN_COLUMNS:
+            _csv_bool(row, column, "results.csv")
+    if len(result_payment_ids) != len(set(result_payment_ids)):
+        raise _artifact_error("results.csv", "payment IDs must be unique")
+    if set(result_payment_ids) != detail_payment_ids:
+        raise _artifact_error(
+            "results.csv",
+            "payment IDs disagree with the validated details publication",
+        )
+
     cases: List[Dict[str, object]] = []
     for row in rows:
         if row["baseline_decision"] not in {"resolve", "abstain"}:
@@ -1026,24 +1077,62 @@ def load_case_comparisons() -> Dict[str, object]:
     class_rows = _csv_rows(
         contents["confusion_breakdown.csv"], "confusion_breakdown.csv", _CLASS_CSV_COLUMNS
     )
+    expected_by_class: Dict[str, Dict[str, int]] = defaultdict(
+        lambda: {column: 0 for column in _CLASS_AGGREGATE_COLUMNS}
+    )
+    for row in rows:
+        exception_class = row["exception_class"].strip()
+        if not exception_class:
+            raise _artifact_error("results.csv", "exception_class is missing or blank")
+        aggregate = expected_by_class[exception_class]
+        aggregate["records"] += 1
+        aggregate["resolved"] += row["decision"] in {"matched_normally", "resolved"}
+        aggregate["correct_resolutions"] += _csv_bool(
+            row, "final_correct_resolution", "results.csv"
+        )
+        aggregate["human_review"] += row["decision"] == "human_review"
+        aggregate["wrong_auto_resolutions"] += _csv_bool(
+            row, "wrong_auto_resolution", "results.csv"
+        )
+        aggregate["false_escalations"] += _csv_bool(
+            row, "false_escalation", "results.csv"
+        )
+
     by_class: List[Dict[str, object]] = []
+    seen_classes = set()
     for row in class_rows:
         try:
+            exception_class = row["exception_class"].strip()
+            if not exception_class:
+                raise ValueError("blank exception class")
+            if exception_class in seen_classes:
+                raise ValueError("duplicate exception class")
+            seen_classes.add(exception_class)
             by_class.append(
                 {
-                    "exception_class": row["exception_class"],
-                    "records": int(row["records"]),
-                    "resolved": int(row["resolved"]),
-                    "correct_resolutions": int(row["correct_resolutions"]),
-                    "human_review": int(row["human_review"]),
-                    "wrong_auto_resolutions": int(row["wrong_auto_resolutions"]),
-                    "false_escalations": int(row["false_escalations"]),
+                    "exception_class": exception_class,
+                    **{
+                        column: _csv_nonnegative_int(row, column, "confusion_breakdown.csv")
+                        for column in _CLASS_AGGREGATE_COLUMNS
+                    },
                 }
             )
         except (KeyError, ValueError) as exc:
             raise _artifact_error(
                 "confusion_breakdown.csv", "class breakdown row is malformed"
             ) from exc
+    provided_by_class = {
+        str(item["exception_class"]): {
+            column: int(item[column])
+            for column in _CLASS_AGGREGATE_COLUMNS
+        }
+        for item in by_class
+    }
+    if provided_by_class != dict(expected_by_class):
+        raise _artifact_error(
+            "confusion_breakdown.csv",
+            "class aggregates disagree with results.csv",
+        )
     if sum(item["records"] for item in by_class) != metrics["total_receipts"]:
         raise _artifact_error(
             "confusion_breakdown.csv", "class record counts disagree with total receipts"
