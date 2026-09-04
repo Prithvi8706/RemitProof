@@ -7,7 +7,15 @@ from app.services.proof_engine import verify_candidate
 from app.utils.remittance_semantics import superseded_allocation_email_ids
 
 
-def _bundle(*, old_email_body: str, new_email_body: str, old_date=date(2026, 1, 5), new_date=date(2026, 1, 10)) -> CandidateBundle:
+def _bundle(
+    *,
+    old_email_body: str,
+    new_email_body: str,
+    bank_reference: str = "",
+    remittance_reference: str = "",
+    old_date=date(2026, 1, 5),
+    new_date=date(2026, 1, 10),
+) -> CandidateBundle:
     return CandidateBundle.model_validate(
         {
             "payment": {
@@ -16,8 +24,8 @@ def _bundle(*, old_email_body: str, new_email_body: str, old_date=date(2026, 1, 
                 "amount": "100.00",
                 "currency": "USD",
                 "payer_name": "Treasury Bank",
-                "bank_reference": "",
-                "remittance_reference": "",
+                "bank_reference": bank_reference,
+                "remittance_reference": remittance_reference,
                 "allocated_customer_id": None,
             },
             "candidate_customers": [
@@ -110,6 +118,24 @@ def test_newer_instruction_can_supersede_old_instruction():
     assert proof.contradictions == []
     assert len(alternatives) == 2
     assert sufficiency.evidence_disambiguates_alternatives is True
+    assert sufficiency.safe_to_resolve is True
+
+
+def test_correction_can_switch_between_current_payment_reference_fields():
+    bundle = _bundle(
+        old_email_body="For WIRE_TEST, please apply the payment to INV_201.",
+        new_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
+        bank_reference="WIRE_TEST",
+    )
+    proposal = _proposal(
+        invoice_ids=["INV_202"],
+        evidence_ids=["CUS_TEST", "INV_202", "EMAIL_NEW"],
+    )
+
+    proof, _, sufficiency = _decide(bundle, proposal)
+
+    assert _superseded(bundle) == {"EMAIL_OLD"}
+    assert proof.contradictions == []
     assert sufficiency.safe_to_resolve is True
 
 
