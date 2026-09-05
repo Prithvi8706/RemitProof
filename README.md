@@ -1,8 +1,8 @@
 # RemitProof
 
-> **A financial reconciliation can be mathematically valid and still be wrong.**
+RemitProof is a read-only financial-control app for ambiguous cross-border payment exceptions: AI investigates remittance evidence and proposes an invoice or credit allocation, while deterministic checks recompute the money, reject contradictions and duplicates, compare alternative explanations, and authorize a resolution only when one is uniquely supported; otherwise it abstains for human review. It uses realistic synthetic data, never writes to Razorpay or accounting systems, and is available at [remitproof-demo.vercel.app](https://remitproof-demo.vercel.app).
 
-RemitProof is an evaluation-grade, read-only financial-control MVP for unresolved cross-border payment exceptions. It keeps ordinary deterministic reconciliation in charge of straightforward receipts, then uses AI to interpret semantic evidence such as remittance intent and payer relationships. The AI only proposes an allocation; deterministic code recomputes the money, validates invoice/credit state, currency, entities, duplicates, and contradictions, searches for competing financially valid explanations, and authorizes a resolution only when the evidence uniquely supports it. Otherwise it abstains and produces an auditable human-review record. The repository uses realistic synthetic data and the deployed demo does not post real Razorpay or accounting transactions.
+> **A financial reconciliation can be mathematically valid and still be wrong.**
 
 In one sentence: **rules are safe but limited, LLMs are capable but unsafe, and RemitProof combines semantic investigation with proof-gated authorization.**
 
