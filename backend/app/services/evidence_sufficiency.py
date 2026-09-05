@@ -142,7 +142,7 @@ def _evidence_matrix(
     proposal: InvestigationProposal,
     alternatives: List[AlternativeAllocation],
 ) -> List[EvidenceAlternativeAssessment]:
-    """Explain how each cited record bears on every financially valid allocation."""
+    """Explain how authoritative evidence bears on every financially valid allocation."""
 
     emails = {email.email_id: email for email in bundle.candidate_emails}
     customers = {customer.customer_id for customer in bundle.candidate_customers}
@@ -161,6 +161,79 @@ def _evidence_matrix(
         trusted_sender_ids=trusted_sender_ids,
     )
     rows: List[EvidenceAlternativeAssessment] = []
+
+    payment_semantics = classify_document_semantics(
+        f"{bundle.payment.bank_reference} {bundle.payment.remittance_reference}",
+        bare_references_are_affirmative=True,
+    )
+    payment_has_allocation_evidence = bool(
+        payment_semantics.affirmative_invoice_ids
+        or payment_semantics.affirmative_credit_ids
+        or payment_semantics.affirmative_credit_amounts
+        or payment_semantics.prohibited_invoice_ids
+        or payment_semantics.noncurrent_invoice_ids
+        or payment_semantics.prohibited_credit_ids
+        or payment_semantics.prohibited_credit_amounts
+    )
+    if payment_has_allocation_evidence:
+        for allocation in alternatives:
+            allocation_invoices = set(allocation.invoice_ids)
+            allocation_credits = set(allocation.credit_ids)
+            selected_credit_amounts = {
+                credit_amounts[credit_id]
+                for credit_id in allocation_credits
+                if credit_id in credit_amounts
+            }
+            prohibited = bool(
+                allocation_invoices.intersection(payment_semantics.prohibited_invoice_ids)
+                or allocation_invoices.intersection(payment_semantics.noncurrent_invoice_ids)
+                or allocation_credits.intersection(payment_semantics.prohibited_credit_ids)
+                or selected_credit_amounts.intersection(
+                    payment_semantics.prohibited_credit_amounts
+                )
+            )
+            has_affirmative_allocation = bool(
+                payment_semantics.affirmative_invoice_ids
+                or payment_semantics.affirmative_credit_ids
+                or payment_semantics.affirmative_credit_amounts
+            )
+            invoice_support = not payment_semantics.affirmative_invoice_ids or (
+                allocation_invoices == set(payment_semantics.affirmative_invoice_ids)
+            )
+            credit_id_support = not payment_semantics.affirmative_credit_ids or (
+                allocation_credits == set(payment_semantics.affirmative_credit_ids)
+            )
+            credit_amount_support = not payment_semantics.affirmative_credit_amounts or (
+                selected_credit_amounts
+                == set(payment_semantics.affirmative_credit_amounts)
+                and (
+                    payment_semantics.affirmative_credit_ids
+                    or len(allocation_credits)
+                    == len(payment_semantics.affirmative_credit_amounts)
+                )
+            )
+            relationship = "irrelevant"
+            reason = "The payment remittance does not distinguish this allocation."
+            if prohibited:
+                relationship = "contradicts"
+                reason = "The payment remittance explicitly prohibits a selected record."
+            elif (
+                has_affirmative_allocation
+                and invoice_support
+                and credit_id_support
+                and credit_amount_support
+            ):
+                relationship = "supports"
+                reason = "The payment remittance explicitly identifies this allocation."
+            rows.append(
+                EvidenceAlternativeAssessment(
+                    evidence_id=bundle.payment.payment_id,
+                    allocation_id=allocation.allocation_id,
+                    relationship=relationship,
+                    reason=reason,
+                )
+            )
+
     for evidence_id in proposal.evidence_ids:
         for allocation in alternatives:
             relationship = "irrelevant"

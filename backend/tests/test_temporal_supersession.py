@@ -2,7 +2,7 @@ from datetime import date
 
 import pytest
 
-from app.models import CandidateBundle, InvestigationProposal
+from app.models import CandidateBundle, Customer, InvestigationProposal, Payment, RemittanceEmail
 from app.services.alternative_finder import find_valid_alternatives
 from app.services.evidence_sufficiency import evaluate_evidence_sufficiency
 from app.services.proof_engine import verify_candidate
@@ -104,7 +104,7 @@ def _decide(bundle: CandidateBundle, proposal: InvestigationProposal):
     return proof, alternatives, sufficiency
 
 
-def _superseded(bundle: CandidateBundle):
+def _superseded(bundle: CandidateBundle, *, authoritative_payments=None):
     return superseded_allocation_email_ids(
         bundle.candidate_emails,
         payment=bundle.payment,
@@ -114,7 +114,84 @@ def _superseded(bundle: CandidateBundle):
             bundle.candidate_customers,
             customer_id="CUS_TEST",
         ),
+        authoritative_payments=authoritative_payments,
     )
+
+
+def test_abbreviated_synthetic_sender_domain_fails_closed_when_other_brand_owner_is_not_retrieved():
+    payment = Payment(
+        payment_id="PAY_COLLISION",
+        date=date(2026, 1, 15),
+        amount="100.00",
+        currency="USD",
+        payer_name="Treasury Bank",
+    )
+    customers = [Customer(customer_id="CUS_TECH", legal_name="Acme Technologies Inc")]
+    emails = [
+        RemittanceEmail(
+            email_id="EMAIL_COLLISION",
+            sender="finance@acme.example",
+            customer_id="CUS_TECH",
+            date=date(2026, 1, 10),
+            subject="Allocation",
+            body="Apply PAY_COLLISION to INV_1.",
+        )
+    ]
+
+    assert trusted_remittance_sender_ids(
+        emails, payment, customers, customer_id="CUS_TECH"
+    ) == set()
+
+
+def test_abbreviated_synthetic_sender_domain_is_rejected_even_when_brand_looks_unique():
+    payment = Payment(
+        payment_id="PAY_UNIQUE",
+        date=date(2026, 1, 15),
+        amount="100.00",
+        currency="USD",
+        payer_name="Treasury Bank",
+    )
+    customer = Customer(
+        customer_id="CUS_ACME", legal_name="Acme Technologies Inc"
+    )
+    email = RemittanceEmail(
+        email_id="EMAIL_UNIQUE",
+        sender="finance@acme.example",
+        customer_id="CUS_ACME",
+        date=date(2026, 1, 10),
+        subject="Allocation",
+        body="Apply PAY_UNIQUE to INV_1.",
+    )
+
+    assert trusted_remittance_sender_ids(
+        [email], payment, [customer], customer_id="CUS_ACME"
+    ) == set()
+
+
+def test_complete_synthetic_sender_domain_remains_trusted_during_brand_collision():
+    payment = Payment(
+        payment_id="PAY_EXACT",
+        date=date(2026, 1, 15),
+        amount="100.00",
+        currency="USD",
+        payer_name="Treasury Bank",
+    )
+    customers = [
+        Customer(customer_id="CUS_TECH", legal_name="Acme Technologies Inc"),
+        Customer(customer_id="CUS_LOGISTICS", legal_name="Acme Logistics LLC"),
+    ]
+    email = RemittanceEmail(
+        email_id="EMAIL_EXACT",
+        sender="finance@acmetechnologies.example",
+        customer_id="CUS_TECH",
+        date=date(2026, 1, 10),
+        subject="Allocation",
+        body="Apply PAY_EXACT to INV_1.",
+    )
+
+    assert trusted_remittance_sender_ids(
+        [email], payment, customers, customer_id="CUS_TECH"
+    ) == {"finance@acmetechnologies.example"}
 
 
 def test_newer_instruction_can_supersede_old_instruction():
@@ -136,7 +213,7 @@ def test_newer_instruction_can_supersede_old_instruction():
     assert sufficiency.safe_to_resolve is True
 
 
-def test_correction_can_switch_between_current_payment_reference_fields():
+def test_unique_secondary_reference_requires_authoritative_payment_context():
     bundle = _bundle(
         old_email_body="For WIRE_TEST_77, please apply the payment to INV_201.",
         new_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
@@ -149,9 +226,29 @@ def test_correction_can_switch_between_current_payment_reference_fields():
 
     proof, _, sufficiency = _decide(bundle, proposal)
 
-    assert _superseded(bundle) == {"EMAIL_OLD"}
-    assert proof.contradictions == []
-    assert sufficiency.safe_to_resolve is True
+    assert _superseded(
+        bundle, authoritative_payments=[bundle.payment]
+    ) == {"EMAIL_OLD"}
+    assert proof.contradictions
+    assert sufficiency.safe_to_resolve is False
+
+
+def test_shared_secondary_reference_cannot_authorize_temporal_supersession():
+    bundle = _bundle(
+        old_email_body="For WIRE2026, please apply the payment to INV_201.",
+        new_email_body=(
+            "Correction for WIRE2026: please apply the payment to INV_202."
+        ),
+        bank_reference="WIRE2026",
+    )
+    other_payment = bundle.payment.model_copy(
+        update={"payment_id": "PAY_OTHER", "bank_reference": "wire-2026"}
+    )
+
+    assert _superseded(
+        bundle,
+        authoritative_payments=[bundle.payment, other_payment],
+    ) == set()
 
 
 def test_credit_amount_correction_supersedes_older_amount_claim():

@@ -14,6 +14,7 @@ function StepIcon({ state }: { state: StepState }) {
 }
 
 export function InvestigationPath({ detail }: { detail: ExceptionDetail }) {
+  const investigationFailed = Boolean(detail.investigator_error);
   const proofPassed = Boolean(
     detail.proof?.financial_validity &&
     detail.proof.state_validity &&
@@ -42,50 +43,76 @@ export function InvestigationPath({ detail }: { detail: ExceptionDetail }) {
     },
     {
       label: "Financial proof",
-      detail: proofPassed ? "Arithmetic and record constraints passed" : "A deterministic check failed",
-      state: proofPassed ? "complete" : "blocked",
+      detail: investigationFailed
+        ? "Not run because the investigation failed"
+        : proofPassed
+          ? "Arithmetic and record constraints passed"
+          : "A deterministic check failed",
+      state: !investigationFailed && proofPassed ? "complete" : "blocked",
     },
     {
       label: "Alternative search",
-      detail: "Financially valid competing allocations enumerated",
-      state: "complete",
+      detail: investigationFailed
+        ? "Not run because the investigation failed"
+        : "Financially valid competing allocations enumerated",
+      state: investigationFailed ? "blocked" : "complete",
     },
     {
-      label: alternativesFound
+      label: investigationFailed
+        ? "Alternatives not evaluated"
+        : alternativesFound
         ? `${detail.alternatives.length} explanations found`
         : detail.proof?.financial_validity
           ? "Unique financial solution"
           : "No valid allocation",
-      detail: alternativesFound
+      detail: investigationFailed
+        ? detail.investigator_error ?? "Investigation failed before alternative search"
+        : alternativesFound
         ? "Arithmetic alone cannot authorize the proposal"
         : detail.proof?.financial_validity
           ? "No competing allocation survived"
           : "The proposal failed financial constraints",
-      state: alternativesFound ? "attention" : detail.proof?.financial_validity ? "complete" : "blocked",
+      state: investigationFailed
+        ? "blocked"
+        : alternativesFound
+          ? "attention"
+          : detail.proof?.financial_validity
+            ? "complete"
+            : "blocked",
     },
     {
       label: "Evidence compared",
-      detail: detail.sufficiency?.chosen_proposal_supported
-        ? "Proposal support evaluated against every alternative"
-        : "Proposal support is incomplete or contradicted",
-      state: detail.sufficiency?.chosen_proposal_supported ? "complete" : "blocked",
+      detail: investigationFailed
+        ? "Not run because the investigation failed"
+        : detail.sufficiency?.chosen_proposal_supported
+          ? "Proposal support evaluated against every alternative"
+          : "Proposal support is incomplete or contradicted",
+      state: !investigationFailed && detail.sufficiency?.chosen_proposal_supported ? "complete" : "blocked",
     },
     {
-      label: conflictCleared
+      label: investigationFailed
+        ? "Conflict not evaluated"
+        : conflictCleared
         ? "Conflict cleared"
         : alternativesFound
           ? "Conflict remains"
           : unresolvedNonAllocationConflict
             ? "Contradiction found"
             : "No conflict remains",
-      detail: conflictCleared
+      detail: investigationFailed
+        ? "Not run because the investigation failed"
+        : conflictCleared
         ? "Cited evidence uniquely selects the proposal"
         : alternativesFound
           ? "Available evidence does not establish one intent"
           : unresolvedNonAllocationConflict
             ? detail.conflict?.reason ?? "Evidence conflicts with the proposal"
             : "No unresolved alternative requires disambiguation",
-      state: conflictCleared || (!alternativesFound && !unresolvedNonAllocationConflict) ? "complete" : "blocked",
+      state: investigationFailed
+        ? "blocked"
+        : conflictCleared || (!alternativesFound && !unresolvedNonAllocationConflict)
+          ? "complete"
+          : "blocked",
     },
     {
       label: resolved ? "Safe to resolve" : "Decision blocked",

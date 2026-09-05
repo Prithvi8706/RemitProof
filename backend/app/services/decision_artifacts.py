@@ -79,8 +79,14 @@ def _without_evidence(
     proposal: InvestigationProposal,
     evidence_id: str,
 ) -> Tuple[CandidateBundle, InvestigationProposal]:
+    payment = bundle.payment
+    if evidence_id == payment.payment_id:
+        payment = payment.model_copy(
+            update={"bank_reference": "", "remittance_reference": ""}
+        )
     reduced_bundle = bundle.model_copy(
         update={
+            "payment": payment,
             "candidate_customers": [item for item in bundle.candidate_customers if item.customer_id != evidence_id],
             "candidate_invoices": [item for item in bundle.candidate_invoices if item.invoice_id != evidence_id],
             "candidate_credits": [item for item in bundle.candidate_credits if item.credit_id != evidence_id],

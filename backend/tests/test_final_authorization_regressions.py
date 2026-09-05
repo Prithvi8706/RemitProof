@@ -14,6 +14,7 @@ from app.models import (
 )
 from app.services.alternative_finder import find_valid_alternatives
 from app.services.baseline_matcher import baseline_match
+from app.services.decision_artifacts import build_counterfactuals
 from app.services.evidence_sufficiency import evaluate_evidence_sufficiency
 from app.services.evidence_sufficiency import _evidence_matrix
 from app.services.pipeline import process_payment
@@ -389,6 +390,41 @@ def test_single_credit_amount_cannot_authorize_multiple_equal_credits():
     assert proposal_row.relationship != "supports"
     assert sufficiency.evidence_disambiguates_alternatives is False
     assert sufficiency.safe_to_resolve is False
+
+
+def test_payment_remittance_support_is_visible_in_evidence_matrix():
+    bundle = _bundle(
+        known_payers=["Treasury Bank"],
+        remittance_reference="INV_A",
+        invoices=[_invoice("INV_A"), _invoice("INV_B")],
+    )
+    proposal = _proposal(invoice_ids=["INV_A"], cite_email=False)
+
+    proof, sufficiency = _sufficiency(bundle, proposal)
+    payment_rows = {
+        row.allocation_id: row.relationship
+        for row in sufficiency.evidence_alternative_matrix
+        if row.evidence_id == "PAY_AUTH"
+    }
+
+    assert proof.financial_validity is True
+    assert sufficiency.evidence_disambiguates_alternatives is True
+    assert sufficiency.chosen_proposal_supported is True
+    assert payment_rows == {"ALT_001": "supports", "ALT_002": "irrelevant"}
+    assert "PAY_AUTH" in sufficiency.uniquely_distinguishing_evidence
+    assert sufficiency.safe_to_resolve is True
+
+    counterfactuals = build_counterfactuals(
+        bundle,
+        proposal,
+        find_valid_alternatives(bundle),
+        sufficiency,
+    )
+    payment_counterfactual = next(
+        row for row in counterfactuals if row.evidence_id == "PAY_AUTH"
+    )
+    assert payment_counterfactual.decision_critical is True
+    assert payment_counterfactual.decision_without_evidence == "human_review"
 
 
 def test_evidence_matrix_marks_prohibited_credit_amount_as_contradiction():

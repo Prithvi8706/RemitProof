@@ -312,7 +312,7 @@
       "candidate_emails": [
         {
           "email_id": "EMAIL_S05",
-          "sender": "controller@helios.example",
+          "sender": "controller@heliossystems.example",
           "customer_id": "CUS_S05",
           "date": "2026-08-08",
           "subject": "May invoice remittance",
@@ -644,7 +644,7 @@
       "candidate_emails": [
         {
           "email_id": "EMAIL_S10",
-          "sender": "finance@acme.example",
+          "sender": "finance@acmetechnologies.example",
           "customer_id": "CUS_S10",
           "date": "2026-08-03",
           "subject": "August remittance",
