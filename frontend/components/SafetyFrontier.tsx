@@ -51,7 +51,7 @@ export function SafetyFrontier({ comparisonRecordCount, comparison }: SafetyFron
               )
               .join(". ")}
           >
-            <span className="absolute -left-1 top-0 -translate-x-full text-[11px] font-medium text-muted">
+            <span className="absolute left-2 top-2 text-[11px] font-medium text-muted">
               More wrong actions
             </span>
             <span className="absolute -bottom-7 right-0 text-[11px] font-medium text-muted">
