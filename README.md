@@ -29,6 +29,20 @@ The dangerous cases begin when several financial explanations are simultaneously
 
 It is not a replacement for normal reconciliation. It is a financial conflict-resolution layer for the unresolved exceptions left behind by structured matching.
 
+## Live demonstration
+
+The final read-only demonstration is deployed on Vercel:
+
+- **Website:** https://remitproof-demo.vercel.app
+- **Benchmark dashboard:** https://remitproof-demo.vercel.app/benchmark
+- **Example resolved investigation:** https://remitproof-demo.vercel.app/exceptions/PAY_051
+- **Read-only API:** https://remitproof-api-preview.vercel.app
+
+The benchmark and exception URLs are routes in the same frontend deployment.
+The API is a separate read-only service backed by the committed evaluation
+artifacts. The deployment does not perform accounting write-back, settlement,
+or live Razorpay operations.
+
 ```text
 Incoming receipts
         |
