@@ -11,17 +11,17 @@ export default async function ExceptionQueuePage() {
   const exceptions = await getExceptions();
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="case-site min-h-screen bg-canvas">
       <AppHeader />
       <main className="mx-auto min-w-0 max-w-[1440px] px-4 py-8 sm:px-6 sm:py-10">
         <nav aria-label="Breadcrumb">
-          <Link className="inline-flex items-center gap-2 rounded-md py-1 text-sm font-semibold text-muted hover:text-primary" href="/">
+          <Link className="case-back-link inline-flex items-center gap-2 rounded-md py-1 text-sm font-semibold text-muted hover:text-primary" href="/">
             <ArrowLeft className="size-4" aria-hidden="true" />
             Back to dashboard
           </Link>
         </nav>
 
-        <header className="mt-7 border-b border-line pb-8">
+        <header className="case-page-heading mt-7 border-b border-line pb-8">
           <div className="flex items-start gap-3">
             <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-[10px] bg-primary-soft text-primary-dark">
               <ListChecks className="size-5" aria-hidden="true" />

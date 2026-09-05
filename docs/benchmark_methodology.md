@@ -50,10 +50,29 @@ Comparison payloads in `metrics.json` are scoped to records that remained unreso
 | Evidence precision | Cited IDs that ground truth marks relevant / all cited IDs |
 | Arithmetic correctness | Records whose final behavior never authorizes failed arithmetic / all records |
 | Retrieval accuracy | Records whose required customer, invoices, credits, and email evidence were retained / all records |
+| Alternative detection accuracy | Exception records where competing financial allocations are detected when expected / exception records |
+| Ambiguity detection accuracy | Exception records where unresolved multi-allocation ambiguity matches the scenario label / exception records |
+| Contradiction detection accuracy | Exception records where authoritative contradiction presence matches the scenario label / exception records |
+| Decision-critical evidence accuracy | Exception records where a counterfactual decision change matches the expected need for disambiguating evidence / exception records |
 
 `resolution_accuracy` and `false_escalation_rate` are exception-only metrics. Their denominators are the safely resolvable exception records, so conventional exact-reference matches cannot inflate either metric. Metrics explicitly defined over all records or all evaluated records retain those all-receipt denominators.
 
 The three-system comparison is restricted to unresolved exceptions to avoid easy cases obscuring the result. The metrics payload keeps `comparison_scope` and reports the corresponding `comparison_record_count` (30 for the full run and 20 for the synthetic benchmark/regression subset).
+
+## Adversarial controls
+
+The synthetic corpus intentionally includes verifier traps rather than only clean matches:
+
+- already-paid or allocated invoices;
+- payer names that do not establish a customer relationship;
+- exact-amount allocations with another exact combination;
+- contradictory or reversed remittance instructions;
+- missing, invalid, consumed, or cross-record credits;
+- unsupported currency and short-payment cases;
+- duplicate bank transactions and stale record state;
+- malformed or unavailable investigator output in regression tests.
+
+Each trap must block authorization unless independent evidence and deterministic state checks establish one safe allocation. The benchmark reports observed detection accuracy rather than assuming every trap is caught.
 
 ## Final result
 

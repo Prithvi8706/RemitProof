@@ -19,8 +19,11 @@ _PUBLIC_EXCEPTION_DETAIL_FIELDS = (
     "evidence",
     "proof",
     "alternatives",
+    "conflict",
     "sufficiency",
     "counterfactuals",
+    "resolution_proof",
+    "blocked_decision",
     "investigator_error",
 )
 

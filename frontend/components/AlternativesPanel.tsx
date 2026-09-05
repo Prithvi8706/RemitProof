@@ -1,6 +1,6 @@
 import { GitCompareArrows } from "lucide-react";
 import { formatMoney } from "@/lib/format";
-import type { AlternativeRecord, DecisionRecord } from "@/lib/types";
+import type { AlternativeRecord, DecisionRecord, SufficiencyRecord } from "@/lib/types";
 
 function sameSet(first: string[], second: string[]) {
   return first.length === second.length && first.every((item) => second.includes(item));
@@ -9,28 +9,47 @@ function sameSet(first: string[], second: string[]) {
 export function AlternativesPanel({
   alternatives,
   decision,
+  sufficiency,
   currency,
 }: {
   alternatives: AlternativeRecord[];
   decision: DecisionRecord;
+  sufficiency: SufficiencyRecord | null;
   currency: string;
 }) {
-  if (alternatives.length <= 1) return null;
+  const competing = alternatives.length > 1;
+  const cleared = Boolean(competing && sufficiency?.evidence_disambiguates_alternatives);
+  const unresolved = Boolean(competing && !cleared);
+  const status = cleared
+    ? "Conflict cleared by evidence"
+    : unresolved
+      ? "Conflict remains"
+      : "No competing allocation survived";
 
   return (
-    <section aria-labelledby="alternatives-title">
-      <div className="mb-4 flex items-center gap-3">
+    <section aria-labelledby="alternatives-title" className="border border-line">
+      <div className={`flex flex-wrap items-start justify-between gap-4 border-b px-5 py-4 sm:px-6 ${
+        unresolved
+          ? "border-warning/30 bg-warning-soft"
+          : cleared
+            ? "border-primary/25 bg-primary-soft"
+            : "border-line bg-surface"
+      }`}>
+        <div className="flex items-center gap-3">
         <span className="grid size-9 place-items-center rounded-[10px] bg-accent-soft text-accent">
           <GitCompareArrows className="size-4.5" aria-hidden="true" />
         </span>
         <div>
           <h2 id="alternatives-title" className="text-xl font-semibold tracking-[-0.02em] text-ink">
-            Alternative hypotheses
+            Conflict test
           </h2>
-          <p className="mt-0.5 text-sm text-muted">Every financially valid allocation found in the candidate set.</p>
+          <p className="mt-0.5 text-sm text-muted">The verifier searches beyond the model&apos;s chosen explanation.</p>
         </div>
+        </div>
+        <span className={`text-xs font-semibold ${unresolved ? "text-warning" : "text-primary-dark"}`}>{status}</span>
       </div>
-      <div className="divide-y divide-line border-y border-line">
+      {alternatives.length > 0 ? (
+      <div className="divide-y divide-line">
         {alternatives.map((alternative, index) => {
           const selected =
             alternative.customer_id === decision.customer_id &&
@@ -47,6 +66,11 @@ export function AlternativesPanel({
                         PROPOSED
                       </span>
                     )}
+                    {!selected && competing && (
+                      <span className={`text-[10px] font-semibold ${cleared ? "text-muted" : "text-warning"}`}>
+                        {cleared ? "ELIMINATED BY EVIDENCE" : "STILL PLAUSIBLE"}
+                      </span>
+                    )}
                   </div>
                   <div className="mt-1 text-xs leading-5 text-muted">
                     {alternative.invoice_ids.join(" + ")}
@@ -61,6 +85,11 @@ export function AlternativesPanel({
           );
         })}
       </div>
+      ) : (
+        <p className="px-5 py-5 text-sm leading-6 text-muted sm:px-6">
+          No financially complete allocation survived the deterministic constraints.
+        </p>
+      )}
     </section>
   );
 }

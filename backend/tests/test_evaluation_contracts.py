@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.services.evaluator import _metrics_for_rows
+from app.services.evaluator import ALTERNATIVE_SEARCH_CLASSES, _metrics_for_rows
 
 
 def _metric_row(
@@ -77,6 +77,30 @@ def test_exception_metrics_do_not_use_normal_records_as_denominators():
     assert metrics["comparison"]["llm_only"]["standalone_llm_system"] is False
 
 
+def test_comparison_excludes_truth_exceptions_resolved_by_baseline():
+    row = _metric_row(
+        is_exception=True,
+        expected_should_resolve=True,
+        decision="matched_normally",
+        final_correct_resolution=True,
+    )
+
+    metrics = _metrics_for_rows([row], elapsed_seconds=60)
+
+    assert metrics["exceptions"] == 0
+    assert metrics["comparison_record_count"] == 0
+    for system in metrics["comparison"].values():
+        assert system["resolved"] == 0
+        assert system["correct_abstentions"] == 0
+        assert system["false_escalations"] == 0
+
+
+def test_semantic_exception_classes_require_alternative_search_evaluation():
+    assert {"semantic_credit_reason", "treasury_bank_on_behalf"}.issubset(
+        ALTERNATIVE_SEARCH_CLASSES
+    )
+
+
 def test_exception_detail_api_has_an_explicit_non_evaluator_shape():
     client = TestClient(app)
     expected_public_fields = {
@@ -93,8 +117,11 @@ def test_exception_detail_api_has_an_explicit_non_evaluator_shape():
             "model_cited_evidence",
             "proof",
         "alternatives",
+        "conflict",
         "sufficiency",
         "counterfactuals",
+        "resolution_proof",
+        "blocked_decision",
         "investigator_error",
     }
 

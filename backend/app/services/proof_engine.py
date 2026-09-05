@@ -11,6 +11,8 @@ from app.utils.remittance_semantics import (
     explicitly_negates_payer_relationship,
     payer_identity_phrases,
     sender_is_trusted_for_relationship,
+    superseded_allocation_email_ids,
+    trusted_remittance_sender_ids,
 )
 
 
@@ -338,14 +340,28 @@ def verify_candidate(
     selected_credit_amounts = {credit.amount for credit in selected_credits}
     affirmative_credit_references = set()
     affirmative_credit_amounts = set()
+    superseded_email_ids = superseded_allocation_email_ids(
+        bundle.candidate_emails,
+        payment=bundle.payment,
+        trusted_sender_ids=trusted_remittance_sender_ids(
+            bundle.candidate_emails,
+            bundle.payment,
+            bundle.candidate_customers,
+            customer_id=proposed_customer.customer_id if proposed_customer else None,
+        ),
+    )
     for email in bundle.candidate_emails:
         if proposed_customer and email.customer_id != proposed_customer.customer_id:
             continue
         email_text = f"{email.subject} {email.body}"
         semantics = classify_document_semantics(email_text)
-        mentioned_invoice_ids = semantics.affirmative_invoice_ids
-        mentioned_credit_ids = semantics.affirmative_credit_ids
-        mentioned_amounts = semantics.affirmative_credit_amounts
+        # A dated, explicit, payment-linked correction from a trusted source
+        # supersedes an older affirmative instruction. Its prohibitions remain
+        # active safety input; only its positive allocation claim loses authority.
+        superseded = email.email_id in superseded_email_ids
+        mentioned_invoice_ids = set() if superseded else semantics.affirmative_invoice_ids
+        mentioned_credit_ids = set() if superseded else semantics.affirmative_credit_ids
+        mentioned_amounts = set() if superseded else semantics.affirmative_credit_amounts
         affirmative_credit_references.update(mentioned_credit_ids)
         affirmative_credit_amounts.update(mentioned_amounts)
         prohibited_invoice_ids = (

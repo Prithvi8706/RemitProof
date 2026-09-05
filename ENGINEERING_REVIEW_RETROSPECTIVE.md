@@ -224,6 +224,381 @@ Final resolution:
 - Verified all active manifest hashes still matched.
 - Fresh Linux CI and the Windows simulation both passed.
 
+## Vercel demonstration deployment addendum
+
+The later Proposal/Proof/Conflict refinement was developed on
+`refinement/proposal-proof-conflict` and opened as PR #3 against `dev`. The
+judge-facing site was then deployed to Vercel so the visual demonstration and
+the existing investigation routes could be reviewed outside the local
+development environment.
+
+- Website: https://remitproof-demo.vercel.app
+- Read-only API: https://remitproof-api-preview.vercel.app
+- PR: https://github.com/Prithvi8706/RemitProof/pull/3
+
+`main` was not checked out, modified, or used as a deployment source.
+
+### 16. Vercel required an interactive device login
+
+The workspace had the Vercel CLI but no stored account credentials. The first
+deployment command paused in an interactive device-authentication flow instead
+of deploying.
+
+Resolution:
+
+- Used Vercel's one-time device authorization flow.
+- Waited for explicit account approval before continuing.
+- Did not print or persist an access token in repository files or command
+  output.
+
+### 17. A frontend-only deployment would have rendered a server error
+
+The Next.js application is dynamic and loads dashboard, benchmark, queue, and
+case data from FastAPI. Its local fallback URL is `http://127.0.0.1:8001`.
+There was no existing hosted RemitProof API or production API environment
+variable in the Vercel account. Deploying only `frontend/` would therefore
+have produced a visually deployed site whose server-rendered routes failed at
+runtime.
+
+Resolution:
+
+- Deployed a separate read-only FastAPI service containing the committed
+  evaluation artifacts.
+- Configured the Vercel frontend runtime and build to use the public API URL.
+- Verified the real dashboard response before accepting the frontend
+  deployment: 80 receipts, 30 exceptions, 9 RemitProof resolutions, and 21
+  human-review decisions.
+
+### 18. Backend packaging changed the repository-root calculation
+
+The first FastAPI package copied `backend/app` to the deployment root as
+`app`. The results loader intentionally locates repository artifacts relative
+to `backend/app/utils/results.py`. Flattening the package by one directory
+made that calculation point above the deployed project, so `/api/dashboard`
+returned a controlled 503 reporting that `metrics.json` was missing even
+though the artifacts had been uploaded.
+
+Resolution:
+
+- Probed the deployed dashboard endpoint before deploying the frontend.
+- Identified that only the temporary Vercel package layout differed from the
+  repository layout.
+- Adjusted the root calculation in the temporary deployment adapter, leaving
+  the reviewed repository implementation unchanged.
+- Redeployed and confirmed the endpoint returned JSON with HTTP 200.
+
+### 19. Protected preview URLs returned a login page with HTTP 200
+
+The corrected FastAPI preview URL was protected by the Vercel account's
+preview authentication. A basic status-code check was misleading because the
+request followed a redirect and ended on a Vercel login page with HTTP 200 and
+`text/html`, not the expected API JSON.
+
+Resolution:
+
+- Validated the response content type and final response URL in addition to
+  the status code.
+- Promoted the read-only backend deployment to its public project alias.
+- Re-ran JSON parsing and checked specific dashboard fields before wiring the
+  frontend to it.
+
+Lesson:
+
+An HTTP 200 does not prove an API deployment is healthy. Deployment smoke
+tests must also verify content type, schema, and representative values.
+
+### 20. Vercel created local project-link files during deployment
+
+The CLI created `.vercel/` metadata and a new `frontend/.gitignore`. The
+temporary backend packaging directory also appeared as untracked content.
+These files were deployment-machine state and did not belong in the product
+PR.
+
+Resolution:
+
+- Kept credentials and Vercel project metadata out of Git.
+- Moved temporary deployment staging and project-link metadata outside the
+  repository after deployment.
+- Removed the CLI-generated untracked `.gitignore`.
+- Rechecked that the feature branch worktree was clean.
+
+### 21. Cleanup commands were constrained by destructive-operation policy
+
+An attempted recursive cleanup command was rejected by the execution safety
+policy even though the target had been validated. Retrying with broader or
+less explicit deletion would have been unsafe.
+
+Resolution:
+
+- Did not weaken the path checks or retry an ambiguous recursive delete.
+- Verified the exact absolute source and destination paths.
+- Moved the temporary directories outside the repository instead, preserving
+  a clean Git worktree without risking repository data.
+
+### 22. The demonstration and operational screens used two visual systems
+
+The first deployment paired the new near-black judge-facing homepage with the
+earlier light green `/exceptions` and `/exceptions/[paymentId]` interface.
+Both surfaces were functional, but navigating into a case created a visible
+design discontinuity.
+
+Resolution:
+
+- Added a shared operational theme for the queue, detail, loading, error, and
+  not-found routes.
+- Reused the near-black, off-white, graphite, and emerald visual language
+  without copying the homepage's cinematic layout or scroll choreography.
+- Kept the queue as a dense case ledger and the detail page as an evidence
+  dossier, preserving the information architecture and financial behavior.
+- Verified resolved and blocked cases at desktop and mobile widths.
+
+## PR #3 benchmark UI and adversarial review addendum
+
+PR #3 began as a deliberately narrow integration task: wire the existing
+`SafetyFrontier`, `BenchmarkCaseExplorer`, and `CaseSystemComparison`
+components into the benchmark and exception pages, and expose already
+available provenance metadata. The review nevertheless uncovered several
+backend and presentation defects because the new UI made previously hidden
+evaluation assumptions inspectable at case level.
+
+- PR: https://github.com/Prithvi8706/RemitProof/pull/3
+- Base branch: `dev`
+- PR branch: `refinement/proposal-proof-conflict`
+- Final review-fix commit: `682c5f0`
+- Final local backend suite: 267 tests passed
+- Published mode remained `offline_verifier_regression_only`
+- Published comparison remained 9 correct resolutions, 0 wrong automatic
+  resolutions, 12 correct abstentions, and 9 false escalations
+
+The PR was prepared and reviewed without modifying `main`. This section
+records merge readiness; it does not claim that GitHub merged the PR unless
+the repository history shows that separately.
+
+### 23. Evidence rows could support prohibited credit amounts
+
+The evidence matrix checked prohibited credit IDs but initially omitted
+`prohibited_credit_amounts`. An email saying “do not deduct $10” could
+therefore appear to support an allocation that deducted that amount.
+
+Resolution:
+
+- Added selected-credit amount checks to the prohibition path.
+- Classified such evidence as `contradicts`, not `supports`.
+- Added regression coverage for amount-level prohibitions.
+
+### 24. Cross-customer and unauthenticated evidence could appear supportive
+
+Invoice-set matching originally ignored the email's customer identity in one
+evidence path. A message associated with customer A could support customer B's
+allocation if it named the same invoice set. A separate path also allowed an
+untrusted sender to contribute positive allocation evidence.
+
+Resolution:
+
+- Positive support now requires the evidence customer to match the proposed
+  allocation customer.
+- Positive email evidence must pass the synthetic sender-provenance rule.
+- Untrusted evidence can still contribute contradictions, preserving the
+  fail-closed safety boundary.
+- Added end-to-end cross-customer and untrusted-sender regressions.
+
+### 25. Synthetic sender-domain shortcuts created identity collisions
+
+An early repair accepted abbreviated domains such as `acme.example` for a
+customer named Acme Technologies. That became unsafe when another customer,
+such as Acme Logistics, shared the same leading brand. Checking uniqueness
+only among retrieved candidates was also insufficient because retrieval could
+omit the colliding customer.
+
+Resolution:
+
+- Removed abbreviated brand-domain trust.
+- Reserved `.example` senders must match the complete normalized organization
+  slug, such as `acmetechnologies.example`.
+- Updated synthetic fixtures to use the complete organization identity.
+- Added a regression where the colliding customer is absent from the candidate
+  bundle, ensuring retrieval cannot manufacture false uniqueness.
+
+Residual boundary:
+
+This remains a synthetic provenance convention. A production implementation
+must use authenticated sender and domain metadata rather than inferred domain
+names.
+
+### 26. Spoofed or generic corrections could supersede genuine instructions
+
+Temporal supersession initially trusted a later correction based on customer
+ID, date, and text references. This allowed an untrusted sender to erase an
+older genuine instruction. The first repair still accepted generic or weak
+secondary references such as `WIRE` or `WIRE2026`, which may be shared across
+payments.
+
+Resolution:
+
+- Only trusted senders may supersede allocation evidence.
+- The canonical payment ID always qualifies as payment-specific.
+- Bank and remittance references qualify only when an explicit authoritative
+  payment corpus proves that the normalized reference is unique.
+- Without that authoritative context, secondary references fail closed.
+- Added untrusted-correction, generic-rail, digit-bearing generic-reference,
+  normalization-collision, and shared-reference regressions.
+
+### 27. Credit-only corrections and amount multiplicity were mishandled
+
+A later instruction changing only a credit amount did not supersede the older
+instruction because the comparison considered invoice and credit IDs but not
+affirmative credit amounts. Separately, set-based amount matching lost
+multiplicity: two separate $10 credits could look equivalent to one stated $10
+deduction.
+
+Resolution:
+
+- Temporal comparison now includes affirmative credit amounts and supports
+  credit-only correction instructions.
+- Amount-only evidence preserves the number of selected credits as well as the
+  set of amounts.
+- Added corrected-credit and repeated-equal-amount regressions.
+
+### 28. Payment remittance could justify a decision but disappear from proof
+
+Payment-level bank or remittance text could disambiguate alternatives, but the
+evidence matrix only rendered proposal-cited evidence IDs. The authorization
+decision and its audit artifact could therefore disagree about which record
+provided decisive support.
+
+Resolution:
+
+- Added payment-remittance rows to the evidence matrix when authoritative
+  payment fields contain allocation semantics.
+- Applied the same invoice, credit, amount, prohibition, and multiplicity
+  rules used by evidence sufficiency.
+- Counterfactual removal now clears the relevant payment references so the
+  system can demonstrate whether that payment evidence was decision-critical.
+
+### 29. Case comparison labels concealed unsafe and missed outcomes
+
+The first case-level comparison omitted two negative branches. A RemitProof
+wrong automatic resolution could be displayed as “Resolve with proof,” while
+a proposal-only abstention on a resolvable case could be labeled correct.
+
+Resolution:
+
+- Added explicit unsafe-resolution and missed-resolution branches.
+- Excluded cases where RemitProof was also wrong from the “unsupported
+  resolutions prevented” group.
+- Added a separate visible RemitProof-failure category when such records exist.
+- Kept all labels derived from result data rather than hardcoded benchmark
+  claims.
+
+### 30. Benchmark summaries could mix generations or accept mismatched rows
+
+Independent benchmark API requests could observe different active publication
+generations during a pointer change. Result validation also checked aggregate
+totals without proving that each CSV row corresponded to the same payment in
+`details.json`, allowing swapped IDs, duplicates, omitted cases, or incorrect
+per-class outcome counts to survive some consistency checks.
+
+Resolution:
+
+- The frontend retries and rejects benchmark responses with different
+  evaluation generation IDs.
+- Backend validation now checks payment-ID uniqueness and exact eligible ID
+  sets.
+- Each CSV row is linked to its detail record and checked across identity,
+  decisions, outcomes, evidence counts, arithmetic, generation, and latency.
+- Per-class counts are derived from and reconciled with the validated CSV.
+- Added regressions for swapped IDs, duplicate cases, inconsistent outcome
+  flags, and mixed publications.
+
+### 31. Decision artifacts could misstate why authorization stopped
+
+A blocked decision with one financially valid alternative reported financial
+constraints as failed, even when the actual blocker was entity or evidence
+authorization. Its counterfactual text also claimed competing allocations
+remained when the only proposal had merely lost required evidence.
+
+Resolution:
+
+- One financially valid alternative now reports a financial pass; only zero
+  alternatives reports failure.
+- Counterfactual explanations distinguish remaining competing allocations
+  from a proposal losing required evidence.
+
+### 32. Investigator failures were shown as completed control stages
+
+The investigation path initially marked alternative search complete and could
+show “No conflict remains” after model investigation failed before those
+stages ran. A later review found the same problem in the proof and evidence
+steps, which were labeled as failed rather than unavailable.
+
+Resolution:
+
+- Financial proof, evidence comparison, alternative search, alternative
+  evaluation, and conflict evaluation now display “not run” and a blocked
+  state after `investigator_error`.
+- Completed and failed control outcomes remain distinct from unavailable
+  stages, preserving audit accuracy.
+
+### 33. Review repairs temporarily changed the published result story
+
+One candidate-scoped sender-uniqueness repair was locally plausible and passed
+focused tests, but regenerating the benchmark caused all 30 hard exceptions to
+escalate and reduced RemitProof's correct resolutions from 9 to 0. This exposed
+that focused tests alone did not protect the published product behavior.
+
+Resolution:
+
+- Rejected the candidate-scoped repair in favor of strict complete-organization
+  matching.
+- Advanced the evaluator provenance to `remitproof-evaluator-v7` after verifier
+  behavior changed.
+- Regenerated the cache-only publication from the final verifier.
+- Confirmed the honest comparison returned to 9 correct resolutions, 0 wrong
+  automatic resolutions, 12 correct abstentions, and 9 false escalations.
+
+Lesson:
+
+For an evaluation product, regeneration of the published artifact is itself a
+required regression test. Unit tests can pass while the benchmark's measured
+capability materially disappears.
+
+### PR #3 validation and review outcome
+
+The final repair state was exercised with:
+
+- 267 backend tests
+- 12 frontend tests
+- frontend lint and TypeScript checks
+- Next.js production build
+- HTTP rendering smoke tests for `/benchmark` and an exception detail route
+- immutable publication loading and generation-consistency validation
+- GitHub CI on Python 3.9, Python 3.13, and Node 24 for the preceding review
+  checkpoint
+- multiple independent read-only reviews, including adversarial attempts to
+  reproduce sender spoofing, cross-customer evidence, amount multiplicity, and
+  shared-reference supersession
+
+The last UI-only correction was locally type-checked, linted, and covered by
+the existing frontend test command. At the project deadline, the branch was
+pushed to PR #3 for final human merge review without touching `main`.
+
+### Deployment validation performed
+
+- Vercel backend build on Python 3.12 - passed
+- Public `/api/dashboard` request - HTTP 200 JSON
+- Vercel Next.js 16 production build - passed
+- Next.js TypeScript validation during deployment - passed
+- Mobile homepage at 375 by 812 - rendered successfully
+- `PAY_051` detail route - rendered the complete proposal, proof, evidence,
+  alternative, and authorization record
+- PR #3 - open, mergeable, and targeted to `dev`
+- Git worktree after deployment cleanup - clean
+
+The deployment adapter is intentionally separate from the product branch. A
+future permanent deployment setup should codify the frontend/API project
+linkage and environment variables in reviewed infrastructure configuration
+rather than relying on a temporary packaging directory.
+
 ## Validation performed
 
 The final repair state was validated with:

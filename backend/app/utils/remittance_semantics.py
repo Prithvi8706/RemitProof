@@ -1,8 +1,9 @@
 import re
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Iterable, Set
+from typing import Iterable, Optional, Set
 
+from app.models.payment import Payment
 from app.utils.normalization import extract_credit_amounts, extract_document_ids
 
 
@@ -63,6 +64,13 @@ _NEGATED_CREDIT_AMOUNT = re.compile(
     r"\b(?:do\s+not|don't|must\s+not|should\s+not|never|not\s+to)\s+"
     r"(?:apply|use|deduct|subtract)\b[^.!?;\r\n]{0,100}"
     r"(?:USD|EUR|GBP|\$|€|£)\s*[0-9]",
+    re.IGNORECASE,
+)
+_CORRECTION_LANGUAGE = re.compile(
+    r"\bcorrection\b|\bcorrigendum\b|\bcorrected\s+(?:instruction|remittance|allocation)\b|"
+    r"\b(?:please\s+)?disregard\s+(?:our|the|my)\s+(?:previous|earlier|prior)\b|"
+    r"\bignore\s+(?:our|the|my)\s+(?:previous|earlier|prior)\b|"
+    r"\bsupersedes?\b|\bthis\s+replaces\s+(?:our|the|my)\s+(?:previous|earlier|prior)\b",
     re.IGNORECASE,
 )
 _SENDER_ADDRESS = re.compile(
@@ -181,11 +189,10 @@ def sender_is_trusted_for_relationship(
     local = match.group("local").casefold()
     domain = match.group("domain").casefold().rstrip(".")
     customer_slugs = _identity_slugs(customer_names)
-    # Repository fixtures model customer-controlled mailboxes with the exact
-    # organization slug immediately below the reserved ``.example`` suffix
-    # (for example, ``copperleaffoods.example``). Requiring an exact slug match
-    # prevents a merely shared token or an attacker-owned lookalike such as
-    # ``acme.evil.example`` from becoming authorization evidence.
+    # Repository fixtures model customer-controlled mailboxes with the complete
+    # organization slug immediately below the reserved ``.example`` suffix.
+    # Abbreviated brand domains are not authoritative because retrieval cannot
+    # prove that another customer sharing the brand was absent from the corpus.
     if domain.endswith(".example"):
         organization_slug = re.sub(r"[^a-z0-9]+", "", domain[: -len(".example")])
         return bool(organization_slug and organization_slug in customer_slugs)
@@ -225,6 +232,198 @@ class DocumentSemantics:
     noncurrent_invoice_ids: Set[str] = field(default_factory=set)
     affirmative_credit_amounts: Set[Decimal] = field(default_factory=set)
     prohibited_credit_amounts: Set[Decimal] = field(default_factory=set)
+
+
+def is_correction_instruction(text: str) -> bool:
+    return bool(_CORRECTION_LANGUAGE.search(text or ""))
+
+
+def _reference_key(value: str) -> str:
+    return "".join(re.findall(r"[a-z0-9]+", value.casefold()))
+
+
+def _payment_reference_values(
+    payment: Optional[Payment],
+    authoritative_payments: Optional[Iterable[Payment]] = None,
+) -> Set[str]:
+    if payment is None:
+        return set()
+    values = {payment.payment_id.strip()} if payment.payment_id.strip() else set()
+    if authoritative_payments is None:
+        return values
+
+    payments = list(authoritative_payments)
+    if not any(item.payment_id == payment.payment_id for item in payments):
+        return values
+    reference_owners = {}
+    for item in payments:
+        for value in (item.bank_reference, item.remittance_reference):
+            if not isinstance(value, str) or not value.strip():
+                continue
+            reference_owners.setdefault(_reference_key(value), set()).add(item.payment_id)
+    for value in (payment.bank_reference, payment.remittance_reference):
+        if (
+            isinstance(value, str)
+            and value.strip()
+            and reference_owners.get(_reference_key(value)) == {payment.payment_id}
+        ):
+            values.add(value.strip())
+    return values
+
+
+def _contains_payment_reference(text: str, reference: str) -> bool:
+    body_tokens = re.findall(r"[a-z0-9]+", text.casefold())
+    reference_tokens = re.findall(r"[a-z0-9]+", reference.casefold())
+    if len(reference_tokens) == 1:
+        return reference_tokens[0] in body_tokens
+    return contains_token_phrase(text, reference)
+
+
+def _email_payment_references(
+    text: str,
+    payment: Optional[Payment],
+    authoritative_payments: Optional[Iterable[Payment]] = None,
+) -> Set[str]:
+    return {
+        reference
+        for reference in _payment_reference_values(payment, authoritative_payments)
+        if _contains_payment_reference(text, reference)
+    }
+
+
+def trusted_remittance_sender_ids(
+    emails,
+    payment: Payment,
+    customers,
+    *,
+    customer_id: Optional[str] = None,
+) -> Set[str]:
+    """Return sender identities trusted for the candidate customer context.
+
+    Email records carry no thread or authentication metadata. Until that
+    metadata exists, a correction may rely on a sender only when the existing
+    identity-alignment rule recognizes that sender for the payment's payer and
+    the email's customer. Callers still pass the resulting set explicitly so
+    this helper cannot silently trust arbitrary candidate email addresses.
+    """
+
+    customers_by_id = {customer.customer_id: customer for customer in customers}
+    trusted: Set[str] = set()
+    for email in emails:
+        if customer_id is not None and email.customer_id != customer_id:
+            continue
+        customer = customers_by_id.get(email.customer_id)
+        if customer is None:
+            continue
+        customer_names = (
+            customer.legal_name,
+            *customer.aliases,
+            *customer.parent_entities,
+            *customer.subsidiaries,
+        )
+        if sender_is_trusted_for_relationship(
+            email.sender,
+            payment.payer_name,
+            customer_names,
+        ):
+            trusted.add(email.sender.casefold())
+    return trusted
+
+
+def superseded_allocation_email_ids(
+    emails,
+    *,
+    payment: Optional[Payment] = None,
+    trusted_sender_ids: Optional[Iterable[str]] = None,
+    authoritative_payments: Optional[Iterable[Payment]] = None,
+) -> Set[str]:
+    """Identify emails whose affirmative allocation instruction is superseded.
+
+    An instruction is superseded only under the narrowest defensible rule: a
+    strictly later email from the same customer carries explicit correction
+    language, its own differing affirmative instruction, and an explicit
+    reference to the same payment context as the older instruction. The
+    payment context is supplied by the caller because an email's customer and
+    invoice IDs alone do not identify which payment the correction replaces.
+    Prohibitions in a superseded email remain active safety input, and
+    conflicting instructions without an explicit dated correction stay
+    contradictions.
+
+    ``payment`` is intentionally optional for callers that only need the
+    semantic classifier. Without it, no allocation can be superseded: a
+    customer-level correction with no payment, bank, or remittance reference
+    is not sufficient authority to rewrite an unrelated payment's evidence.
+    Secondary bank/remittance references are accepted only when
+    ``authoritative_payments`` proves that the normalized value belongs to one
+    payment. Without that complete context, only the canonical payment ID can
+    authorize supersession. ``trusted_sender_ids`` must contain both email sources before a correction
+    can rewrite an allocation. The current email model has no authenticated
+    thread metadata, so callers should leave this set empty when source trust
+    cannot be established and the function fails closed.
+    """
+
+    trusted_senders = {
+        sender.casefold()
+        for sender in (trusted_sender_ids or ())
+        if isinstance(sender, str) and sender.strip()
+    }
+    authoritative_payment_context = (
+        list(authoritative_payments) if authoritative_payments is not None else None
+    )
+    analyzed = []
+    for email in emails:
+        text = f"{email.subject} {email.body}"
+        analyzed.append(
+            (
+                email,
+                classify_document_semantics(text),
+                is_correction_instruction(text),
+                _email_payment_references(
+                    text, payment, authoritative_payment_context
+                ),
+            )
+        )
+    superseded: Set[str] = set()
+    for email, semantics, _, email_references in analyzed:
+        if not (
+            semantics.affirmative_invoice_ids
+            or semantics.affirmative_credit_ids
+            or semantics.affirmative_credit_amounts
+        ):
+            continue
+        for other, other_semantics, other_is_correction, other_references in analyzed:
+            if other.email_id == email.email_id or not other_is_correction:
+                continue
+            if other.customer_id != email.customer_id:
+                continue
+            if other.date <= email.date:
+                continue
+            if not (
+                other_semantics.affirmative_invoice_ids
+                or other_semantics.affirmative_credit_ids
+                or other_semantics.affirmative_credit_amounts
+            ):
+                continue
+            # Both sides must identify the current payment through its
+            # canonical ID or a secondary reference proven unique in the
+            # authoritative payment corpus.
+            if not email_references or not other_references:
+                continue
+            if (
+                email.sender.casefold() not in trusted_senders
+                or other.sender.casefold() not in trusted_senders
+            ):
+                continue
+            if (
+                other_semantics.affirmative_invoice_ids == semantics.affirmative_invoice_ids
+                and other_semantics.affirmative_credit_ids == semantics.affirmative_credit_ids
+                and other_semantics.affirmative_credit_amounts
+                == semantics.affirmative_credit_amounts
+            ):
+                continue
+            superseded.add(email.email_id)
+            break
+    return superseded
 
 
 def classify_document_semantics(

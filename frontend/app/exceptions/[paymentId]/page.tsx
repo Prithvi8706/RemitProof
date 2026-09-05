@@ -1,14 +1,17 @@
 import { ArrowLeft, CircleCheck, Info, LockKeyhole } from "lucide-react";
 import Link from "next/link";
-import { AllocationPanel } from "@/components/AllocationPanel";
 import { AlternativesPanel } from "@/components/AlternativesPanel";
 import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
+import { CaseSystemComparison } from "@/components/CaseSystemComparison";
 import { DecisionPanel } from "@/components/DecisionPanel";
 import { EvidencePanel } from "@/components/EvidencePanel";
+import { EvidenceAlternativeMatrix } from "@/components/EvidenceAlternativeMatrix";
+import { InvestigationPath } from "@/components/InvestigationPath";
 import { PaymentPanel } from "@/components/PaymentPanel";
+import { ProposalPanel } from "@/components/ProposalPanel";
 import { ProofPanel } from "@/components/ProofPanel";
-import { ApiError, getException } from "@/lib/api";
+import { ApiError, getBenchmarkCases, getException } from "@/lib/api";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +22,7 @@ export default async function ExceptionDetailPage({
   params: Promise<{ paymentId: string }>;
 }) {
   const { paymentId } = await params;
+  const comparisonDataPromise = getBenchmarkCases().catch(() => null);
   let detail;
   try {
     detail = await getException(paymentId);
@@ -28,6 +32,8 @@ export default async function ExceptionDetailPage({
     }
     throw error;
   }
+  const comparisonData = await comparisonDataPromise;
+  const comparison = comparisonData?.cases.find((row) => row.payment_id === paymentId) ?? null;
   const isResolved = detail.decision.decision === "resolved";
   const missingEvidenceIds = Array.from(
     new Set([
@@ -37,26 +43,28 @@ export default async function ExceptionDetailPage({
   );
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="case-site min-h-screen bg-canvas">
       <AppHeader />
       <main className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 sm:py-10">
         <nav aria-label="Breadcrumb">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-md py-1 text-sm font-semibold text-muted hover:text-primary"
+            className="case-back-link inline-flex items-center gap-2 rounded-md py-1 text-sm font-semibold text-muted hover:text-primary"
           >
             <ArrowLeft className="size-4" aria-hidden="true" />
             Back to dashboard
           </Link>
         </nav>
 
-        <header className="mt-7 flex flex-col gap-5 border-b border-line pb-8 sm:flex-row sm:items-end sm:justify-between">
+        <header className="case-page-heading mt-7 flex flex-col gap-5 border-b border-line pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold text-primary">Exception investigation</p>
             <h1 className="numeric mt-2 text-3xl font-semibold tracking-[-0.035em] text-ink sm:text-4xl">
               {detail.payment.payment_id}
             </h1>
-            <p className="mt-2 text-sm text-muted">A complete audit of the model proposal, deterministic proof, and available evidence.</p>
+            <p className="mt-2 max-w-[70ch] text-sm text-muted">
+              A transaction case: proposal, claims, evidence, competing explanations, proof, and authorization decision.
+            </p>
           </div>
           <div className="flex items-center gap-2 text-xs font-medium text-muted">
             <LockKeyhole className="size-4 text-primary" aria-hidden="true" />
@@ -64,9 +72,13 @@ export default async function ExceptionDetailPage({
           </div>
         </header>
 
+        {comparison && <CaseSystemComparison comparison={comparison} />}
+
+        <InvestigationPath detail={detail} />
+
         <div className="mt-8 grid gap-5 lg:grid-cols-2">
           <PaymentPanel payment={detail.payment} />
-          <DecisionPanel detail={detail} />
+          <ProposalPanel detail={detail} />
         </div>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-16">
@@ -75,21 +87,20 @@ export default async function ExceptionDetailPage({
             citedEvidence={detail.model_cited_evidence}
             auditRecords={detail.audit_records}
             missingEvidenceIds={missingEvidenceIds}
+            claims={detail.proposal?.semantic_claims ?? []}
           />
         </div>
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)] lg:items-start">
-          <AllocationPanel
-            allocation={detail.proposed_allocation}
-            proof={detail.proof}
-            currency={detail.payment.currency}
-            paymentAmount={detail.payment.amount}
-          />
+        <EvidenceAlternativeMatrix detail={detail} />
+
+        <div className="mt-12 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)] lg:items-start">
           <AlternativesPanel
             alternatives={detail.alternatives}
             decision={detail.decision}
+            sufficiency={detail.sufficiency}
             currency={detail.payment.currency}
           />
+          <DecisionPanel detail={detail} />
         </div>
 
         <section

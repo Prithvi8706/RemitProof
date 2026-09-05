@@ -1,6 +1,14 @@
 # Architecture
 
-RemitProof separates interpretation from authorization. The model may suggest what a receipt means, but only deterministic code can authorize a result.
+RemitProof is conflict detection for AI financial decisions. The model may suggest what a receipt means, but only deterministic proof, alternative search, and evidence sufficiency can authorize a result.
+
+The architecture revolves around three domain objects:
+
+- **Proposal:** the model's structured hypothesis, claims, citations, and unresolved questions.
+- **Proof:** deterministic financial, state, entity, credit, duplicate, and contradiction checks.
+- **Conflict:** any competing financially valid explanation that the available evidence has not eliminated.
+
+Normal reconciliation remains the first stage. RemitProof receives only the exceptions that structured financial signals could not determine.
 
 ```mermaid
 flowchart TD
@@ -39,7 +47,11 @@ The proposal is untrusted. The proof engine independently checks:
 - credits belong to selected invoices and are valid;
 - remittance claims do not contradict credit-note amounts or identifiers.
 
-The alternative finder exhaustively enumerates financially valid subsets inside the bounded candidate set. Evidence sufficiency authorizes only when the proposal itself passes proof and the available evidence uniquely identifies it. A second viable explanation without disambiguating evidence is a mandatory abstention.
+Remittance instructions are not treated as timeless. A strictly later email from the same customer that carries explicit correction language and its own differing allocation instruction supersedes the older email's affirmative instruction; the older email's prohibitions remain active safety input. Conflicting instructions without such a dated, explicit correction stay contradictions and force human review.
+
+The alternative finder exhaustively enumerates financially valid subsets inside the bounded candidate set and assigns each one a stable allocation ID. Evidence sufficiency creates an evidence-versus-allocation matrix, distinguishing records that support, contradict, establish a shared financial fact, are superseded by a later correction, or have no bearing on each hypothesis. It authorizes only when the proposal itself passes proof and the available evidence uniquely identifies it. A second viable explanation without disambiguating evidence is a mandatory abstention.
+
+For evidence that uniquely distinguishes a resolved proposal, the pipeline removes that record and reruns proof and sufficiency. A decision change marks the record as decision-critical. The pipeline emits one reusable artifact: a `resolution_proof` for authorized cases or a `blocked_decision` for abstentions. Structured conflict records preserve the conflict type, surviving allocations, required disambiguation, and whether evidence cleared the conflict.
 
 ## Decision policy
 
@@ -61,6 +73,7 @@ No branch performs production write-back. Decisions are serialized into benchmar
 | `proof_engine.py` | Independent arithmetic, state, currency, entity, credit, and contradiction checks |
 | `alternative_finder.py` | Exhaustive financial hypotheses within candidates |
 | `evidence_sufficiency.py` | Final authorization/abstention policy |
+| `decision_artifacts.py` | Conflict, counterfactual, resolution-proof, and blocked-decision artifacts |
 | `pipeline.py` | Single payment orchestration |
 | `evaluator.py` | Three-way comparisons and generated metrics |
 

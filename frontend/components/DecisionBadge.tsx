@@ -14,7 +14,7 @@ const DECISIONS = {
   },
   human_review: {
     label: "HUMAN REVIEW REQUIRED",
-    className: "border-warning/30 bg-warning-soft text-[oklch(0.36_0.09_65)]",
+    className: "border-warning/30 bg-warning-soft text-warning",
     icon: TriangleAlert,
   },
 } as const;

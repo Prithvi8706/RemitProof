@@ -1,0 +1,12 @@
+{
+  "manifest_format_version": 1,
+  "publication_id": "95de6ceec1d476f5e17d4277d79f7bed83d7ee68c481d6700f86d6e7b7bdb227",
+  "evaluation_generation_id": "95f330d320163ff29b4c09b1a2bb382bba97b5d488a9c8b808ba06bfbe2c5880",
+  "evaluation_mode": "cache_only_legacy_identity_unverified_proposal_replay",
+  "artifacts": {
+    "results.csv": "beec1e1545e676aa3d4e58a24527312d78b1a64296323a4bbe18876cfb029377",
+    "confusion_breakdown.csv": "38662a539debb3b7c10ce9381d3caeb47ff067d2cc49a9ea34cce2295f781778",
+    "metrics.json": "13642ded8fc6a5be77f41467b37040b95207c55a858707fa3cddf11f9aee967c",
+    "details.json": "febf3ae97df22762217d4a1e367307be7e5180264a25e02ab167727fa1a43e23"
+  }
+}

@@ -1,8 +1,83 @@
 # RemitProof
 
-RemitProof is an evidence-grounded investigation layer for cross-border receipts that normal reconciliation cannot safely explain. A local language model proposes a semantic interpretation; deterministic code independently proves the money, record state, entity relationship, credit support, and uniqueness before any receipt is marked resolved.
+> **A financial reconciliation can be mathematically valid and still be wrong.**
 
-The operating rule is simple: maximize justified automation subject to an incorrect auto-resolution rate near zero. If the evidence does not identify one safe explanation, RemitProof sends the case to human review.
+If two invoice allocations both equal the received payment, arithmetic cannot establish what the payer intended. RemitProof investigates those cases. AI proposes an explanation, deterministic code verifies the financial constraints, and the verifier searches for competing explanations. Evidence must uniquely support one allocation before automation is authorized.
+
+If it does not, RemitProof refuses to act.
+
+```text
+PLAUSIBLE
+    ≠
+JUSTIFIED
+```
+
+**AI proposes. RemitProof verifies.**
+
+Normal reconciliation is deterministic.
+
+```text
+Payment reference matches.
+Amount matches.
+Customer matches.
+Done.
+```
+
+The dangerous cases begin when several financial explanations are simultaneously plausible.
+
+**RemitProof verifies whether an AI-generated financial reconciliation is uniquely supported by non-conflicting evidence before allowing it to resolve the transaction.**
+
+It is not a replacement for normal reconciliation. It is a financial conflict-resolution layer for the unresolved exceptions left behind by structured matching.
+
+```text
+Incoming receipts
+        |
+normal deterministic reconciliation
+        |
+        +---- structured match ----> resolved normally
+        |
+        +---- unresolved exception
+                    |
+             REMITPROOF STARTS
+                    |
+               AI proposal
+                    |
+       financial proof + conflict search
+                    |
+          evidence sufficiency gate
+              /             \\
+         RESOLVE           ABSTAIN
+```
+
+The project is not about generating more financial decisions with AI. It determines which AI-generated financial decisions are justified enough to execute.
+
+## Three domain primitives
+
+### Proposal
+
+The local model constructs one structured hypothesis: customer, invoices, credits, semantic claims, cited evidence, and unresolved questions. A proposal describes what the model thinks happened. It has no authority to resolve the receipt.
+
+### Proof
+
+Deterministic code recomputes the money and verifies record state, currency, credit validity, entity support, duplicate risk, contradictions, and evidence requirements. The model cannot override these checks.
+
+### Conflict
+
+The alternative finder searches for every other allocation that satisfies the bounded financial constraints. If more than one explanation remains and evidence does not uniquely distinguish the proposal, RemitProof blocks the decision and produces a deliberate abstention.
+
+> A plausible financial explanation is not automatically a justified financial action.
+
+## Product boundary
+
+The conventional matcher is intentionally competent. It already handles:
+
+- exact invoice references and exact amount matches;
+- known customer IDs, aliases, and payer relationships;
+- currency and date constraints;
+- simple multi-invoice totals;
+- valid ordinary credits.
+
+RemitProof adds value only on semantic ambiguity, fragmented evidence, contradictory evidence, and multiple financially valid explanations. OCR, ERP write-back, FX, settlement, compliance, generic chat, and production integrations remain outside scope.
 
 ## What is implemented
 
@@ -10,10 +85,18 @@ The operating rule is simple: maximize justified automation subject to an incorr
 - Deterministic candidate retrieval with bounded customer, invoice, credit, and email sets.
 - A local Ollama investigator returning strict Pydantic-validated JSON.
 - Decimal-based financial proof, state checks, duplicate prevention, and contradiction detection.
+- Temporal instruction handling: a strictly later, explicitly marked correction from the same customer supersedes an older allocation instruction; conflicting instructions without one remain contradictions and force human review.
 - Exhaustive alternative-allocation search over the bounded candidate set.
-- Evidence-sufficiency gating with explicit abstention.
+- Structured conflict records with cleared or unresolved status.
+- Evidence-versus-alternative assessments and explicit evidence-sufficiency gating.
+- Counterfactual tests that identify decision-critical evidence.
+- Reusable resolution-proof and blocked-decision artifacts.
+- Explicit abstention when alternatives survive or evidence contradicts a proposal.
 - An 80-receipt synthetic dataset, a 10-case kill spike, a 60-record synthetic benchmark/regression subset, and three-way evaluation.
 - A FastAPI read API and a responsive Next.js dashboard with resolved and human-review detail states.
+- A dark, evidence-first demonstration website with a progressively enhanced WebGL hypothesis field, reversible GSAP/Lenis motion, accessible glass navigation, publication-style benchmark figures, and direct links into the live exception artifacts.
+
+The home route is the judge-facing demonstration surface. The exception library and case-detail routes remain operational views backed by the generated FastAPI artifacts.
 
 ## Measured result
 
@@ -35,7 +118,7 @@ On the 30 unresolved exceptions, the forced-proposal-without-verification ablati
 
 ## Architecture in one sentence
 
-AI proposes; code proves; evidence sufficiency authorizes or abstains.
+The AI proposes. Deterministic code proves. Conflict detection and evidence sufficiency authorize or abstain.
 
 ```text
 receipt -> retrieve -> conventional match
@@ -116,6 +199,7 @@ python -m pytest -q backend\tests
 
 Set-Location frontend
 npm ci
+npm test
 npm run lint
 .\node_modules\.bin\tsc.cmd --noEmit
 npm run build
@@ -134,6 +218,7 @@ GitHub Actions runs these checks from clean, lockfile-driven environments on eve
 | `GET /api/exceptions` | Exception queue |
 | `GET /api/exceptions/{payment_id}` | Payment, proposal, evidence, proof, and alternatives |
 | `GET /api/benchmark` | Full generated benchmark metrics |
+| `GET /api/benchmark/cases` | Per-case comparison outcomes and exception-class breakdown |
 
 These endpoints are read-only. The prototype does not post allocations to an accounting system.
 

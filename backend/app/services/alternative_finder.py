@@ -99,7 +99,7 @@ def find_valid_alternatives(bundle: CandidateBundle) -> List[AlternativeAllocati
                     )
                 )
 
-    return sorted(
+    ordered = sorted(
         alternatives,
         key=lambda alternative: (
             alternative.customer_id,
@@ -107,3 +107,7 @@ def find_valid_alternatives(bundle: CandidateBundle) -> List[AlternativeAllocati
             alternative.credit_ids,
         ),
     )
+    return [
+        alternative.model_copy(update={"allocation_id": f"ALT_{index:03d}"})
+        for index, alternative in enumerate(ordered, start=1)
+    ]

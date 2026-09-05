@@ -1,6 +1,6 @@
-import { AlertTriangle, Building2, FileBadge2, FileText, Mail } from "lucide-react";
+import { AlertTriangle, Building2, FileBadge2, FileText, Link2, Mail } from "lucide-react";
 import { titleCase } from "@/lib/format";
-import type { EvidenceRecord } from "@/lib/types";
+import type { EvidenceRecord, SemanticClaimRecord } from "@/lib/types";
 
 const ICONS = {
   customer_record: Building2,
@@ -57,19 +57,57 @@ export function EvidencePanel({
   citedEvidence,
   auditRecords,
   missingEvidenceIds,
+  claims,
 }: {
   citedEvidence: EvidenceRecord[];
   auditRecords: EvidenceRecord[];
   missingEvidenceIds: string[];
+  claims: SemanticClaimRecord[];
 }) {
+  const citedIds = new Set(citedEvidence.map((record) => record.evidence_id));
+
   return (
     <section aria-labelledby="evidence-title">
       <div className="mb-4">
         <h2 id="evidence-title" className="text-xl font-semibold tracking-[-0.02em] text-ink">
-          Evidence and audit records
+          Claim and evidence map
         </h2>
-        <p className="mt-1 text-sm text-muted">Model citations are kept separate from records appended for allocation context.</p>
+        <p className="mt-1 text-sm text-muted">Every proposal claim must identify the records it relies on.</p>
       </div>
+
+      {claims.length > 0 && (
+        <div className="mb-7 border-y border-line" aria-label="Proposal claims and cited evidence">
+          {claims.map((claim) => {
+            const citationsPresent = claim.evidence_ids.length > 0 && claim.evidence_ids.every((id) => citedIds.has(id));
+            return (
+              <article key={claim.claim_id} className="grid gap-3 border-b border-line py-4 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_auto]">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="numeric text-[11px] font-semibold text-muted">{claim.claim_id}</span>
+                    <span className={`text-[11px] font-semibold ${citationsPresent ? "text-primary-dark" : "text-danger"}`}>
+                      {citationsPresent ? "CITATIONS PRESENT" : "CITATION GAP"}
+                    </span>
+                  </div>
+                  <h3 className="mt-1.5 text-sm font-semibold leading-6 text-ink">{claim.claim}</h3>
+                </div>
+                <div className="flex flex-wrap items-start gap-2 sm:max-w-[240px] sm:justify-end">
+                  {claim.evidence_ids.length ? claim.evidence_ids.map((evidenceId) => (
+                    <span key={evidenceId} className="inline-flex items-center gap-1.5 rounded-md bg-surface px-2 py-1 text-xs font-semibold text-ink">
+                      <Link2 className="size-3 text-primary" aria-hidden="true" />
+                      {evidenceId}
+                    </span>
+                  )) : (
+                    <span className="text-xs font-medium text-danger">No evidence cited</span>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+          <p className="py-3 text-xs leading-5 text-muted">
+            Citations make a claim inspectable. Deterministic proof and conflict testing still decide whether it can authorize action.
+          </p>
+        </div>
+      )}
 
       {missingEvidenceIds.length > 0 && (
         <div className="mb-6 border border-warning/35 bg-warning-soft p-4" role="status">
@@ -91,8 +129,8 @@ export function EvidencePanel({
       )}
 
       <div>
-        <h3 className="mb-1 text-sm font-semibold text-ink">Model-cited evidence</h3>
-        <p className="mb-3 text-xs leading-5 text-muted">Records explicitly named in the investigator proposal.</p>
+        <h3 className="mb-1 text-sm font-semibold text-ink">Cited evidence</h3>
+        <p className="mb-3 text-xs leading-5 text-muted">Records explicitly named by the proposal and available for inspection.</p>
       </div>
       {citedEvidence.length ? (
         <EvidenceList evidence={citedEvidence} />

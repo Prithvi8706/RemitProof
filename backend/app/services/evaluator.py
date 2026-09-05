@@ -13,11 +13,25 @@ from app.utils.loaders import Dataset
 
 
 CACHE_FORMAT_VERSION = 2
-EVALUATOR_VERSION = "remitproof-evaluator-v3"
+EVALUATOR_VERSION = "remitproof-evaluator-v7"
 PROPOSAL_ABLATION_MODE = "proposal_only_forced_proposal_verifier_ablation"
 SYNTHETIC_BENCHMARK_LABEL = (
     "synthetic benchmark/regression partition; not an independent held-out set"
 )
+
+ALTERNATIVE_SEARCH_CLASSES = {
+    "detached_remittance_email",
+    "same_amount_ambiguity",
+    "credit_deduction",
+    "multiple_allocations_email",
+    "parent_entity_multi_invoice",
+    "known_payer_disambiguated",
+    "multi_invoice_remittance",
+    "semantic_credit_reason",
+    "treasury_bank_on_behalf",
+    "alternative_allocation_email",
+}
+CONTRADICTION_CLASSES = {"conflicting_evidence"}
 
 
 def _sha256_json(value: object) -> str:
@@ -271,6 +285,18 @@ def _row_from_result(
         or (result.decision.decision == "resolved" and proof and proof.financial_validity)
         or result.decision.decision == "human_review"
     )
+    alternatives_expected = truth["exception_class"] in ALTERNATIVE_SEARCH_CLASSES
+    alternatives_detected = len(result.alternatives) > 1
+    ambiguity_expected = truth["exception_class"] == "same_amount_ambiguity"
+    ambiguity_detected = bool(
+        alternatives_detected
+        and result.sufficiency
+        and not result.sufficiency.evidence_disambiguates_alternatives
+    )
+    contradiction_expected = truth["exception_class"] in CONTRADICTION_CLASSES
+    contradiction_detected = bool(result.proof and result.proof.contradictions)
+    critical_expected = bool(truth["should_resolve"] and alternatives_expected)
+    critical_detected = any(item.decision_critical for item in result.counterfactuals)
 
     return {
         "payment_id": result.decision.payment_id,
@@ -304,6 +330,10 @@ def _row_from_result(
         "evidence_relevant_count": len(cited_ids.intersection(relevant_evidence_ids)),
         "arithmetic_correct": arithmetic_correct,
         "retrieval_correct": required_retrieval_ids.issubset(candidate_ids),
+        "alternative_detection_correct": alternatives_detected == alternatives_expected,
+        "ambiguity_detection_correct": ambiguity_detected == ambiguity_expected,
+        "contradiction_detection_correct": contradiction_detected == contradiction_expected,
+        "decision_critical_evidence_correct": critical_detected == critical_expected,
         "reason": result.decision.reason,
         "latency_ms": result.decision.latency_ms,
         "investigator_error": result.investigator_error or "",
@@ -355,20 +385,45 @@ def _comparison(rows: List[Dict[str, object]], prefix: str) -> Dict[str, object]
     return comparison
 
 
+def _comparison_rows(rows: List[Dict[str, object]]) -> List[Dict[str, object]]:
+    """Return truth exceptions the baseline could not resolve.
+
+    The three-system comparison is intentionally scoped to hard exceptions. A
+    truth exception that the deterministic baseline already resolves is still
+    included in the overall evaluation, but it is not a comparison case.
+    """
+
+    return [
+        row
+        for row in rows
+        if row["is_exception"] and row["baseline_decision"] == "abstain"
+    ]
+
+
 def _metrics_for_rows(
     rows: List[Dict[str, object]],
     elapsed_seconds: float,
     timing_scope: str = "pipeline/verifier timing; model-inference inclusion is declared by run metadata",
 ) -> Dict[str, object]:
-    exceptions = [row for row in rows if row["is_exception"]]
+    # Operational exception metrics must agree with the baseline boundary used
+    # by details.json and the dashboard. A truth-labelled exception that the
+    # deterministic baseline already resolves is still part of the complete
+    # evaluation, but it is not an unresolved exception for the AI comparison.
+    operational_exceptions = [
+        row for row in rows if row["baseline_decision"] == "abstain"
+    ]
+    comparison_rows = _comparison_rows(rows)
     resolvable_exceptions = [
-        row for row in exceptions if row["expected_should_resolve"]
+        row for row in comparison_rows if row["expected_should_resolve"]
     ]
     ambiguous_exceptions = [
-        row for row in exceptions if not row["expected_should_resolve"]
+        row for row in comparison_rows if not row["expected_should_resolve"]
     ]
     auto_resolved = [row for row in rows if row["decision"] in {"matched_normally", "resolved"}]
     remitproof_resolved = [row for row in rows if row["decision"] == "resolved"]
+    comparison_resolved = [
+        row for row in comparison_rows if row["decision"] == "resolved"
+    ]
     correct_exception_resolutions = sum(
         bool(row["final_correct_resolution"]) for row in resolvable_exceptions
     )
@@ -379,19 +434,21 @@ def _metrics_for_rows(
     false_escalations = sum(
         bool(row["false_escalation"]) for row in resolvable_exceptions
     )
-    evidence_cited = sum(int(row["evidence_cited_count"]) for row in exceptions)
-    evidence_relevant = sum(int(row["evidence_relevant_count"]) for row in exceptions)
+    evidence_cited = sum(int(row["evidence_cited_count"]) for row in comparison_rows)
+    evidence_relevant = sum(int(row["evidence_relevant_count"]) for row in comparison_rows)
 
     return {
         "total_receipts": len(rows),
         "matched_normally": sum(row["decision"] == "matched_normally" for row in rows),
-        "exceptions": len(exceptions),
+        "exceptions": len(operational_exceptions),
         "resolved_by_remitproof": len(remitproof_resolved),
         "human_review": sum(row["decision"] == "human_review" for row in rows),
         "baseline_match_rate": _ratio(
             sum(row["baseline_decision"] == "resolve" for row in rows), len(rows)
         ),
-        "exception_resolution_rate": _ratio(len(remitproof_resolved), len(exceptions)),
+        "exception_resolution_rate": _ratio(
+            len(comparison_resolved), len(comparison_rows)
+        ),
         # These metrics intentionally use only safely resolvable exception records.
         "resolution_accuracy": _ratio(
             correct_exception_resolutions, len(resolvable_exceptions)
@@ -404,7 +461,7 @@ def _metrics_for_rows(
             false_escalations, len(resolvable_exceptions)
         ),
         "entity_resolution_accuracy": _ratio(
-            sum(bool(row["entity_correct"]) for row in exceptions), len(exceptions)
+            sum(bool(row["entity_correct"]) for row in comparison_rows), len(comparison_rows)
         ),
         "evidence_precision": _ratio(evidence_relevant, evidence_cited),
         "arithmetic_correctness": _ratio(
@@ -413,6 +470,22 @@ def _metrics_for_rows(
         "retrieval_accuracy": _ratio(
             sum(bool(row["retrieval_correct"]) for row in rows), len(rows)
         ),
+        "alternative_detection_accuracy": _ratio(
+            sum(bool(row.get("alternative_detection_correct", True)) for row in comparison_rows),
+            len(comparison_rows),
+        ),
+        "ambiguity_detection_accuracy": _ratio(
+            sum(bool(row.get("ambiguity_detection_correct", True)) for row in comparison_rows),
+            len(comparison_rows),
+        ),
+        "contradiction_detection_accuracy": _ratio(
+            sum(bool(row.get("contradiction_detection_correct", True)) for row in comparison_rows),
+            len(comparison_rows),
+        ),
+        "decision_critical_evidence_accuracy": _ratio(
+            sum(bool(row.get("decision_critical_evidence_correct", True)) for row in comparison_rows),
+            len(comparison_rows),
+        ),
         "throughput_per_minute": round(
             len(rows) / (elapsed_seconds / 60), 2
         ) if elapsed_seconds else 0.0,
@@ -420,12 +493,12 @@ def _metrics_for_rows(
             sum(int(row["latency_ms"]) for row in rows) / len(rows), 1
         ) if rows else 0.0,
         "comparison_scope": "unresolved exception records",
-        "comparison_record_count": len(exceptions),
+        "comparison_record_count": len(comparison_rows),
         "timing_scope": timing_scope,
         "comparison": {
-            "baseline": _comparison(exceptions, "baseline"),
-            "llm_only": _comparison(exceptions, "llm_only"),
-            "remitproof": _comparison(exceptions, "remitproof"),
+            "baseline": _comparison(comparison_rows, "baseline"),
+            "llm_only": _comparison(comparison_rows, "llm_only"),
+            "remitproof": _comparison(comparison_rows, "remitproof"),
         },
     }
 

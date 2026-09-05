@@ -53,6 +53,11 @@ def test_pipeline_resolves_disambiguated_semantic_exception():
     assert result.decision.decision == "resolved"
     assert result.sufficiency is not None
     assert result.sufficiency.evidence_disambiguates_alternatives is True
+    assert result.conflict is not None
+    assert result.conflict.status == "cleared"
+    assert result.resolution_proof is not None
+    assert result.resolution_proof["authorization"] == "safe_to_resolve"
+    assert any(item.decision_critical for item in result.counterfactuals)
 
 
 def test_pipeline_abstains_on_same_amount_ambiguity():
@@ -73,3 +78,7 @@ def test_pipeline_abstains_on_same_amount_ambiguity():
     assert result.decision.decision == "human_review"
     assert result.sufficiency is not None
     assert result.sufficiency.abstention_reason == "multiple_financially_valid_explanations"
+    assert result.conflict is not None
+    assert result.conflict.status == "unresolved"
+    assert result.blocked_decision is not None
+    assert len(result.blocked_decision["surviving_alternatives"]) == 2

@@ -13,6 +13,11 @@ from app.services.alternative_finder import find_valid_alternatives
 from app.services.audit_builder import build_allocation, build_evidence
 from app.services.baseline_matcher import baseline_match
 from app.services.candidate_retriever import retrieve_candidates
+from app.services.decision_artifacts import (
+    build_conflict,
+    build_counterfactuals,
+    build_decision_artifact,
+)
 from app.services.evidence_sufficiency import evaluate_evidence_sufficiency
 from app.services.proof_engine import verify_candidate
 from app.utils.loaders import Dataset
@@ -146,6 +151,11 @@ def process_payment(
         proof,
         alternatives,
     )
+    conflict = build_conflict(payment.payment_id, proof, alternatives, sufficiency)
+    counterfactuals = build_counterfactuals(candidates, proposal, alternatives, sufficiency)
+    decision_artifact = build_decision_artifact(
+        payment.payment_id, proposal, proof, alternatives, sufficiency, counterfactuals
+    )
     latency_ms = round((time.perf_counter() - started) * 1000)
     if sufficiency.safe_to_resolve:
         decision_state = "resolved"
@@ -175,5 +185,9 @@ def process_payment(
         evidence=audit_evidence,
         proof=proof,
         alternatives=alternatives,
+        conflict=conflict,
         sufficiency=sufficiency,
+        counterfactuals=counterfactuals,
+        resolution_proof=decision_artifact if sufficiency.safe_to_resolve else None,
+        blocked_decision=decision_artifact if not sufficiency.safe_to_resolve else None,
     )
