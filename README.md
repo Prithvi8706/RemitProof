@@ -2,9 +2,9 @@
 
 > **A financial reconciliation can be mathematically valid and still be wrong.**
 
-If two invoice allocations both equal the received payment, arithmetic cannot establish what the payer intended. RemitProof investigates those cases. AI proposes an explanation, deterministic code verifies the financial constraints, and the verifier searches for competing explanations. Evidence must uniquely support one allocation before automation is authorized.
+RemitProof is an evaluation-grade, read-only financial-control MVP for unresolved cross-border payment exceptions. It keeps ordinary deterministic reconciliation in charge of straightforward receipts, then uses AI to interpret semantic evidence such as remittance intent and payer relationships. The AI only proposes an allocation; deterministic code recomputes the money, validates invoice/credit state, currency, entities, duplicates, and contradictions, searches for competing financially valid explanations, and authorizes a resolution only when the evidence uniquely supports it. Otherwise it abstains and produces an auditable human-review record. The repository uses realistic synthetic data and the deployed demo does not post real Razorpay or accounting transactions.
 
-If it does not, RemitProof refuses to act.
+In one sentence: **rules are safe but limited, LLMs are capable but unsafe, and RemitProof combines semantic investigation with proof-gated authorization.**
 
 ```text
 PLAUSIBLE
