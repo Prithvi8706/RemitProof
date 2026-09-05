@@ -13,7 +13,7 @@ from app.utils.loaders import Dataset
 
 
 CACHE_FORMAT_VERSION = 2
-EVALUATOR_VERSION = "remitproof-evaluator-v4"
+EVALUATOR_VERSION = "remitproof-evaluator-v6"
 PROPOSAL_ABLATION_MODE = "proposal_only_forced_proposal_verifier_ablation"
 SYNTHETIC_BENCHMARK_LABEL = (
     "synthetic benchmark/regression partition; not an independent held-out set"

@@ -84,32 +84,55 @@ def _evidence_disambiguates(
     )
     invoice_references = set(payment_semantics.affirmative_invoice_ids)
     credit_references = set(payment_semantics.affirmative_credit_ids)
+    credit_amount_references = set(payment_semantics.affirmative_credit_amounts)
     cited_ids = set(proposal.evidence_ids)
+    trusted_sender_ids = trusted_remittance_sender_ids(
+        bundle.candidate_emails,
+        bundle.payment,
+        bundle.candidate_customers,
+        customer_id=proposal.proposed_customer,
+    )
     superseded_ids = superseded_allocation_email_ids(
         bundle.candidate_emails,
         payment=bundle.payment,
-        trusted_sender_ids=trusted_remittance_sender_ids(
-            bundle.candidate_emails,
-            bundle.payment,
-            bundle.candidate_customers,
-            customer_id=proposal.proposed_customer,
-        ),
+        trusted_sender_ids=trusted_sender_ids,
     )
     for email in bundle.candidate_emails:
-        if email.email_id not in cited_ids or email.email_id in superseded_ids:
+        if (
+            email.email_id not in cited_ids
+            or email.email_id in superseded_ids
+            or email.customer_id != proposal.proposed_customer
+            or email.sender.casefold() not in trusted_sender_ids
+        ):
             continue
         semantics = classify_document_semantics(f"{email.subject} {email.body}")
         invoice_references.update(semantics.affirmative_invoice_ids)
         credit_references.update(semantics.affirmative_credit_ids)
+        credit_amount_references.update(semantics.affirmative_credit_amounts)
 
-    if not invoice_references:
+    if not invoice_references and not credit_references and not credit_amount_references:
         return False
 
     supported = []
     for allocation in alternatives:
-        invoice_match = set(allocation.invoice_ids) == invoice_references
+        invoice_match = not invoice_references or set(allocation.invoice_ids) == invoice_references
         credit_match = not credit_references or set(allocation.credit_ids) == credit_references
-        if invoice_match and credit_match:
+        allocation_credit_amounts = {
+            credit.amount
+            for credit in bundle.candidate_credits
+            if credit.credit_id in allocation.credit_ids
+        }
+        amount_match = (
+            not credit_amount_references
+            or (
+                allocation_credit_amounts == credit_amount_references
+                and (
+                    credit_references
+                    or len(allocation.credit_ids) == len(credit_amount_references)
+                )
+            )
+        )
+        if invoice_match and credit_match and amount_match:
             supported.append(allocation)
     return len(supported) == 1 and _proposal_matches(proposal, supported[0])
 
@@ -126,15 +149,16 @@ def _evidence_matrix(
     invoices = {invoice.invoice_id for invoice in bundle.candidate_invoices}
     credits = {credit.credit_id for credit in bundle.candidate_credits}
     credit_amounts = {credit.credit_id: credit.amount for credit in bundle.candidate_credits}
+    trusted_sender_ids = trusted_remittance_sender_ids(
+        bundle.candidate_emails,
+        bundle.payment,
+        bundle.candidate_customers,
+        customer_id=proposal.proposed_customer,
+    )
     superseded_ids = superseded_allocation_email_ids(
         bundle.candidate_emails,
         payment=bundle.payment,
-        trusted_sender_ids=trusted_remittance_sender_ids(
-            bundle.candidate_emails,
-            bundle.payment,
-            bundle.candidate_customers,
-            customer_id=proposal.proposed_customer,
-        ),
+        trusted_sender_ids=trusted_sender_ids,
     )
     rows: List[EvidenceAlternativeAssessment] = []
     for evidence_id in proposal.evidence_ids:
@@ -157,21 +181,42 @@ def _evidence_matrix(
                     or allocation_credits.intersection(semantics.prohibited_credit_ids)
                     or selected_credit_amounts.intersection(semantics.prohibited_credit_amounts)
                 )
-                exact_invoice_support = (
-                    email.customer_id == allocation.customer_id
-                    and bool(semantics.affirmative_invoice_ids)
-                    and allocation_invoices == set(semantics.affirmative_invoice_ids)
+                has_affirmative_allocation = bool(
+                    semantics.affirmative_invoice_ids
+                    or semantics.affirmative_credit_ids
+                    or semantics.affirmative_credit_amounts
                 )
-                credit_support = not semantics.affirmative_credit_ids or (
+                invoice_support = not semantics.affirmative_invoice_ids or (
+                    allocation_invoices == set(semantics.affirmative_invoice_ids)
+                )
+                credit_id_support = not semantics.affirmative_credit_ids or (
                     allocation_credits == set(semantics.affirmative_credit_ids)
+                )
+                credit_amount_support = not semantics.affirmative_credit_amounts or (
+                    selected_credit_amounts == set(semantics.affirmative_credit_amounts)
+                    and (
+                        semantics.affirmative_credit_ids
+                        or len(allocation_credits)
+                        == len(semantics.affirmative_credit_amounts)
+                    )
                 )
                 if prohibited:
                     relationship = "contradicts"
                     reason = "The remittance explicitly prohibits a selected record."
                 elif evidence_id in superseded_ids:
                     relationship = "superseded"
-                    reason = "A later explicit correction from the same customer replaces this instruction."
-                elif exact_invoice_support and credit_support:
+                    reason = (
+                        "A later payment-linked correction from a trusted source "
+                        "replaces this instruction."
+                    )
+                elif (
+                    email.customer_id == allocation.customer_id
+                    and email.sender.casefold() in trusted_sender_ids
+                    and has_affirmative_allocation
+                    and invoice_support
+                    and credit_id_support
+                    and credit_amount_support
+                ):
                     relationship = "supports"
                     reason = "The remittance explicitly identifies this allocation."
             elif evidence_id in customers and evidence_id == allocation.customer_id:

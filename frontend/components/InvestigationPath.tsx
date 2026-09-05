@@ -21,7 +21,9 @@ export function InvestigationPath({ detail }: { detail: ExceptionDetail }) {
   );
   const alternativesFound = detail.alternatives.length > 1;
   const conflictCleared = Boolean(
-    alternativesFound && detail.sufficiency?.evidence_disambiguates_alternatives,
+    alternativesFound &&
+    detail.sufficiency?.evidence_disambiguates_alternatives &&
+    detail.conflict?.status === "cleared",
   );
   const resolved = detail.decision.decision === "resolved";
   const unresolvedNonAllocationConflict = Boolean(

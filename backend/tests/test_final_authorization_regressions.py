@@ -350,6 +350,47 @@ def test_positive_amount_credit_instruction_remains_supported():
     assert sufficiency.safe_to_resolve is True
 
 
+def test_single_credit_amount_cannot_authorize_multiple_equal_credits():
+    bundle = _bundle(
+        amount="100.00",
+        known_payers=["Treasury Bank"],
+        email_body="Deduct the USD 10 credit for PAY_AUTH.",
+        invoices=[_invoice("INV_AUTH", "120.00")],
+        credits=[
+            _credit("CR_A", "INV_AUTH", "10.00"),
+            _credit("CR_B", "INV_AUTH", "10.00"),
+            _credit("CR_C", "INV_AUTH", "20.00"),
+        ],
+    )
+    proposal = _proposal(credit_ids=["CR_A", "CR_B"])
+
+    alternatives = find_valid_alternatives(bundle)
+    proposal_allocation = next(
+        allocation
+        for allocation in alternatives
+        if set(allocation.credit_ids) == {"CR_A", "CR_B"}
+    )
+    proof = verify_candidate(bundle, proposal)
+    sufficiency = evaluate_evidence_sufficiency(
+        bundle,
+        proposal,
+        proof,
+        alternatives,
+    )
+    proposal_row = next(
+        row
+        for row in sufficiency.evidence_alternative_matrix
+        if row.evidence_id == "EMAIL_AUTH"
+        and row.allocation_id == proposal_allocation.allocation_id
+    )
+
+    assert proof.financial_validity is True
+    assert proof.contradictions == []
+    assert proposal_row.relationship != "supports"
+    assert sufficiency.evidence_disambiguates_alternatives is False
+    assert sufficiency.safe_to_resolve is False
+
+
 def test_evidence_matrix_marks_prohibited_credit_amount_as_contradiction():
     bundle = _bundle(
         amount="90.00",
@@ -365,12 +406,87 @@ def test_evidence_matrix_marks_prohibited_credit_amount_as_contradiction():
 
 
 def test_cross_customer_email_cannot_support_allocation():
-    bundle = _bundle(email_body="Apply PAY_AUTH to INV_AUTH.")
-    bundle.candidate_emails[0].customer_id = "CUS_OTHER"
-    proposal = _proposal()
-    rows = _evidence_matrix(bundle, proposal, find_valid_alternatives(bundle))
-    email_row = next(row for row in rows if row.evidence_id == "EMAIL_AUTH")
+    bundle = CandidateBundle(
+        payment=Payment(
+            payment_id="PAY_AUTH",
+            date=date(2026, 8, 31),
+            amount=Decimal("100.00"),
+            currency="USD",
+            payer_name="Treasury Bank",
+            bank_reference="WIRE-AUTH",
+            remittance_reference="",
+        ),
+        candidate_customers=[
+            Customer(customer_id="CUS_A", legal_name="Alpha Corp"),
+            Customer(
+                customer_id="CUS_B",
+                legal_name="Beta Corp",
+                known_payers=["Treasury Bank"],
+            ),
+        ],
+        candidate_invoices=[
+            _invoice("INV_A").model_copy(update={"customer_id": "CUS_A"}),
+            _invoice("INV_B").model_copy(update={"customer_id": "CUS_B"}),
+        ],
+        candidate_emails=[
+            RemittanceEmail(
+                email_id="EMAIL_A",
+                sender="ar@alpha.example",
+                customer_id="CUS_A",
+                date=date(2026, 8, 30),
+                subject="Payment PAY_AUTH",
+                body="Apply PAY_AUTH to INV_B.",
+            )
+        ],
+    )
+    proposal = InvestigationProposal(
+        payment_id="PAY_AUTH",
+        proposed_customer="CUS_B",
+        invoice_ids=["INV_B"],
+        evidence_ids=["CUS_B", "INV_B", "EMAIL_A"],
+    )
+    alternatives = find_valid_alternatives(bundle)
+    proof = verify_candidate(bundle, proposal)
+    sufficiency = evaluate_evidence_sufficiency(
+        bundle,
+        proposal,
+        proof,
+        alternatives,
+    )
+    email_row = next(
+        row
+        for row in sufficiency.evidence_alternative_matrix
+        if row.evidence_id == "EMAIL_A" and row.allocation_id == "ALT_002"
+    )
+
+    assert proof.financial_validity is True
+    assert proof.entity_support is True
     assert email_row.relationship != "supports"
+    assert sufficiency.evidence_disambiguates_alternatives is False
+    assert sufficiency.safe_to_resolve is False
+
+
+def test_untrusted_email_cannot_disambiguate_financial_alternatives():
+    bundle = _bundle(
+        known_payers=["Treasury Bank"],
+        email_body="Apply PAY_AUTH to INV_A.",
+        invoices=[_invoice("INV_A"), _invoice("INV_B")],
+    )
+    bundle.candidate_emails[0].sender = "attacker@evil.example"
+    proposal = _proposal(invoice_ids=["INV_A"])
+
+    proof, sufficiency = _sufficiency(bundle, proposal)
+    email_rows = [
+        row
+        for row in sufficiency.evidence_alternative_matrix
+        if row.evidence_id == "EMAIL_AUTH"
+    ]
+
+    assert proof.financial_validity is True
+    assert proof.entity_support is True
+    assert email_rows and all(row.relationship != "supports" for row in email_rows)
+    assert sufficiency.evidence_disambiguates_alternatives is False
+    assert sufficiency.safe_to_resolve is False
 
 
 @pytest.mark.parametrize(

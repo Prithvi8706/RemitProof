@@ -120,14 +120,21 @@ def build_counterfactuals(
                 decision_with_evidence="resolved" if sufficiency.safe_to_resolve else "human_review",
                 decision_without_evidence="resolved" if reduced_sufficiency.safe_to_resolve else "human_review",
                 decision_critical=changed,
-                reason=(
-                    "Without this record, competing financially valid allocations remain."
-                    if changed
-                    else "Removing this record does not change the authorization decision."
-                ),
+                reason=_counterfactual_reason(changed, len(alternatives)),
             )
         )
     return rows
+
+
+def _counterfactual_reason(
+    changed: bool,
+    alternative_count: int,
+) -> str:
+    if not changed:
+        return "Removing this record does not change the authorization decision."
+    if alternative_count > 1:
+        return "Without this record, competing financially valid allocations remain."
+    return "Without this record, the proposed allocation lacks required evidence."
 
 
 def build_decision_artifact(

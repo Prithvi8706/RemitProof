@@ -57,7 +57,10 @@ const METRIC_DEFINITIONS: Array<{ key: string; label: string; definition: string
 export default async function BenchmarkPage() {
   const { benchmark, caseData } = await getConsistentBenchmarkPublication();
   const comparison = benchmark.comparison;
-  const prevented = caseData.cases.filter((row) => row.llm_only_wrong_resolution);
+  const unsafe = caseData.cases.filter((row) => row.wrong_auto_resolution);
+  const prevented = caseData.cases.filter(
+    (row) => row.llm_only_wrong_resolution && !row.wrong_auto_resolution,
+  );
   const recovered = caseData.cases.filter((row) => row.recovered_from_baseline);
   const escalated = caseData.cases.filter((row) => row.false_escalation);
   const benchmarkRun = describeBenchmarkRun(benchmark);
@@ -212,10 +215,11 @@ export default async function BenchmarkPage() {
             </table>
           </div>
           <p className="mt-4 max-w-[80ch] text-sm leading-6 text-ink">
-            Rules alone resolved nothing. Unverified proposals resolved everything and were wrong{" "}
-            {comparison.llm_only.wrong_auto_resolutions} times. RemitProof kept{" "}
-            {comparison.remitproof.correct_resolutions} of the {comparison.llm_only.correct_resolutions} correct
-            resolutions while authorizing zero wrong ones — the cost is{" "}
+            Rules alone resolved {comparison.baseline.resolved} cases. Unverified proposals automatically resolved{" "}
+            {comparison.llm_only.resolved} of {benchmark.comparison_record_count}: {comparison.llm_only.correct_resolutions}{" "}
+            correct and {comparison.llm_only.wrong_auto_resolutions} wrong. RemitProof safely resolved{" "}
+            {comparison.remitproof.correct_resolutions} and authorized {comparison.remitproof.wrong_auto_resolutions}{" "}
+            wrong automatic resolutions — the cost is{" "}
             {comparison.remitproof.false_escalations} unnecessary escalations.
           </p>
         </section>
@@ -226,6 +230,17 @@ export default async function BenchmarkPage() {
         />
 
         <BenchmarkCaseExplorer cases={caseData.cases} />
+
+        <CaseListSection
+          id="unsafe-remitproof"
+          icon={<ShieldAlert className="size-5" aria-hidden="true" />}
+          iconClass="bg-danger-soft text-danger"
+          title="RemitProof wrong auto-resolutions"
+          intro={`${unsafe.length} cases were automatically resolved incorrectly by RemitProof. These are safety failures, not prevented decisions.`}
+          cases={unsafe}
+          rightLabel="RemitProof outcome"
+          right={() => "Wrong automatic resolution"}
+        />
 
         <CaseListSection
           id="prevented"

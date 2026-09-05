@@ -1,5 +1,7 @@
 from datetime import date
 
+import pytest
+
 from app.models import CandidateBundle, InvestigationProposal
 from app.services.alternative_finder import find_valid_alternatives
 from app.services.evidence_sufficiency import evaluate_evidence_sufficiency
@@ -18,6 +20,8 @@ def _bundle(
     remittance_reference: str = "",
     old_sender: str = "treasury@acme.example",
     new_sender: str = "treasury@acme.example",
+    candidate_invoices=None,
+    candidate_credits=None,
     old_date=date(2026, 1, 5),
     new_date=date(2026, 1, 10),
 ) -> CandidateBundle:
@@ -40,7 +44,7 @@ def _bundle(
                     "known_payers": ["Treasury Bank"],
                 }
             ],
-            "candidate_invoices": [
+            "candidate_invoices": candidate_invoices or [
                 {
                     "invoice_id": "INV_201",
                     "customer_id": "CUS_TEST",
@@ -60,7 +64,7 @@ def _bundle(
                     "description": "Synthetic invoice",
                 },
             ],
-            "candidate_credits": [],
+            "candidate_credits": candidate_credits or [],
             "candidate_emails": [
                 {
                     "email_id": "EMAIL_OLD",
@@ -83,12 +87,12 @@ def _bundle(
     )
 
 
-def _proposal(*, invoice_ids, evidence_ids) -> InvestigationProposal:
+def _proposal(*, invoice_ids, evidence_ids, credit_ids=None) -> InvestigationProposal:
     return InvestigationProposal(
         payment_id="PAY_TEST",
         proposed_customer="CUS_TEST",
         invoice_ids=invoice_ids,
-        credit_ids=[],
+        credit_ids=credit_ids or [],
         evidence_ids=evidence_ids,
     )
 
@@ -134,9 +138,9 @@ def test_newer_instruction_can_supersede_old_instruction():
 
 def test_correction_can_switch_between_current_payment_reference_fields():
     bundle = _bundle(
-        old_email_body="For WIRE_TEST, please apply the payment to INV_201.",
+        old_email_body="For WIRE_TEST_77, please apply the payment to INV_201.",
         new_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
-        bank_reference="WIRE_TEST",
+        bank_reference="WIRE_TEST_77",
     )
     proposal = _proposal(
         invoice_ids=["INV_202"],
@@ -163,6 +167,64 @@ def test_credit_amount_correction_supersedes_older_amount_claim():
     assert _superseded(bundle) == {"EMAIL_OLD"}
 
 
+def test_credit_only_correction_can_disambiguate_credit_alternatives():
+    bundle = _bundle(
+        old_email_body="For PAY_TEST, apply credit CR_OLD to the payment.",
+        new_email_body="Correction for PAY_TEST: apply credit CR_NEW to the payment.",
+        candidate_invoices=[
+            {
+                "invoice_id": "INV_201",
+                "customer_id": "CUS_TEST",
+                "amount": "120.00",
+                "currency": "USD",
+                "issue_date": date(2025, 12, 1),
+                "due_date": date(2026, 1, 1),
+                "description": "Synthetic invoice",
+            }
+        ],
+        candidate_credits=[
+            {
+                "credit_id": "CR_OLD",
+                "customer_id": "CUS_TEST",
+                "invoice_id": "INV_201",
+                "amount": "20.00",
+                "currency": "USD",
+                "reason": "Synthetic credit",
+            },
+            {
+                "credit_id": "CR_NEW",
+                "customer_id": "CUS_TEST",
+                "invoice_id": "INV_201",
+                "amount": "20.00",
+                "currency": "USD",
+                "reason": "Synthetic correction credit",
+            },
+        ],
+    )
+    proposal = _proposal(
+        invoice_ids=["INV_201"],
+        credit_ids=["CR_NEW"],
+        evidence_ids=["CUS_TEST", "INV_201", "CR_NEW", "EMAIL_NEW"],
+    )
+
+    proof, alternatives, sufficiency = _decide(bundle, proposal)
+
+    assert _superseded(bundle) == {"EMAIL_OLD"}
+    assert len(alternatives) == 2
+    assert proof.financial_validity is True
+    assert proof.contradictions == []
+    assert sufficiency.evidence_disambiguates_alternatives is True
+    assert any(
+        row.evidence_id == "EMAIL_NEW"
+        and row.relationship == "supports"
+        and set(alternative.credit_ids) == {"CR_NEW"}
+        for alternative in alternatives
+        for row in sufficiency.evidence_alternative_matrix
+        if row.allocation_id == alternative.allocation_id
+    )
+    assert sufficiency.safe_to_resolve is True
+
+
 def test_unrelated_later_correction_cannot_supersede_current_instruction():
     bundle = _bundle(
         old_email_body="For PAY_TEST, please apply the payment to INV_201.",
@@ -186,6 +248,28 @@ def test_untrusted_later_correction_cannot_supersede_current_instruction():
         old_email_body="For PAY_TEST, please apply the payment to INV_201.",
         new_email_body="Correction for PAY_TEST: please apply the payment to INV_202.",
         new_sender="attacker@evil.example",
+    )
+    proposal = _proposal(
+        invoice_ids=["INV_202"],
+        evidence_ids=["CUS_TEST", "INV_202", "EMAIL_NEW"],
+    )
+
+    proof, _, sufficiency = _decide(bundle, proposal)
+
+    assert _superseded(bundle) == set()
+    assert proof.contradictions
+    assert sufficiency.safe_to_resolve is False
+    assert sufficiency.abstention_reason == "contradictory_evidence"
+
+
+@pytest.mark.parametrize("generic_reference", ["WIRE", "ACH", "SEPA", "SWIFT", "NEFT", "RTGS"])
+def test_generic_bank_reference_cannot_authorize_temporal_supersession(generic_reference):
+    bundle = _bundle(
+        old_email_body=f"For {generic_reference}, please apply the payment to INV_201.",
+        new_email_body=(
+            f"Correction for {generic_reference}: please apply the payment to INV_202."
+        ),
+        bank_reference=generic_reference,
     )
     proposal = _proposal(
         invoice_ids=["INV_202"],

@@ -913,6 +913,7 @@ _CASE_CSV_COLUMNS = {
     "amount",
     "currency",
     "baseline_decision",
+    "baseline_correct_resolution",
     "llm_only_decision",
     "llm_only_correct_resolution",
     "comparator_mode",
@@ -922,7 +923,19 @@ _CASE_CSV_COLUMNS = {
     "correct_abstention",
     "false_escalation",
     "wrong_auto_resolution",
+    "entity_correct",
+    "evidence_cited_count",
+    "evidence_relevant_count",
+    "arithmetic_correct",
+    "retrieval_correct",
+    "alternative_detection_correct",
+    "ambiguity_detection_correct",
+    "contradiction_detection_correct",
+    "decision_critical_evidence_correct",
     "reason",
+    "latency_ms",
+    "investigator_error",
+    "evaluation_generation_id",
 }
 _CLASS_CSV_COLUMNS = {
     "exception_class",
@@ -954,12 +967,25 @@ def _csv_rows(content: bytes, filename: str, required_columns: set) -> List[Dict
 
 _CASE_BOOLEAN_COLUMNS = {
     "is_exception",
+    "baseline_correct_resolution",
     "llm_only_correct_resolution",
     "final_correct_resolution",
     "expected_should_resolve",
     "correct_abstention",
     "false_escalation",
     "wrong_auto_resolution",
+    "entity_correct",
+    "arithmetic_correct",
+    "retrieval_correct",
+    "alternative_detection_correct",
+    "ambiguity_detection_correct",
+    "contradiction_detection_correct",
+    "decision_critical_evidence_correct",
+}
+_CASE_INTEGER_COLUMNS = {
+    "evidence_cited_count",
+    "evidence_relevant_count",
+    "latency_ms",
 }
 _CLASS_AGGREGATE_COLUMNS = (
     "records",
@@ -982,6 +1008,142 @@ def _csv_nonnegative_int(row: Dict[str, str], column: str, filename: str) -> int
     return parsed
 
 
+def _validate_case_row_linkage(
+    row: Dict[str, str],
+    detail: Dict[str, object],
+    *,
+    generation_id: str,
+    comparator_mode: str,
+) -> None:
+    """Ensure a CSV outcome row still describes its matching detail record."""
+
+    payment = detail["payment"]
+    baseline = detail["baseline"]
+    decision = detail["decision"]
+    proposal = detail["proposal"]
+    payment_id = str(payment["payment_id"])
+
+    expected_strings = {
+        "payment_id": payment_id,
+        "split": str(detail["split"]),
+        "exception_class": str(detail["exception_class"]),
+        "payer": str(payment["payer_name"]),
+        "amount": str(payment["amount"]),
+        "currency": str(payment["currency"]),
+        "baseline_decision": "resolve" if baseline["status"] == "matched" else "abstain",
+        "llm_only_decision": (
+            "resolve"
+            if proposal is not None
+            and proposal["proposed_customer"]
+            and proposal["invoice_ids"]
+            else "abstain"
+        ),
+        "comparator_mode": comparator_mode,
+        "decision": str(decision["decision"]),
+        "reason": str(decision["reason"]),
+        "investigator_error": str(detail["investigator_error"] or ""),
+        "evaluation_generation_id": generation_id,
+    }
+    for column, expected in expected_strings.items():
+        if row.get(column) != expected:
+            raise _artifact_error(
+                "results.csv",
+                f"{column} for {payment_id} disagrees with details.json",
+            )
+
+    expected_bools = {
+        "is_exception": bool(detail["is_exception"]),
+        "expected_should_resolve": bool(detail["expected_should_resolve"]),
+    }
+    for column, expected in expected_bools.items():
+        if _csv_bool(row, column, "results.csv") != expected:
+            raise _artifact_error(
+                "results.csv",
+                f"{column} for {payment_id} disagrees with details.json",
+            )
+
+    row_decision = str(decision["decision"])
+    baseline_matched = baseline["status"] == "matched"
+    if (baseline_matched and row_decision != "matched_normally") or (
+        not baseline_matched and row_decision == "matched_normally"
+    ):
+        raise _artifact_error(
+            "results.csv",
+            f"decision for {payment_id} is inconsistent with the baseline outcome",
+        )
+    # ``baseline_correct_resolution`` is ground-truth-dependent for an unusual
+    # truth exception that the baseline happens to resolve. The detail record
+    # does not carry the hidden correct allocation, so only enforce the
+    # deterministic abstention invariant here.
+    if not baseline_matched and _csv_bool(
+        row, "baseline_correct_resolution", "results.csv"
+    ):
+        raise _artifact_error(
+            "results.csv",
+            f"baseline_correct_resolution for {payment_id} is inconsistent",
+        )
+    expected_llm_only = expected_strings["llm_only_decision"] == "resolve"
+    llm_only_correct = _csv_bool(row, "llm_only_correct_resolution", "results.csv")
+    if not expected_llm_only and llm_only_correct:
+        raise _artifact_error(
+            "results.csv",
+            f"llm_only_correct_resolution for {payment_id} is inconsistent",
+        )
+
+    final_correct = _csv_bool(row, "final_correct_resolution", "results.csv")
+    if row_decision == "human_review" and final_correct:
+        raise _artifact_error(
+            "results.csv",
+            f"final_correct_resolution for {payment_id} is inconsistent",
+        )
+    expected_outcomes = {
+        "correct_abstention": row_decision == "human_review" and not detail["expected_should_resolve"],
+        "false_escalation": row_decision == "human_review" and bool(detail["expected_should_resolve"]),
+        "wrong_auto_resolution": row_decision in {"matched_normally", "resolved"} and not final_correct,
+    }
+    for column, expected in expected_outcomes.items():
+        if _csv_bool(row, column, "results.csv") != expected:
+            raise _artifact_error(
+                "results.csv",
+                f"{column} for {payment_id} disagrees with details.json",
+            )
+
+    proof = detail["proof"]
+    expected_arithmetic = (
+        row_decision in {"matched_normally", "human_review"}
+        or (
+            row_decision == "resolved"
+            and isinstance(proof, dict)
+            and proof.get("financial_validity") is True
+        )
+    )
+    if _csv_bool(row, "arithmetic_correct", "results.csv") != expected_arithmetic:
+        raise _artifact_error(
+            "results.csv",
+            f"arithmetic_correct for {payment_id} disagrees with details.json",
+        )
+
+    proposal_evidence_count = len(set(proposal["evidence_ids"])) if proposal else 0
+    cited_count = _csv_nonnegative_int(row, "evidence_cited_count", "results.csv")
+    relevant_count = _csv_nonnegative_int(row, "evidence_relevant_count", "results.csv")
+    if cited_count != proposal_evidence_count:
+        raise _artifact_error(
+            "results.csv",
+            f"evidence_cited_count for {payment_id} disagrees with details.json",
+        )
+    if relevant_count > cited_count:
+        raise _artifact_error(
+            "results.csv",
+            f"evidence_relevant_count for {payment_id} exceeds cited evidence",
+        )
+    latency_ms = _csv_nonnegative_int(row, "latency_ms", "results.csv")
+    if latency_ms != int(decision["latency_ms"]):
+        raise _artifact_error(
+            "results.csv",
+            f"latency_ms for {payment_id} disagrees with details.json",
+        )
+
+
 def load_case_comparisons() -> Dict[str, object]:
     """Serve per-case baseline/ablation/RemitProof outcomes from the published CSVs.
 
@@ -1000,6 +1162,11 @@ def load_case_comparisons() -> Dict[str, object]:
         str(detail["payment"]["payment_id"])
         for detail in details
     }
+    details_by_payment_id = {
+        str(detail["payment"]["payment_id"]): detail
+        for detail in details
+    }
+    comparator_mode = str(metrics["comparison"]["llm_only"]["mode"])
     result_payment_ids = []
     for row in rows:
         payment_id = row.get("payment_id", "")
@@ -1008,12 +1175,21 @@ def load_case_comparisons() -> Dict[str, object]:
         result_payment_ids.append(payment_id)
         for column in _CASE_BOOLEAN_COLUMNS:
             _csv_bool(row, column, "results.csv")
+        for column in _CASE_INTEGER_COLUMNS:
+            _csv_nonnegative_int(row, column, "results.csv")
     if len(result_payment_ids) != len(set(result_payment_ids)):
         raise _artifact_error("results.csv", "payment IDs must be unique")
     if set(result_payment_ids) != detail_payment_ids:
         raise _artifact_error(
             "results.csv",
             "payment IDs disagree with the validated details publication",
+        )
+    for row in rows:
+        _validate_case_row_linkage(
+            row,
+            details_by_payment_id[row["payment_id"]],
+            generation_id=generation_id,
+            comparator_mode=comparator_mode,
         )
 
     cases: List[Dict[str, object]] = []

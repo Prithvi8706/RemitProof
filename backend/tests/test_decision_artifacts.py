@@ -6,7 +6,16 @@ from app.models import (
     ProofResult,
     SufficiencyResult,
 )
-from app.services.decision_artifacts import build_decision_artifact
+from app.services.decision_artifacts import (
+    _counterfactual_reason,
+    build_decision_artifact,
+)
+
+
+def test_single_alternative_counterfactual_explains_missing_evidence():
+    assert _counterfactual_reason(True, 1) == (
+        "Without this record, the proposed allocation lacks required evidence."
+    )
 
 
 def test_blocked_single_alternative_preserves_financial_proof_status():

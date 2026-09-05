@@ -120,6 +120,33 @@ def test_benchmark_cases_reject_duplicate_or_missing_payment_ids(monkeypatch, tm
     assert "payment IDs" in response.json()["detail"]
 
 
+def test_benchmark_cases_reject_rows_linked_to_the_wrong_payment(monkeypatch, tmp_path):
+    rows, metrics, details = _active_payloads()
+    first_payment_id = rows[0]["payment_id"]
+    rows[0]["payment_id"] = rows[1]["payment_id"]
+    rows[1]["payment_id"] = first_payment_id
+    _write_valid_snapshot(tmp_path, metrics, details, results_csv=_csv_bytes(rows))
+    monkeypatch.setattr(results, "RESULTS_DIR", tmp_path)
+
+    response = client.get("/api/benchmark/cases")
+
+    assert response.status_code == 503
+    assert "disagrees with details.json" in response.json()["detail"]
+
+
+def test_benchmark_cases_reject_inconsistent_row_outcome_flags(monkeypatch, tmp_path):
+    rows, metrics, details = _active_payloads()
+    resolved_row = next(row for row in rows if row["decision"] == "resolved")
+    resolved_row["wrong_auto_resolution"] = "True"
+    _write_valid_snapshot(tmp_path, metrics, details, results_csv=_csv_bytes(rows))
+    monkeypatch.setattr(results, "RESULTS_DIR", tmp_path)
+
+    response = client.get("/api/benchmark/cases")
+
+    assert response.status_code == 503
+    assert "wrong_auto_resolution" in response.json()["detail"]
+
+
 def test_benchmark_cases_reject_tampered_class_aggregates(monkeypatch, tmp_path):
     _, metrics, details = _active_payloads()
     class_rows = list(

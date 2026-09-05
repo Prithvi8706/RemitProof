@@ -355,9 +355,9 @@ def verify_candidate(
             continue
         email_text = f"{email.subject} {email.body}"
         semantics = classify_document_semantics(email_text)
-        # A dated, explicit correction from the same customer supersedes an
-        # older affirmative instruction. Its prohibitions remain active safety
-        # input; only its positive allocation claim loses authority.
+        # A dated, explicit, payment-linked correction from a trusted source
+        # supersedes an older affirmative instruction. Its prohibitions remain
+        # active safety input; only its positive allocation claim loses authority.
         superseded = email.email_id in superseded_email_ids
         mentioned_invoice_ids = set() if superseded else semantics.affirmative_invoice_ids
         mentioned_credit_ids = set() if superseded else semantics.affirmative_credit_ids
