@@ -1,46 +1,20 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Check, CircleAlert, GitCompareArrows, ShieldCheck, X } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { describeBenchmarkRun } from "@/lib/benchmark-provenance";
 import type { BenchmarkData, DashboardData } from "@/lib/types";
 import { formatPercent } from "@/lib/format";
 import { ResearchNav } from "./ResearchNav";
 import { ResearchRuntime } from "./ResearchRuntime";
 
-const EvidenceScene = dynamic(() => import("./EvidenceScene"), { ssr: false });
+import EvidenceScene from "./EvidenceScene";
 const spring = { type: "spring" as const, stiffness: 260, damping: 34, mass: 0.8 };
 
-function EvidenceFallback() {
-  return (
-    <svg className="research-evidence-svg" viewBox="0 0 1000 400" role="img" aria-label="Several financially valid allocations diverge, while verified evidence uniquely supports one proposal">
-      <path d="M40 310 C260 250 360 80 540 235 S790 330 960 278" className="hypothesis-line dashed" />
-      <path d="M40 310 C240 270 370 330 530 190 S790 210 960 240" className="hypothesis-line dashed" />
-      <path d="M40 310 C245 270 350 160 520 110 S780 48 960 60" className="verified-line" />
-      <circle cx="960" cy="60" r="7" className="verified-point" />
-      <text x="40" y="350">PROPOSAL</text><text x="960" y="38" textAnchor="end">VERIFIED EVIDENCE</text><text x="960" y="350" textAnchor="end">ALTERNATIVES ELIMINATED</text>
-    </svg>
-  );
-}
-
 export function ResearchHome({ dashboard, benchmark }: { dashboard: DashboardData; benchmark: BenchmarkData }) {
-  const [webgl, setWebgl] = useState(false);
   const shouldReduceMotion = useReducedMotion() === true;
   const benchmarkRun = describeBenchmarkRun(benchmark);
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const large = matchMedia("(min-width: 1024px)").matches;
-      try {
-        const canvas = document.createElement("canvas");
-        setWebgl(Boolean(!reduced && large && (canvas.getContext("webgl2") || canvas.getContext("webgl"))));
-      } catch { setWebgl(false); }
-    });
-    return () => cancelAnimationFrame(frame);
-  }, []);
 
   const stages = [
     ["01", "Proposal", "AI constructs one structured hypothesis from the unresolved receipt."],
@@ -76,8 +50,8 @@ export function ResearchHome({ dashboard, benchmark }: { dashboard: DashboardDat
             </motion.div>
           </div>
           <figure className="research-hero-figure">
-            <div className="research-scene">{webgl ? <EvidenceScene /> : <EvidenceFallback />}</div>
-            <figcaption><span>FIGURE 01</span> Evidence must eliminate every competing financial explanation before authorization.</figcaption>
+            <EvidenceScene />
+            <figcaption><span>ILLUSTRATION</span> Simplified example: financial and record checks are assumed to pass. Without evidence selecting one allocation, human review is required.</figcaption>
           </figure>
           <div className="research-hero-fade" aria-hidden="true" />
         </section>

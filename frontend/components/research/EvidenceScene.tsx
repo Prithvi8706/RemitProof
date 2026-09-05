@@ -1,42 +1,64 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Line, Text } from "@react-three/drei";
-import { useRef } from "react";
-import type { Group } from "three";
-import { scrollVelocity } from "./ResearchRuntime";
+import { useEffect, useRef, useState } from "react";
+import { useInView, useReducedMotion } from "framer-motion";
+import { ArrowDown, Check, Mail, Pause, Play, RotateCcw, ShieldCheck } from "lucide-react";
 
-const alternatives: [number, number, number][][] = [
-  [[-5, -1.2, 0], [-3.4, -0.8, 0], [-1.2, 0.5, 0], [1.1, -0.3, 0], [4.7, -0.7, 0]],
-  [[-5, -1.2, 0], [-3.2, -0.4, 0], [-1.3, -0.7, 0], [1.4, 0.4, 0], [4.7, -0.3, 0]],
-  [[-5, -1.2, 0], [-3.5, -1, 0], [-1, -0.2, 0], [1.7, -0.8, 0], [4.7, -1.05, 0]],
+const captions = [
+  "A payment arrives. Two allocations balance.",
+  "The amount proves a match is possible. The email identifies the invoices.",
+  "Evidence supports one allocation. RemitProof can authorize it.",
 ];
 
-function EvidenceGraph() {
-  const group = useRef<Group>(null);
-  useFrame((state) => {
-    if (!group.current) return;
-    const velocity = scrollVelocity.current;
-    group.current.rotation.x += ((velocity * 0.014) - group.current.rotation.x) * 0.08;
-    group.current.rotation.y += ((velocity * 0.01) - group.current.rotation.y) * 0.08;
-    group.current.position.y = Math.sin(state.clock.elapsedTime * 0.22) * 0.025;
-  });
-  return (
-    <group ref={group}>
-      {alternatives.map((points, index) => <Line key={index} points={points} color="#6e6e73" lineWidth={0.65} dashed dashSize={0.12} gapSize={0.1} transparent opacity={0.35 - index * 0.06} />)}
-      <Line points={[[-5,-1.2,0.1],[-3.5,-0.65,0.1],[-1.7,0.1,0.1],[0.2,0.72,0.1],[2.4,1.15,0.1],[4.7,1.22,0.1]]} color="#f5f5f7" lineWidth={1.5} />
-      <mesh position={[4.7,1.22,0.1]}><sphereGeometry args={[0.085,24,24]} /><meshBasicMaterial color="#10b981" /></mesh>
-      <Text position={[-4.95,-1.55,0]} fontSize={0.18} color="#86868b" anchorX="left">PROPOSAL</Text>
-      <Text position={[4.75,1.48,0]} fontSize={0.18} color="#10b981" anchorX="right">VERIFIED EVIDENCE</Text>
-      <Text position={[4.75,-1.42,0]} fontSize={0.15} color="#6e6e73" anchorX="right">ALTERNATIVES ELIMINATED</Text>
-    </group>
-  );
-}
-
 export default function EvidenceScene() {
-  return (
-    <Canvas aria-hidden="true" orthographic camera={{ position: [0,0,10], zoom: 75 }} dpr={[1,2]} gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}>
-      <EvidenceGraph />
-    </Canvas>
-  );
+  const ref = useRef<HTMLDivElement>(null);
+  const visible = useInView(ref, { amount: 0.3 });
+  const reduced = useReducedMotion();
+  const [step, setStep] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const activeStep = reduced ? 2 : step;
+
+  useEffect(() => {
+    if (!visible || reduced || paused || step === 2) return;
+    const timer = setTimeout(() => setStep(value => value + 1), 3600);
+    return () => clearTimeout(timer);
+  }, [visible, reduced, paused, step]);
+
+  return <div ref={ref} className="payment-scene" data-step={activeStep}>
+    <div className="payment-scene-top"><span>Illustrative payment · USD</span><span className="payment-scene-status">{activeStep === 2 ? "Evidence verified" : "Authorization pending"}</span></div>
+    <div className="payment-desk">
+      <div className="payment-receipt">
+        <span>Payment received</span><strong>$10,000<span>.00</span></strong>
+        <div><span>Invoice reference</span><span>Not supplied</span></div>
+      </div>
+      <div className="payment-connector" aria-hidden="true"><ArrowDown /></div>
+      <div className="payment-options">
+        <article className="payment-option payment-option-a">
+          <div className="payment-option-label"><span>Proposed allocation</span><Check size={15} /><span className="sr-only">Amount balances</span></div>
+          <div className="payment-invoice"><span>Invoice A</span><strong>$6,000</strong></div>
+          <div className="payment-invoice"><span>Invoice B</span><strong>$4,000</strong></div>
+          <div className="payment-total"><span>Total</span><strong>$10,000</strong></div>
+          <div className="payment-authorization"><ShieldCheck size={17} /><span>{activeStep === 2 ? "Supported by remittance" : "Waiting for evidence"}</span></div>
+        </article>
+        <span className="payment-or" aria-hidden="true">or</span>
+        <article className="payment-option payment-option-b">
+          <div className="payment-option-label"><span>Competing allocation</span><Check size={15} /><span className="sr-only">Amount balances</span></div>
+          <div className="payment-invoice"><span>Invoice C</span><strong>$10,000</strong></div>
+          <div className="payment-invoice payment-invoice-empty" aria-hidden="true"><span>—</span></div>
+          <div className="payment-total"><span>Total</span><strong>$10,000</strong></div>
+          <div className="payment-authorization"><span>{activeStep === 2 ? "Not supported by remittance" : "Also financially valid"}</span></div>
+        </article>
+      </div>
+      <div className="payment-email" aria-hidden={activeStep === 0}>
+        <div><Mail size={18} /><span>Remittance instruction</span><span>From the payer</span></div>
+        <p>“Please apply this payment to <mark>Invoice A and Invoice B</mark>.”</p>
+      </div>
+    </div>
+    <div className="payment-scene-caption">
+      <div><span className="payment-progress" aria-hidden="true">{[0,1,2].map(i => <i key={i} data-active={i <= activeStep} />)}</span><p>{captions[activeStep]}</p></div>
+      {!reduced && <button type="button" onClick={() => { if (step === 2) { setStep(0); setPaused(false); } else setPaused(value => !value); }} aria-label={step === 2 ? "Replay payment illustration" : paused ? "Play payment illustration" : "Pause payment illustration"}>
+        {step === 2 ? <RotateCcw size={15} /> : paused ? <Play size={15} /> : <Pause size={15} />}<span>{step === 2 ? "Replay" : paused ? "Play" : "Pause"}</span>
+      </button>}
+    </div>
+  </div>;
 }
