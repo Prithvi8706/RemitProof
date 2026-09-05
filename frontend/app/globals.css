@@ -237,6 +237,41 @@ p {
   animation: case-skeleton 1.5s ease-in-out infinite;
 }
 
+.sandbox-site {
+  color-scheme: dark;
+}
+
+.sandbox-site .sandbox-field::first-letter {
+  text-transform: uppercase;
+}
+
+.sandbox-site button.bg-primary {
+  color: var(--canvas);
+}
+
+.sandbox-site fieldset > details {
+  border-radius: 6px;
+}
+
+.sandbox-site fieldset > details:not([open]) {
+  border-color: transparent transparent var(--line);
+  border-radius: 0;
+}
+
+.sandbox-site fieldset > details > summary {
+  padding-block: 2px;
+}
+
+.sandbox-site input,
+.sandbox-site textarea {
+  font-variant-numeric: tabular-nums;
+}
+
+.sandbox-site label:focus-within:has(input[type="file"]) {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
 .case-footer {
   background: rgb(17 17 19 / 78%);
 }

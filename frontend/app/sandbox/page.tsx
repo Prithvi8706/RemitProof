@@ -2,7 +2,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { SandboxWorkspace } from "@/components/SandboxWorkspace";
 
 export default function SandboxPage() {
-  return <div className="case-site min-h-screen bg-canvas text-ink">
+  return <div className="case-site sandbox-site min-h-screen bg-canvas text-ink">
     <AppHeader />
     <main className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6">
       <header className="border-b border-line pb-7">

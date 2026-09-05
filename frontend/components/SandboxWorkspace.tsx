@@ -10,8 +10,8 @@ import { DecisionBadge } from "./DecisionBadge";
 import { blankScenario, errorMessage, parseScenario } from "@/lib/sandbox";
 import type { Scenario, SandboxExample, SandboxRun } from "@/lib/sandbox";
 
-const control = "w-full min-w-0 rounded-md border border-line-strong bg-canvas px-3 py-2 text-sm text-ink disabled:opacity-50";
-const button = "rounded-md border border-line-strong px-3 py-2 text-sm font-semibold hover:bg-surface-raised disabled:cursor-wait disabled:opacity-50";
+const control = "w-full min-w-0 rounded-md border border-line bg-canvas px-3 py-2 text-sm text-ink disabled:opacity-50";
+const button = "rounded-md border border-line px-3 py-2 text-sm font-medium hover:bg-surface-raised disabled:cursor-wait disabled:opacity-50";
 type Collection = "customers" | "invoices" | "credits" | "emails" | "related_payments";
 const limits: Record<Collection, number> = { customers: 3, invoices: 8, credits: 3, emails: 4, related_payments: 4 };
 
@@ -45,7 +45,7 @@ function newRecord(kind: Collection, scenario: Scenario): Record<string, unknown
 
 function RecordFields({ record, onChange }: { record: Record<string, unknown>; onChange: (row: Record<string, unknown>) => void }) {
   return <div className="grid gap-4 sm:grid-cols-2">
-    {Object.entries(record).map(([key, value]) => <label key={key} className={`block text-xs font-medium text-muted ${key === "body" ? "sm:col-span-2" : ""}`}>
+    {Object.entries(record).map(([key, value]) => <label key={key} className={`sandbox-field block text-xs font-medium text-muted ${key === "body" ? "sm:col-span-2" : ""}`}>
       {key.replaceAll("_", " ")}{Array.isArray(value) ? " (comma separated)" : ""}
       {key === "body" ? <textarea className={`${control} mt-1 min-h-28`} maxLength={12000} value={String(value ?? "")} onChange={e => onChange({ ...record, [key]: e.target.value })} /> :
         Array.isArray(value) ? <ListInput values={value} onChange={values => onChange({ ...record, [key]: values })} /> : <input className={`${control} mt-1`} type={key.includes("date") || key === "date" ? "date" : "text"} maxLength={2000}
@@ -172,7 +172,7 @@ export function SandboxWorkspace() {
         <button className="mt-5 w-full rounded-md bg-primary px-5 py-3 text-sm font-semibold text-white hover:bg-primary-dark disabled:cursor-wait disabled:opacity-50" disabled={busy || jsonEditor !== null || (scenario.mode === "live_ai" && !liveEnabled)} onClick={() => void run()}>{busy ? "Investigating your scenario…" : "Run reconciliation"}</button>
       </section>
 
-      <section aria-labelledby="result-title" aria-busy={busy} className="min-w-0">
+      <section aria-labelledby="result-title" aria-busy={busy} className="min-w-0 xl:border-l xl:border-line xl:pl-8">
         <h2 id="result-title" ref={resultHeading} tabIndex={-1} className="text-xl font-semibold">Investigation result</h2>
         <p className="mt-2 text-xs leading-5 text-muted">Up to five runs stay in this tab’s memory. Refreshing clears them. Download a report to keep it.</p>
         {history.length > 0 && <div className="mt-4 flex flex-wrap gap-2">{history.map((item, index) => <button key={item.run.run_id} aria-pressed={selected === index} className={`${button} ${selected === index ? "bg-surface-raised" : ""}`} onClick={() => setSelected(index)}>Run {history.length - index}: {item.run.detail.decision.decision.replaceAll("_", " ")}</button>)}<button className={button} onClick={() => { setHistory([]); setSelected(0); }}>Clear history</button></div>}
