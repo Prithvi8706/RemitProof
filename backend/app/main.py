@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import benchmark, dashboard, exceptions
+from app.api import benchmark, dashboard, exceptions, sandbox
 from app.utils.results import ResultsUnavailableError, load_results
 
 
@@ -20,6 +20,7 @@ app.add_middleware(
 app.include_router(dashboard.router)
 app.include_router(exceptions.router)
 app.include_router(benchmark.router)
+app.include_router(sandbox.router)
 
 
 @app.get("/live")

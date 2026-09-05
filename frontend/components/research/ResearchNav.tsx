@@ -45,6 +45,7 @@ export function ResearchNav() {
       <header className="research-nav">
         <Link href="#top" className="research-wordmark">RemitProof</Link>
         <nav aria-label="Research site navigation" className="research-nav-actions">
+          <Link href="/sandbox" className="liquid-pill">Try sandbox</Link>
           <button ref={evidenceTrigger} className="liquid-pill" onClick={() => setOpen(open === "evidence" ? null : "evidence")} aria-expanded={open === "evidence"} aria-haspopup="dialog">Evidence</button>
           <button ref={aboutTrigger} className="liquid-pill" onClick={() => setOpen(open === "about" ? null : "about")} aria-expanded={open === "about"} aria-haspopup="dialog">About</button>
         </nav>

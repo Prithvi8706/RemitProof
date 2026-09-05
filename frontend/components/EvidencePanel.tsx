@@ -143,7 +143,7 @@ export function EvidencePanel({
       {auditRecords.length > 0 && (
         <div className="mt-8">
           <h3 className="mb-1 text-sm font-semibold text-ink">Allocation and audit context</h3>
-          <p className="mb-3 text-xs leading-5 text-muted">Related records retained for inspection. These were not cited by the model.</p>
+          <p className="mb-3 text-xs leading-5 text-muted">Related records retained for inspection. These were not cited in the proposal.</p>
           <EvidenceList evidence={auditRecords} />
         </div>
       )}

@@ -24,6 +24,7 @@ export function AppHeader({ benchmark }: { benchmark?: BenchmarkData } = {}) {
         </Link>
         <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-4">
           <nav aria-label="Primary navigation" className="flex shrink-0 items-center gap-1 text-xs font-semibold sm:text-sm">
+            <Link className="whitespace-nowrap rounded-md px-2.5 py-2 text-primary hover:bg-surface-raised" href="/sandbox">Try sandbox</Link>
             <Link className="hidden whitespace-nowrap rounded-md px-2.5 py-2 text-muted hover:bg-surface-raised hover:text-ink sm:inline-flex" href="/">
               Dashboard
             </Link>
