@@ -35,7 +35,7 @@ git switch -c research/v1
 | RP-004 | READY | Accepted | `8df3526` | 318 / 8 | 318 / 8 | Owner | 2026-11-15 | Report hash and all reference counts match. |
 | RP-005 | READY | Accepted | `ee41803` | 318 / 8 | 318 / 8 | Owner | 2026-11-15 | All nine checks match. Owner signed off the wording of the four findings. |
 | RP-101 | READY | Accepted | `6631de0` | 331 / 8 | 331 / 8 | Owner (architect checks run) | 2026-11-15 | Order 1 of 11. Diff size differs from the dry run as the contract allows; open choices and two documented residuals (weak-signal cap drop, duplicate credit_id ValidationError) accepted. |
-| RP-102 | READY | Not started | | 345 / 8 | | | | Order 2 |
+| RP-102 | READY | Accepted | `7314e9a` | 345 / 8 | 345 / 8 | Owner (architect checks run) | 2026-11-15 | Order 2. Open test-helper details settled without changing contract values; two documented residuals (conservative per-customer credit limit, exponential worst-case cost at the limits) accepted. |
 | RP-103 | READY | Not started | | 354 / 7 | | | | Order 3. Removes 1 marker. |
 | RP-104 | READY | Not started | | 361 / 6 | | | | Order 4. Removes 1 marker. |
 | RP-105 | READY | Not started | | 417 / 1 | | | | Order 9. Owner regenerates the lock. Needs OG-2. |
