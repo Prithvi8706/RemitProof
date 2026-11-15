@@ -42,7 +42,7 @@ git switch -c research/v1
 | RP-106 | READY | Not started | | 423 / 1 | | | | Order 10 |
 | RP-107 | READY | Accepted | `3c8c0df` | 378 / 6 | 378 / 6 | Owner (architect checks run) | 2026-11-15 | Order 5. Review notes: two style-only deviations (a parenthesized condition, an extra assertion message), and a clause the reader misclassifies still hides its ID, the contract's stated F2 residual limit. |
 | RP-108 | READY | Accepted | `7a9fb43` | 392 / 3 | 392 / 3 | Owner (architect checks run) | 2026-11-15 | Order 6. Removes 3 markers. Residuals per contract: a misread but classified sentence still does not block (F2 probe), and only candidate emails are inspected; one style-only extra 80-payment count assertion in test 11. |
-| RP-109 | READY | Not started | | 402 / 3 | | | | Order 7. Owner signs off three changed decisions. |
+| RP-109 | READY | Accepted | `4f30da1` | 402 / 3 | 402 / 3 | Owner (architect checks run; owner signed off the three changed decisions) | 2026-11-15 | Order 7. Owner signs off three changed decisions. PAY_057, PAY_063 and PAY_068 move from review to resolved, each equal to its truth label. Review notes: stop condition 16.3 undercounts by one the existing tests that fail before revision (the fourth is the replay test whose constant 12.2 revises); two comments are now stale (`evidence_sufficiency.py:72-73`, `test_gate_search.py:27`), left per R-02; an uncited email about another payment of the same customer can now disambiguate, which was possible before with a citation. |
 | RP-110 | READY | Not started | | 417 / 1 | | | | Order 8. Removes 2 markers. |
 | RP-111 | READY | Not started | | 430 / 1 | | | | Order 11. Owner signs off the record. |
 | RP-201 | READY | Not started | | 463 / 1 | | | | Order 1 of 8 |
