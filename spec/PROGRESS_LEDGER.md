@@ -40,7 +40,7 @@ git switch -c research/v1
 | RP-104 | READY | Accepted | `cea9db8` | 361 / 6 | 361 / 6 | Owner (architect checks run) | 2026-11-15 | Order 4. Removes 1 marker. Review notes: proposals naming proof-bundle-only invoices, credits or evidence beyond the prompt cap can now resolve when the complete search finds that allocation unique (contract section 9, rows 1-2), and result.candidates now reports the proof bundle, so later retrieval-recall metrics in evaluator.py would count records the model never saw (accepted by the contract; authorization unaffected). |
 | RP-105 | READY | Not started | | 417 / 1 | | | | Order 9. Owner regenerates the lock. Needs OG-2. |
 | RP-106 | READY | Not started | | 423 / 1 | | | | Order 10 |
-| RP-107 | READY | Not started | | 378 / 6 | | | | Order 5 |
+| RP-107 | READY | Accepted | `3c8c0df` | 378 / 6 | 378 / 6 | Owner (architect checks run) | 2026-11-15 | Order 5. Review notes: two style-only deviations (a parenthesized condition, an extra assertion message), and a clause the reader misclassifies still hides its ID, the contract's stated F2 residual limit. |
 | RP-108 | READY | Not started | | 392 / 3 | | | | Order 6. Removes 3 markers. |
 | RP-109 | READY | Not started | | 402 / 3 | | | | Order 7. Owner signs off three changed decisions. |
 | RP-110 | READY | Not started | | 417 / 1 | | | | Order 8. Removes 2 markers. |
