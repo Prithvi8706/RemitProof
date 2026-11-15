@@ -233,7 +233,6 @@ def test_f2_residual_misread_sentence_must_not_authorize_the_wrong_invoices():
     assert _decision(dataset, FixedInvestigator(F2_WRONG_PROPOSAL)) == "human_review"
 
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason="F3: uniqueness claimed on a truncated search; closed by RP-103")
 def test_f3_truncated_search_must_not_match_in_the_rules_only_path():
     assert _decision(f3_dataset(), UnavailableInvestigator()) == "human_review"
 

@@ -1,6 +1,6 @@
-from typing import List, Set
+from typing import List, Optional, Set
 
-from app.models import BaselineResult, CandidateBundle, Customer, RemittanceEmail
+from app.models import AlternativeAllocation, BaselineResult, CandidateBundle, Customer, RemittanceEmail
 from app.services.alternative_finder import find_valid_alternatives
 from app.utils.normalization import normalize_name
 from app.utils.remittance_semantics import (
@@ -37,7 +37,10 @@ def _candidate_remittance_texts(
     ]
 
 
-def baseline_match(bundle: CandidateBundle) -> BaselineResult:
+def baseline_match(
+    bundle: CandidateBundle,
+    alternatives: Optional[List[AlternativeAllocation]] = None,
+) -> BaselineResult:
     payment = bundle.payment
     if payment.status != "unmatched":
         return BaselineResult(
@@ -82,7 +85,7 @@ def baseline_match(bundle: CandidateBundle) -> BaselineResult:
     )
     alternatives = [
         alternative
-        for alternative in find_valid_alternatives(bundle)
+        for alternative in (alternatives if alternatives is not None else find_valid_alternatives(bundle))
         if alternative.customer_id in recognized_customers
     ]
 

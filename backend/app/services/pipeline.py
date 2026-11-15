@@ -12,7 +12,6 @@ from app.services.ai_investigator import InvestigatorError
 from app.services.alternative_finder import find_valid_alternatives
 from app.services.audit_builder import build_allocation, build_evidence
 from app.services.baseline_matcher import baseline_match
-from app.services.candidate_retriever import retrieve_candidates
 from app.services.decision_artifacts import (
     build_conflict,
     build_counterfactuals,
@@ -20,6 +19,8 @@ from app.services.decision_artifacts import (
 )
 from app.services.evidence_sufficiency import evaluate_evidence_sufficiency
 from app.services.proof_engine import verify_candidate
+from app.services.proof_set import build_proof_set
+from app.services.search import STATUS_UNKNOWN, search
 from app.utils.loaders import Dataset
 
 
@@ -47,7 +48,8 @@ def process_payment(
     if payment is None:
         raise KeyError(f"Unknown payment: {payment_id}")
 
-    candidates = retrieve_candidates(payment, dataset)
+    proof_set = build_proof_set(payment, dataset)
+    candidates = proof_set.prompt_bundle
     if payment.payment_id in dataset.replayed_payment_ids:
         baseline = BaselineResult(
             payment_id=payment.payment_id,
@@ -76,7 +78,35 @@ def process_payment(
             candidates=_candidate_dump(candidates),
         )
 
-    baseline = baseline_match(candidates)
+    outcome = search(proof_set)
+    if outcome.status == STATUS_UNKNOWN:
+        baseline = BaselineResult(
+            payment_id=payment.payment_id,
+            status="unresolved",
+            reason="search_incomplete",
+        )
+        latency_ms = round((time.perf_counter() - started) * 1000)
+        decision = Decision(
+            payment_id=payment.payment_id,
+            decision="human_review",
+            proof={
+                "search_status": outcome.status,
+                "search_detail": outcome.detail,
+                "incomplete_reasons": list(outcome.incomplete_reasons),
+                "investigator_skipped": True,
+            },
+            reason="search_incomplete",
+            latency_ms=latency_ms,
+        )
+        return ProcessingResult(
+            payment=payment.model_dump(mode="json"),
+            baseline=baseline,
+            decision=decision,
+            candidates=_candidate_dump(candidates),
+        )
+
+    proof_bundle = proof_set.proof_bundle
+    baseline = baseline_match(proof_bundle, alternatives=list(outcome.alternatives))
     if baseline.status == "matched":
         latency_ms = round((time.perf_counter() - started) * 1000)
         decision = Decision(
@@ -98,7 +128,7 @@ def process_payment(
             payment=payment.model_dump(mode="json"),
             baseline=baseline,
             decision=decision,
-            candidates=_candidate_dump(candidates),
+            candidates=_candidate_dump(proof_bundle),
         )
 
     if payment.status != "unmatched":
