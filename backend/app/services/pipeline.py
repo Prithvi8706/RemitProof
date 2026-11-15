@@ -10,6 +10,7 @@ from app.models import (
 )
 from app.services.ai_investigator import InvestigatorError
 from app.services.audit_builder import build_allocation, build_evidence
+from app.services.authorization import authorizable_allocations, authorization_block_reason
 from app.services.baseline_matcher import baseline_match
 from app.services.decision_artifacts import (
     build_conflict,
@@ -207,6 +208,15 @@ def process_payment(
         proof,
         alternatives,
     )
+    if sufficiency.safe_to_resolve:
+        block_reason = authorization_block_reason(
+            proposal,
+            authorizable_allocations(proof_bundle, alternatives),
+        )
+        if block_reason is not None:
+            sufficiency = sufficiency.model_copy(
+                update={"safe_to_resolve": False, "abstention_reason": block_reason}
+            )
     conflict = build_conflict(payment.payment_id, proof, alternatives, sufficiency)
     counterfactuals = build_counterfactuals(proof_bundle, proposal, alternatives, sufficiency)
     decision_artifact = build_decision_artifact(

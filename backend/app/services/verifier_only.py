@@ -8,18 +8,20 @@ imported by the pipeline or the API.
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Optional, Tuple
 
-from app.models import AlternativeAllocation, CandidateBundle, InvestigationProposal
+from app.models import CandidateBundle, InvestigationProposal
 from app.services.alternative_finder import find_valid_alternatives
-from app.services.evidence_sufficiency import evaluate_evidence_sufficiency
-from app.services.proof_engine import verify_candidate
+from app.services.authorization import (
+    REASON_MULTIPLE_AUTHORIZABLE,
+    authorizable_allocations,
+    canonical_proposal,
+)
 
 
 REASON_UNIQUE = "unique_authorizable_allocation"
 REASON_NO_ALLOCATION = "no_financially_valid_allocation"
 REASON_NONE_AUTHORIZABLE = "no_authorizable_allocation"
-REASON_MULTIPLE_AUTHORIZABLE = "multiple_authorizable_allocations"
 
 
 @dataclass(frozen=True)
@@ -32,37 +34,9 @@ class VerifierOnlyOutcome:
     proposal: Optional[InvestigationProposal]
 
 
-def canonical_proposal(
-    bundle: CandidateBundle, alternative: AlternativeAllocation
-) -> InvestigationProposal:
-    email_ids = [
-        email.email_id
-        for email in bundle.candidate_emails
-        if email.customer_id == alternative.customer_id
-    ]
-    evidence: List[str] = list(
-        dict.fromkeys(
-            [alternative.customer_id] + sorted(alternative.credit_ids) + email_ids
-        )
-    )
-    return InvestigationProposal(
-        payment_id=bundle.payment.payment_id,
-        proposed_customer=alternative.customer_id,
-        invoice_ids=list(alternative.invoice_ids),
-        credit_ids=list(alternative.credit_ids),
-        evidence_ids=evidence,
-    )
-
-
 def verifier_only_decision(bundle: CandidateBundle) -> VerifierOnlyOutcome:
     alternatives = find_valid_alternatives(bundle)
-    authorizable: List[Tuple[AlternativeAllocation, InvestigationProposal]] = []
-    for alternative in alternatives:
-        proposal = canonical_proposal(bundle, alternative)
-        proof = verify_candidate(bundle, proposal)
-        sufficiency = evaluate_evidence_sufficiency(bundle, proposal, proof, alternatives)
-        if sufficiency.safe_to_resolve:
-            authorizable.append((alternative, proposal))
+    authorizable = authorizable_allocations(bundle, alternatives)
 
     selected: Optional[InvestigationProposal] = None
     if len(authorizable) == 1:

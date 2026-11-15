@@ -240,7 +240,6 @@ def test_f3_truncated_search_must_not_resolve_a_proposal():
     assert _decision(f3_dataset(), FixedInvestigator(F3_PROPOSAL)) == "human_review"
 
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason="F4: authorization depends on the proposed customer; closed by RP-110")
 @pytest.mark.parametrize(
     "customer_id,invoice_id,email_id",
     [("CUS_A", "INV_A1", "EMAIL_A"), ("CUS_B", "INV_B1", "EMAIL_B")],
