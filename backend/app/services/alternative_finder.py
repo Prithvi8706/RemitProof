@@ -1,7 +1,7 @@
 from itertools import combinations
 from typing import Iterable, List, Optional, Sequence, Tuple
 
-from app.models import AlternativeAllocation, CandidateBundle
+from app.models import AlternativeAllocation, CandidateBundle, Credit, Invoice
 from app.models.payment import is_valid_monetary_amount
 from app.utils.money import money_sum
 
@@ -26,6 +26,31 @@ def _credits_fit_linked_invoices(invoice_group, credit_group) -> bool:
     return True
 
 
+def eligible_invoices(bundle: CandidateBundle) -> List[Invoice]:
+    payment = bundle.payment
+    return [
+        invoice
+        for invoice in bundle.candidate_invoices
+        if invoice.status == "open"
+        and invoice.allocated_payment_id is None
+        and invoice.currency == payment.currency
+        and invoice.issue_date <= payment.date
+        and is_valid_monetary_amount(invoice.amount)
+    ]
+
+
+def eligible_credits(bundle: CandidateBundle) -> List[Credit]:
+    payment = bundle.payment
+    return [
+        credit
+        for credit in bundle.candidate_credits
+        if credit.status == "valid"
+        and credit.consumed_by_payment_id is None
+        and credit.currency == payment.currency
+        and is_valid_monetary_amount(credit.amount)
+    ]
+
+
 def find_valid_alternatives(bundle: CandidateBundle) -> List[AlternativeAllocation]:
     """Enumerate financially valid allocations from the narrowed candidate set.
 
@@ -38,23 +63,8 @@ def find_valid_alternatives(bundle: CandidateBundle) -> List[AlternativeAllocati
     if not is_valid_monetary_amount(payment.amount):
         return []
 
-    open_invoices = [
-        invoice
-        for invoice in bundle.candidate_invoices
-        if invoice.status == "open"
-        and invoice.allocated_payment_id is None
-        and invoice.currency == payment.currency
-        and invoice.issue_date <= payment.date
-        and is_valid_monetary_amount(invoice.amount)
-    ]
-    valid_credits = [
-        credit
-        for credit in bundle.candidate_credits
-        if credit.status == "valid"
-        and credit.consumed_by_payment_id is None
-        and credit.currency == payment.currency
-        and is_valid_monetary_amount(credit.amount)
-    ]
+    open_invoices = eligible_invoices(bundle)
+    valid_credits = eligible_credits(bundle)
     alternatives = []
     seen = set()
 
