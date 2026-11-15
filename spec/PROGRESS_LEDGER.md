@@ -29,7 +29,7 @@ git switch -c research/v1
 
 | Task | Contract | State | Commit | Suite passed / expected failures (expected) | Observed | Reviewer | Date | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| RP-001 | READY | Not started | | 289 / 0 | | | | |
+| RP-001 | READY | Accepted | `b16c071` | 289 / 0 | 289 / 0 | Owner | 2026-11-15 | Start tree had one unrelated untracked file (`PROJECT_DOSSIER_LOCAL.md`). |
 | RP-002 | READY | Not started | | 295 / 8 | | | | |
 | RP-003 | READY | Not started | | 307 / 8 | | | | |
 | RP-004 | READY | Not started | | 318 / 8 | | | | |
@@ -126,7 +126,7 @@ Update when a marker is removed.
 
 | Kind | Generation | Created by | Files | SHA-256 (LF-normalized) | Commit |
 | --- | --- | --- | --- | --- | --- |
-| Frozen inputs | v0 | RP-001 | `audit/v0/frozen_inputs.json` | `eb1ee75661b40b2c6c2e1248d90f938baffdb2f1da6c31605107bf47c4572ed0` (expected) | |
+| Frozen inputs | v0 | RP-001 | `audit/v0/frozen_inputs.json` | `eb1ee75661b40b2c6c2e1248d90f938baffdb2f1da6c31605107bf47c4572ed0` (observed) | `b16c071` |
 | Audit report | v0 | RP-004 | `audit/v0/verifier_only_baseline.json` | `fd96d3cab59a45e86d10c1baae88f537dbc66ed3317677e412f4633a029bbb3d` (expected) | |
 | Audit report | v1 | RP-111 | `audit/v1/verifier_only_baseline.json` | `291bfce9372a899dea8fb14b83f02e3221cf0935a667c51c8478172f802ed8e2` (expected) | |
 | Frozen inputs | next | RP-303 | Generation directory named by the RP-303 contract. `audit/v1/` already holds the v1 audit report, and the two generation counters are independent. | | |
