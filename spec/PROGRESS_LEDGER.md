@@ -33,7 +33,7 @@ git switch -c research/v1
 | RP-002 | READY | Accepted | `123ca6c` | 295 / 8 | 295 / 8 | Owner | 2026-11-15 | Command 2 as written (`-q` twice) prints a per-file count, 14; the IDs list with one `-q`. |
 | RP-003 | READY | Accepted | `d7bf59e` | 307 / 8 | 307 / 8 | Owner (architect checks run) | 2026-11-15 | Legacy outcomes match the reference lists: 18 resolve, 6 no_authorizable_allocation, 6 no_financially_valid_allocation. |
 | RP-004 | READY | Accepted | `8df3526` | 318 / 8 | 318 / 8 | Owner | 2026-11-15 | Report hash and all reference counts match. |
-| RP-005 | READY | In review | `ee41803` | 318 / 8 | 318 / 8 | | 2026-11-15 | All nine checks and reviewer checks 1 and 2 match. Awaiting owner sign-off on the wording of the four findings (reviewer check 3). |
+| RP-005 | READY | Accepted | `ee41803` | 318 / 8 | 318 / 8 | Owner | 2026-11-15 | All nine checks match. Owner signed off the wording of the four findings. |
 | RP-101 | READY | Not started | | 331 / 8 | | | | Order 1 of 11 |
 | RP-102 | READY | Not started | | 345 / 8 | | | | Order 2 |
 | RP-103 | READY | Not started | | 354 / 7 | | | | Order 3. Removes 1 marker. |
