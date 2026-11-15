@@ -43,7 +43,7 @@ git switch -c research/v1
 | RP-107 | READY | Accepted | `3c8c0df` | 378 / 6 | 378 / 6 | Owner (architect checks run) | 2026-11-15 | Order 5. Review notes: two style-only deviations (a parenthesized condition, an extra assertion message), and a clause the reader misclassifies still hides its ID, the contract's stated F2 residual limit. |
 | RP-108 | READY | Accepted | `7a9fb43` | 392 / 3 | 392 / 3 | Owner (architect checks run) | 2026-11-15 | Order 6. Removes 3 markers. Residuals per contract: a misread but classified sentence still does not block (F2 probe), and only candidate emails are inspected; one style-only extra 80-payment count assertion in test 11. |
 | RP-109 | READY | Accepted | `4f30da1` | 402 / 3 | 402 / 3 | Owner (architect checks run; owner signed off the three changed decisions) | 2026-11-15 | Order 7. Owner signs off three changed decisions. PAY_057, PAY_063 and PAY_068 move from review to resolved, each equal to its truth label. Review notes: stop condition 16.3 undercounts by one the existing tests that fail before revision (the fourth is the replay test whose constant 12.2 revises); two comments are now stale (`evidence_sufficiency.py:72-73`, `test_gate_search.py:27`), left per R-02; an uncited email about another payment of the same customer can now disambiguate, which was possible before with a citation. |
-| RP-110 | READY | Not started | | 417 / 1 | | | | Order 8. Removes 2 markers. |
+| RP-110 | READY | Accepted | `a90c981` | 417 / 1 | 417 / 1 | Owner (architect checks run) | 2026-11-15 | Order 8. Removes 2 markers. Review notes: test 2 builds its proposals through a local nested helper the contract does not name (style only); the edit helper was kept in the session scratchpad outside the repository (R-13, no tree effect); blocked F4 results still mark the multiple_valid_allocations conflict as cleared, as the prescribed section 6.5 code leaves those fields alone; authorization cost is quadratic in the number of alternatives (liveness only, accepted in section 8). |
 | RP-111 | READY | Not started | | 430 / 1 | | | | Order 11. Owner signs off the record. |
 | RP-201 | READY | Not started | | 463 / 1 | | | | Order 1 of 8 |
 | RP-202 | READY | Not started | | 512 / 1 | | | | Order 3 |
@@ -119,8 +119,8 @@ Update when a marker is removed.
 | `test_f2_residual_misread_sentence_must_not_authorize_the_wrong_invoices` | F2 residual | Marked, strict (added in `123ca6c`) | Not scheduled | |
 | `test_f3_truncated_search_must_not_match_in_the_rules_only_path` | F3 | Removed | RP-103 | `51454e1` |
 | `test_f3_truncated_search_must_not_resolve_a_proposal` | F3 | Removed | RP-104 | `cea9db8` |
-| `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_A-INV_A1-EMAIL_A]` | F4 | Marked, strict (added in `123ca6c`) | RP-110 | |
-| `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_B-INV_B1-EMAIL_B]` | F4 | Marked, strict (added in `123ca6c`) | RP-110 | |
+| `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_A-INV_A1-EMAIL_A]` | F4 | Removed | RP-110 | `a90c981` |
+| `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_B-INV_B1-EMAIL_B]` | F4 | Removed | RP-110 | `a90c981` |
 
 ## Generation register
 
