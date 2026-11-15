@@ -41,7 +41,7 @@ git switch -c research/v1
 | RP-105 | READY | Not started | | 417 / 1 | | | | Order 9. Owner regenerates the lock. Needs OG-2. |
 | RP-106 | READY | Not started | | 423 / 1 | | | | Order 10 |
 | RP-107 | READY | Accepted | `3c8c0df` | 378 / 6 | 378 / 6 | Owner (architect checks run) | 2026-11-15 | Order 5. Review notes: two style-only deviations (a parenthesized condition, an extra assertion message), and a clause the reader misclassifies still hides its ID, the contract's stated F2 residual limit. |
-| RP-108 | READY | Not started | | 392 / 3 | | | | Order 6. Removes 3 markers. |
+| RP-108 | READY | Accepted | `7a9fb43` | 392 / 3 | 392 / 3 | Owner (architect checks run) | 2026-11-15 | Order 6. Removes 3 markers. Residuals per contract: a misread but classified sentence still does not block (F2 probe), and only candidate emails are inspected; one style-only extra 80-payment count assertion in test 11. |
 | RP-109 | READY | Not started | | 402 / 3 | | | | Order 7. Owner signs off three changed decisions. |
 | RP-110 | READY | Not started | | 417 / 1 | | | | Order 8. Removes 2 markers. |
 | RP-111 | READY | Not started | | 430 / 1 | | | | Order 11. Owner signs off the record. |
@@ -113,9 +113,9 @@ Update when a marker is removed.
 
 | Probe | Finding | Marker state | Removed by | Commit |
 | --- | --- | --- | --- | --- |
-| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[settles]` | F2 | Marked, strict (added in `123ca6c`) | RP-108 | |
-| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[clears]` | F2 | Marked, strict (added in `123ca6c`) | RP-108 | |
-| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[covers]` | F2 | Marked, strict (added in `123ca6c`) | RP-108 | |
+| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[settles]` | F2 | Removed | RP-108 | `7a9fb43` |
+| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[clears]` | F2 | Removed | RP-108 | `7a9fb43` |
+| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[covers]` | F2 | Removed | RP-108 | `7a9fb43` |
 | `test_f2_residual_misread_sentence_must_not_authorize_the_wrong_invoices` | F2 residual | Marked, strict (added in `123ca6c`) | Not scheduled | |
 | `test_f3_truncated_search_must_not_match_in_the_rules_only_path` | F3 | Removed | RP-103 | `51454e1` |
 | `test_f3_truncated_search_must_not_resolve_a_proposal` | F3 | Removed | RP-104 | `cea9db8` |
