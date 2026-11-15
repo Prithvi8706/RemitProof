@@ -220,7 +220,6 @@ def test_f4_fixture_is_well_formed():
     assert _allocations(bundle) == [("CUS_A", ["INV_A1"]), ("CUS_B", ["INV_B1"])]
 
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason="F2: unread instruction is ignored; closed by RP-108")
 @pytest.mark.parametrize("name", sorted(F2_BODIES))
 def test_f2_unread_instruction_must_not_authorize_the_wrong_invoices(name):
     dataset = f2_dataset(F2_BODIES[name])

@@ -20,6 +20,7 @@ from app.services.evidence_sufficiency import evaluate_evidence_sufficiency
 from app.services.proof_engine import verify_candidate
 from app.services.proof_set import build_proof_set
 from app.services.search import STATUS_UNKNOWN, search
+from app.services.unread_instructions import REASON_UNREAD_INSTRUCTION, find_unread_instructions
 from app.utils.loaders import Dataset
 
 
@@ -105,6 +106,32 @@ def process_payment(
         )
 
     proof_bundle = proof_set.proof_bundle
+    unread = find_unread_instructions(proof_bundle)
+    if unread.blocks:
+        baseline = BaselineResult(
+            payment_id=payment.payment_id,
+            status="unresolved",
+            reason=REASON_UNREAD_INSTRUCTION,
+        )
+        latency_ms = round((time.perf_counter() - started) * 1000)
+        decision = Decision(
+            payment_id=payment.payment_id,
+            decision="human_review",
+            proof={
+                "unread_email_ids": list(unread.email_ids),
+                "unread_document_ids": list(unread.document_ids),
+                "investigator_skipped": True,
+            },
+            reason=REASON_UNREAD_INSTRUCTION,
+            latency_ms=latency_ms,
+        )
+        return ProcessingResult(
+            payment=payment.model_dump(mode="json"),
+            baseline=baseline,
+            decision=decision,
+            candidates=_candidate_dump(proof_bundle),
+        )
+
     baseline = baseline_match(proof_bundle, alternatives=list(outcome.alternatives))
     if baseline.status == "matched":
         latency_ms = round((time.perf_counter() - started) * 1000)
