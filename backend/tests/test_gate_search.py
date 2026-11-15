@@ -25,7 +25,10 @@ NEAR_AMOUNTS = ["9600.00", "9700.00", "9800.00", "9900.00", "10100.00", "10200.0
 
 # Payments whose live replay is expected to differ from results/details.json.
 # Empty until a task changes what the gate authorizes. Only a contract may add an entry.
-PAYMENTS_THAT_DIFFER_FROM_THE_PUBLISHED_SNAPSHOT = []
+PAYMENTS_THAT_DIFFER_FROM_THE_PUBLISHED_SNAPSHOT = [
+    "PAY_052", "PAY_053", "PAY_056", "PAY_057", "PAY_058", "PAY_060", "PAY_063", "PAY_067",
+    "PAY_068", "PAY_069", "PAY_071", "PAY_072", "PAY_073", "PAY_075", "PAY_077", "PAY_078",
+]  # RP-109: see test_derived_citations.py for what differs in each
 
 
 class Fixed:

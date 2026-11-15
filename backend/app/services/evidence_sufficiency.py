@@ -45,13 +45,6 @@ def _proposal_evidence_issues(
             if evidence_id not in available_ids or evidence_id not in cited_ids:
                 issues.append(evidence_id)
 
-    # A credit is an accounting deduction, so the credit note itself must be
-    # part of the proposal's cited evidence rather than inferred only from an
-    # email or from the model's selected IDs.
-    for credit_id in proposal.credit_ids:
-        if credit_id not in cited_ids:
-            issues.append(credit_id)
-
     return cited_ids, list(dict.fromkeys(issues))
 
 
@@ -85,7 +78,6 @@ def _evidence_disambiguates(
     invoice_references = set(payment_semantics.affirmative_invoice_ids)
     credit_references = set(payment_semantics.affirmative_credit_ids)
     credit_amount_references = set(payment_semantics.affirmative_credit_amounts)
-    cited_ids = set(proposal.evidence_ids)
     trusted_sender_ids = trusted_remittance_sender_ids(
         bundle.candidate_emails,
         bundle.payment,
@@ -99,8 +91,7 @@ def _evidence_disambiguates(
     )
     for email in bundle.candidate_emails:
         if (
-            email.email_id not in cited_ids
-            or email.email_id in superseded_ids
+            email.email_id in superseded_ids
             or email.customer_id != proposal.proposed_customer
             or email.sender.casefold() not in trusted_sender_ids
         ):

@@ -56,7 +56,7 @@ def test_invalid_proposal_evidence_id_cannot_resolve(bundle_factory):
     assert "EMAIL_DOES_NOT_EXIST" in result.missing_required_evidence
 
 
-def test_uncited_email_cannot_disambiguate_alternatives(bundle_factory):
+def test_uncited_trusted_email_disambiguates_alternatives(bundle_factory):
     bundle = bundle_factory("SPIKE_05")
 
     _, result = evaluate(
@@ -67,8 +67,8 @@ def test_uncited_email_cannot_disambiguate_alternatives(bundle_factory):
     )
 
     assert result.alternative_allocations_exist is True
-    assert result.evidence_disambiguates_alternatives is False
-    assert result.safe_to_resolve is False
+    assert result.evidence_disambiguates_alternatives is True
+    assert result.safe_to_resolve is True
 
 
 def test_selected_invoice_record_cannot_disambiguate_same_amount_invoices(bundle_factory):
@@ -87,7 +87,7 @@ def test_selected_invoice_record_cannot_disambiguate_same_amount_invoices(bundle
 
 
 def test_selected_credit_record_cannot_disambiguate_competing_credits(bundle_factory):
-    bundle = bundle_factory("SPIKE_04")
+    bundle = bundle_factory("SPIKE_04").model_copy(update={"candidate_emails": []})
 
     _, result = evaluate(
         bundle,
@@ -102,7 +102,7 @@ def test_selected_credit_record_cannot_disambiguate_competing_credits(bundle_fac
     assert result.safe_to_resolve is False
 
 
-def test_selected_credit_must_be_cited(bundle_factory):
+def test_selected_credit_need_not_be_repeated_in_the_citations(bundle_factory):
     bundle = bundle_factory("SPIKE_10")
 
     _, result = evaluate(
@@ -114,8 +114,8 @@ def test_selected_credit_must_be_cited(bundle_factory):
     )
 
     assert result.financial_validity is True
-    assert result.safe_to_resolve is False
-    assert "CR_S10A" in result.missing_required_evidence
+    assert result.safe_to_resolve is True
+    assert result.missing_required_evidence == []
 
 
 def test_semantic_claim_evidence_must_be_valid_and_top_level_cited(bundle_factory):
