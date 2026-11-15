@@ -12,7 +12,7 @@ States: Not started, In progress, Stopped (with the stop condition number), In r
 | --- | --- | --- | --- | --- |
 | OG-0 | This specification is accepted. A working branch exists. Commit `80fc1d7` is tagged `v0-audit-baseline`. `spec/` is committed. | RP-001 | Met | 2026-11-15 |
 | OG-1 | Phase 0 reviewed: all five tasks Accepted, `audit/v0/` committed. The 2026-11-12 revisions in `DESIGN_DECISIONS.md` accepted by the owner. | Phase 1, RP-201, RP-301 | Met | 2026-11-15 |
-| OG-2 | OD-1 decided (Python 3.9 in CI). For RP-505 also OD-6 (how the lock handles numpy under Python 3.13). | RP-105, RP-505, RP-705 | Open | |
+| OG-2 | OD-1 decided (Python 3.9 in CI). For RP-505 also OD-6 (how the lock handles numpy under Python 3.13). | RP-105, RP-505, RP-705 | Met for RP-105 and RP-705 (OD-1 decided). Open for RP-505 until OD-6 is decided. | 2026-11-15 |
 | OG-3 | OD-4 decided: at least three seed authors and one second labeller confirmed with dates | H-202 (sending the guide). RP-203 itself is not blocked. | Open | |
 | OG-4 | OD-2 decided (data licence). Storage location for the sealed test chosen, outside the repository. | H-205 (the sealing). RP-206 itself is not blocked. | Open | |
 | OG-5 | OD-3 decided (model, and whether a second family is available) | RP-305 | Open | |
@@ -214,6 +214,7 @@ Record every stop, even one resolved in minutes.
 | Date | Change |
 | --- | --- |
 | 2026-11-11 | Package created. Phase 0 contracts validated by dry run. |
+| 2026-11-15 | Owner decisions. OD-1: keep Python 3.9 in the CI matrix and pin versions that support it (the default). OD-5: at the owner's request, an agent may commit and push accepted tasks and their ledger records on `research/v1`; implementers still never commit (R-13). |
 | 2026-11-15 | OG-1 met: RP-001 to RP-005 accepted, `audit/v0/` committed, and the owner accepted the 2026-11-12 revisions of DD-04, DD-05, DD-06, DD-07 and DD-09. The 2026-11-14 revision of DD-06 is accepted separately with RP-507. |
 | 2026-11-15 | OG-0 met: specification accepted, `80fc1d7` tagged `v0-audit-baseline`, working branch `research/v1` started from `main` at `72aefa5`. |
 | 2026-11-15 | `spec/` merged into `main` (PR #4, `2b1edd0`). Backend CI job pinned to `ubuntu-24.04` (DD-11). The written line was re-run on top of both: 793 passed, 1 expected failure on Python 3.13.18 and 3.9.25. |
