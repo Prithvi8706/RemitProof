@@ -32,7 +32,7 @@ git switch -c research/v1
 | RP-001 | READY | Accepted | `b16c071` | 289 / 0 | 289 / 0 | Owner | 2026-11-15 | Start tree had one unrelated untracked file (`PROJECT_DOSSIER_LOCAL.md`). |
 | RP-002 | READY | Accepted | `123ca6c` | 295 / 8 | 295 / 8 | Owner | 2026-11-15 | Command 2 as written (`-q` twice) prints a per-file count, 14; the IDs list with one `-q`. |
 | RP-003 | READY | Accepted | `d7bf59e` | 307 / 8 | 307 / 8 | Owner (architect checks run) | 2026-11-15 | Legacy outcomes match the reference lists: 18 resolve, 6 no_authorizable_allocation, 6 no_financially_valid_allocation. |
-| RP-004 | READY | Not started | | 318 / 8 | | | | |
+| RP-004 | READY | Accepted | `8df3526` | 318 / 8 | 318 / 8 | Owner | 2026-11-15 | Report hash and all reference counts match. |
 | RP-005 | READY | Not started | | 318 / 8 | | | | |
 | RP-101 | READY | Not started | | 331 / 8 | | | | Order 1 of 11 |
 | RP-102 | READY | Not started | | 345 / 8 | | | | Order 2 |
@@ -127,7 +127,7 @@ Update when a marker is removed.
 | Kind | Generation | Created by | Files | SHA-256 (LF-normalized) | Commit |
 | --- | --- | --- | --- | --- | --- |
 | Frozen inputs | v0 | RP-001 | `audit/v0/frozen_inputs.json` | `eb1ee75661b40b2c6c2e1248d90f938baffdb2f1da6c31605107bf47c4572ed0` (observed) | `b16c071` |
-| Audit report | v0 | RP-004 | `audit/v0/verifier_only_baseline.json` | `fd96d3cab59a45e86d10c1baae88f537dbc66ed3317677e412f4633a029bbb3d` (expected) | |
+| Audit report | v0 | RP-004 | `audit/v0/verifier_only_baseline.json` | `fd96d3cab59a45e86d10c1baae88f537dbc66ed3317677e412f4633a029bbb3d` (observed) | `8df3526` |
 | Audit report | v1 | RP-111 | `audit/v1/verifier_only_baseline.json` | `291bfce9372a899dea8fb14b83f02e3221cf0935a667c51c8478172f802ed8e2` (expected) | |
 | Frozen inputs | next | RP-303 | Generation directory named by the RP-303 contract. `audit/v1/` already holds the v1 audit report, and the two generation counters are independent. | | |
 | Published results | v0 | Commit `f510cfd` | `results/` | See `results/current_generation.json` | `f510cfd` |
