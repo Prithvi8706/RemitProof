@@ -1,15 +1,22 @@
 import re
 from collections import defaultdict
+from dataclasses import dataclass
 from decimal import Decimal
 from typing import Dict, Iterable, List, Set, Tuple
 
-from app.models import CandidateBundle, Customer, Invoice, Payment, RemittanceEmail
+from app.models import CandidateBundle, Credit, Customer, Invoice, Payment, RemittanceEmail
 from app.utils.loaders import Dataset
 from app.utils.normalization import extract_document_ids, normalize_name
 from app.utils.remittance_semantics import (
     classify_document_semantics,
     explicitly_negates_payer_relationship,
 )
+
+
+EMAIL_LIMIT = 4
+CUSTOMER_LIMIT = 3
+INVOICE_LIMIT = 8
+CREDIT_LIMIT = 3
 
 
 def _tokens(value: str) -> Set[str]:
@@ -142,9 +149,21 @@ def _amount_is_close(invoice_amount: Decimal, payment_amount: Decimal) -> bool:
     return difference <= max(Decimal("500.00"), payment_amount * Decimal("0.08"))
 
 
+@dataclass(frozen=True)
+class RetrievalTrace:
+    ranked_invoices: Tuple[Invoice, ...]
+    ranked_credits: Tuple[Credit, ...]
+    dropped_email_ids: Tuple[str, ...]
+    dropped_strong_customer_ids: Tuple[str, ...]
+
+
 def retrieve_candidates(payment: Payment, dataset: Dataset) -> CandidateBundle:
     """Deterministically narrow records without embeddings or ground truth."""
 
+    return retrieve_with_trace(payment, dataset)[0]
+
+
+def retrieve_with_trace(payment: Payment, dataset: Dataset) -> Tuple[CandidateBundle, RetrievalTrace]:
     customers_by_id = {customer.customer_id: customer for customer in dataset.customers}
     invoices_by_id = {invoice.invoice_id: invoice for invoice in dataset.invoices}
 
@@ -158,7 +177,7 @@ def retrieve_candidates(payment: Payment, dataset: Dataset) -> CandidateBundle:
     # Keep the established bounded payload, but rank fail-closed evidence ahead
     # of supportive correspondence. A fifth equally relevant denial must never
     # disappear merely because four positive messages sort first.
-    candidate_emails = [
+    ranked_emails = [
         email
         for score, email in sorted(
             scored_emails,
@@ -169,7 +188,8 @@ def retrieve_candidates(payment: Payment, dataset: Dataset) -> CandidateBundle:
             ),
         )
         if score >= 80
-    ][:4]
+    ]
+    candidate_emails = ranked_emails[:EMAIL_LIMIT]
 
     evidence_text = " ".join(
         [payment.bank_reference, payment.remittance_reference]
@@ -187,15 +207,19 @@ def retrieve_candidates(payment: Payment, dataset: Dataset) -> CandidateBundle:
     payer_normalized = normalize_name(payment.payer_name)
     payer_tokens = _tokens(payment.payer_name)
     for customer in dataset.customers:
+        strong = False
         score = 0
         supported_names = {normalize_name(value) for value in _customer_names(customer)}
         if payer_normalized in supported_names:
             score += 150
+            strong = True
         if customer.customer_id in email_customer_ids:
             score += 130
+            strong = True
         customer_invoice_ids = {invoice.invoice_id for invoice in invoices_by_customer[customer.customer_id]}
         if referenced_invoices.intersection(customer_invoice_ids):
             score += 140
+            strong = True
         customer_tokens = set().union(*(_tokens(name) for name in _customer_names(customer)))
         score += 12 * len(payer_tokens.intersection(customer_tokens))
         if any(
@@ -213,14 +237,15 @@ def retrieve_candidates(payment: Payment, dataset: Dataset) -> CandidateBundle:
         ):
             score += 20
         if score:
-            customer_scores.append((score, customer))
+            customer_scores.append((score, customer, strong))
 
+    ranked_customers = sorted(
+        customer_scores,
+        key=lambda item: (-item[0], item[1].customer_id),
+    )
     candidate_customers = [
         customer
-        for _, customer in sorted(
-            customer_scores,
-            key=lambda item: (-item[0], item[1].customer_id),
-        )[:3]
+        for _, customer, _ in ranked_customers[:CUSTOMER_LIMIT]
     ]
     candidate_customer_ids = {customer.customer_id for customer in candidate_customers}
 
@@ -247,13 +272,14 @@ def retrieve_candidates(payment: Payment, dataset: Dataset) -> CandidateBundle:
         if score >= 100:
             invoice_scores.append((score, invoice))
 
-    candidate_invoices = [
+    ranked_invoices = [
         invoice
         for _, invoice in sorted(
             invoice_scores,
             key=lambda item: (-item[0], item[1].invoice_id),
-        )[:8]
+        )
     ]
+    candidate_invoices = ranked_invoices[:INVOICE_LIMIT]
     candidate_invoice_ids = {invoice.invoice_id for invoice in candidate_invoices}
 
     credit_scores = []
@@ -269,18 +295,30 @@ def retrieve_candidates(payment: Payment, dataset: Dataset) -> CandidateBundle:
             score += 20
         if score >= 100:
             credit_scores.append((score, credit))
-    candidate_credits = [
+    ranked_credits = [
         credit
         for _, credit in sorted(
             credit_scores,
             key=lambda item: (-item[0], item[1].credit_id),
-        )[:3]
+        )
     ]
+    candidate_credits = ranked_credits[:CREDIT_LIMIT]
 
-    return CandidateBundle(
+    bundle = CandidateBundle(
         payment=payment,
         candidate_customers=candidate_customers,
         candidate_invoices=candidate_invoices,
         candidate_credits=candidate_credits,
         candidate_emails=candidate_emails,
     )
+    trace = RetrievalTrace(
+        ranked_invoices=tuple(ranked_invoices),
+        ranked_credits=tuple(ranked_credits),
+        dropped_email_ids=tuple(email.email_id for email in ranked_emails[EMAIL_LIMIT:]),
+        dropped_strong_customer_ids=tuple(
+            customer.customer_id
+            for _, customer, strong in ranked_customers[CUSTOMER_LIMIT:]
+            if strong
+        ),
+    )
+    return bundle, trace
