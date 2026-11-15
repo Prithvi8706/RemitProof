@@ -39,7 +39,7 @@ Evidence precision is identifier-level. It does not score sentence quality, prov
 
 Candidate retrieval is deterministic and perfect on this generated benchmark, but it relies on identifiers, names, amounts, dates, and lexical email signals. It has not been tested against OCR errors, multilingual remittances, noisy production aliases, or very large ledgers.
 
-Alternative enumeration is exact only inside the retrieved set and current MVP limits: up to eight invoices, three credits, four invoices per allocation, no FX, and no partial-payment schedule.
+Alternative enumeration is exact only inside the retrieved candidate set: at most eight invoices and three credits in total across all candidate customers, with no limit on invoices per allocation, no FX, and no partial-payment schedule. Retrieval does not report when it drops a record, so a unique result inside the retrieved set is not proof of uniqueness over the ledger. See finding F3 in `docs/audit_baseline.md`.
 
 The local model is fixed to one family in the recorded run. Model updates, quantization, and hardware can alter proposal quality and latency even with temperature zero and a fixed seed.
 
