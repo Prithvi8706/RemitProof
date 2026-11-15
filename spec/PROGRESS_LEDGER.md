@@ -31,7 +31,7 @@ git switch -c research/v1
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | RP-001 | READY | Accepted | `b16c071` | 289 / 0 | 289 / 0 | Owner | 2026-11-15 | Start tree had one unrelated untracked file (`PROJECT_DOSSIER_LOCAL.md`). |
 | RP-002 | READY | Accepted | `123ca6c` | 295 / 8 | 295 / 8 | Owner | 2026-11-15 | Command 2 as written (`-q` twice) prints a per-file count, 14; the IDs list with one `-q`. |
-| RP-003 | READY | Not started | | 307 / 8 | | | | |
+| RP-003 | READY | Accepted | `d7bf59e` | 307 / 8 | 307 / 8 | Owner (architect checks run) | 2026-11-15 | Legacy outcomes match the reference lists: 18 resolve, 6 no_authorizable_allocation, 6 no_financially_valid_allocation. |
 | RP-004 | READY | Not started | | 318 / 8 | | | | |
 | RP-005 | READY | Not started | | 318 / 8 | | | | |
 | RP-101 | READY | Not started | | 331 / 8 | | | | Order 1 of 11 |
