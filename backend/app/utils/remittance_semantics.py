@@ -232,6 +232,7 @@ class DocumentSemantics:
     noncurrent_invoice_ids: Set[str] = field(default_factory=set)
     affirmative_credit_amounts: Set[Decimal] = field(default_factory=set)
     prohibited_credit_amounts: Set[Decimal] = field(default_factory=set)
+    unread_ids: Set[str] = field(default_factory=set)
 
 
 def is_correction_instruction(text: str) -> bool:
@@ -461,4 +462,13 @@ def classify_document_semantics(
         ):
             result.affirmative_invoice_ids.update(invoice_ids)
             result.affirmative_credit_ids.update(credit_ids)
+
+        if (
+            not is_negated
+            and not is_noncurrent
+            and not is_affirmative
+            and not bare_references_are_affirmative
+        ):
+            result.unread_ids.update(invoice_ids)
+            result.unread_ids.update(credit_ids)
     return result
