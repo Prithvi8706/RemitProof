@@ -1,0 +1,650 @@
+{
+  "audit_generation": "v0",
+  "by_split": {
+    "benchmark": {
+      "comparison_record_count": 20,
+      "systems": {
+        "rules_only_baseline": {
+          "correct_abstentions": 7,
+          "correct_resolutions": 0,
+          "false_escalations": 13,
+          "resolved": 0,
+          "wrong_auto_resolutions": 0
+        },
+        "verifier_only": {
+          "correct_abstentions": 7,
+          "correct_resolutions": 13,
+          "false_escalations": 0,
+          "resolved": 13,
+          "wrong_auto_resolutions": 0
+        }
+      },
+      "total_receipts": 60
+    },
+    "dev": {
+      "comparison_record_count": 10,
+      "systems": {
+        "rules_only_baseline": {
+          "correct_abstentions": 5,
+          "correct_resolutions": 0,
+          "false_escalations": 5,
+          "resolved": 0,
+          "wrong_auto_resolutions": 0
+        },
+        "verifier_only": {
+          "correct_abstentions": 5,
+          "correct_resolutions": 5,
+          "false_escalations": 0,
+          "resolved": 5,
+          "wrong_auto_resolutions": 0
+        }
+      },
+      "total_receipts": 20
+    }
+  },
+  "cases": [
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "detached_remittance_email",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_051",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X051",
+      "selected_invoices": [
+        "INV_X051A",
+        "INV_X051B"
+      ],
+      "split": "dev",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 0,
+      "exception_class": "same_amount_ambiguity",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_052",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "dev",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 3,
+      "authorizable_allocations": 1,
+      "exception_class": "credit_deduction",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_053",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [
+        "CR_X053A"
+      ],
+      "selected_customer": "CUS_X053",
+      "selected_invoices": [
+        "INV_X053A",
+        "INV_X053B"
+      ],
+      "split": "dev",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 1,
+      "authorizable_allocations": 0,
+      "exception_class": "conflicting_evidence",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_054",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "dev",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "multiple_allocations_email",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_055",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X055",
+      "selected_invoices": [
+        "INV_X055A",
+        "INV_X055B"
+      ],
+      "split": "dev",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 0,
+      "authorizable_allocations": 0,
+      "exception_class": "missing_credit_note",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_056",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "dev",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_financially_valid_allocation"
+    },
+    {
+      "alternatives_considered": 3,
+      "authorizable_allocations": 1,
+      "exception_class": "parent_entity_multi_invoice",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_057",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [
+        "CR_X057A"
+      ],
+      "selected_customer": "CUS_X057",
+      "selected_invoices": [
+        "INV_X057A",
+        "INV_X057B"
+      ],
+      "split": "dev",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 1,
+      "authorizable_allocations": 0,
+      "exception_class": "uncertain_payer_relationship",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_058",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "dev",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "known_payer_disambiguated",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_059",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X059",
+      "selected_invoices": [
+        "INV_X059A",
+        "INV_X059B"
+      ],
+      "split": "dev",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 0,
+      "authorizable_allocations": 0,
+      "exception_class": "stale_or_duplicate_candidate",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_060",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "dev",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_financially_valid_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "multi_invoice_remittance",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_061",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X061",
+      "selected_invoices": [
+        "INV_X061A",
+        "INV_X061B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 0,
+      "authorizable_allocations": 0,
+      "exception_class": "unsupported_currency_or_short_pay",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_062",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_financially_valid_allocation"
+    },
+    {
+      "alternatives_considered": 3,
+      "authorizable_allocations": 1,
+      "exception_class": "semantic_credit_reason",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_063",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [
+        "CR_X063A"
+      ],
+      "selected_customer": "CUS_X063",
+      "selected_invoices": [
+        "INV_X063A",
+        "INV_X063B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "treasury_bank_on_behalf",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_064",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X064",
+      "selected_invoices": [
+        "INV_X064A",
+        "INV_X064B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "alternative_allocation_email",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_065",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X065",
+      "selected_invoices": [
+        "INV_X065A",
+        "INV_X065B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "detached_remittance_email",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_066",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X066",
+      "selected_invoices": [
+        "INV_X066A",
+        "INV_X066B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 0,
+      "exception_class": "same_amount_ambiguity",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_067",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 3,
+      "authorizable_allocations": 1,
+      "exception_class": "credit_deduction",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_068",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [
+        "CR_X068A"
+      ],
+      "selected_customer": "CUS_X068",
+      "selected_invoices": [
+        "INV_X068A",
+        "INV_X068B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 1,
+      "authorizable_allocations": 0,
+      "exception_class": "conflicting_evidence",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_069",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "multiple_allocations_email",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_070",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X070",
+      "selected_invoices": [
+        "INV_X070A",
+        "INV_X070B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 0,
+      "authorizable_allocations": 0,
+      "exception_class": "missing_credit_note",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_071",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_financially_valid_allocation"
+    },
+    {
+      "alternatives_considered": 3,
+      "authorizable_allocations": 1,
+      "exception_class": "parent_entity_multi_invoice",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_072",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [
+        "CR_X072A"
+      ],
+      "selected_customer": "CUS_X072",
+      "selected_invoices": [
+        "INV_X072A",
+        "INV_X072B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 1,
+      "authorizable_allocations": 0,
+      "exception_class": "uncertain_payer_relationship",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_073",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "known_payer_disambiguated",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_074",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X074",
+      "selected_invoices": [
+        "INV_X074A",
+        "INV_X074B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 0,
+      "authorizable_allocations": 0,
+      "exception_class": "stale_or_duplicate_candidate",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_075",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_financially_valid_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "multi_invoice_remittance",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_076",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X076",
+      "selected_invoices": [
+        "INV_X076A",
+        "INV_X076B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 0,
+      "authorizable_allocations": 0,
+      "exception_class": "unsupported_currency_or_short_pay",
+      "expected_should_resolve": false,
+      "is_exception": true,
+      "payment_id": "PAY_077",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": null,
+      "selected_invoices": [],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": false,
+      "verifier_only_decision": "abstain",
+      "verifier_only_reason": "no_financially_valid_allocation"
+    },
+    {
+      "alternatives_considered": 3,
+      "authorizable_allocations": 1,
+      "exception_class": "semantic_credit_reason",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_078",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [
+        "CR_X078A"
+      ],
+      "selected_customer": "CUS_X078",
+      "selected_invoices": [
+        "INV_X078A",
+        "INV_X078B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "treasury_bank_on_behalf",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_079",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X079",
+      "selected_invoices": [
+        "INV_X079A",
+        "INV_X079B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    },
+    {
+      "alternatives_considered": 2,
+      "authorizable_allocations": 1,
+      "exception_class": "alternative_allocation_email",
+      "expected_should_resolve": true,
+      "is_exception": true,
+      "payment_id": "PAY_080",
+      "rules_only_baseline_correct_resolution": false,
+      "rules_only_baseline_decision": "abstain",
+      "selected_credits": [],
+      "selected_customer": "CUS_X080",
+      "selected_invoices": [
+        "INV_X080A",
+        "INV_X080B"
+      ],
+      "split": "benchmark",
+      "verifier_only_correct_resolution": true,
+      "verifier_only_decision": "resolve",
+      "verifier_only_reason": "unique_authorizable_allocation"
+    }
+  ],
+  "dataset_sha256": "fd59237a5dddab0ee712c7a34bab735544c0acc1726026dfda7bdf0cfb7671ae",
+  "overall": {
+    "comparison_record_count": 30,
+    "systems": {
+      "rules_only_baseline": {
+        "correct_abstentions": 12,
+        "correct_resolutions": 0,
+        "false_escalations": 18,
+        "resolved": 0,
+        "wrong_auto_resolutions": 0
+      },
+      "verifier_only": {
+        "correct_abstentions": 12,
+        "correct_resolutions": 18,
+        "false_escalations": 0,
+        "resolved": 18,
+        "wrong_auto_resolutions": 0
+      }
+    },
+    "total_receipts": 80
+  },
+  "report_format_version": 1,
+  "scope": "truth-labelled exceptions that the rules-only baseline did not resolve",
+  "systems": {
+    "rules_only_baseline": "baseline_match on the retrieved candidate bundle; no model",
+    "verifier_only": "resolve only when exactly one financially valid allocation passes the existing proof and sufficiency checks; no model"
+  }
+}
