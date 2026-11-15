@@ -36,7 +36,7 @@ git switch -c research/v1
 | RP-005 | READY | Accepted | `ee41803` | 318 / 8 | 318 / 8 | Owner | 2026-11-15 | All nine checks match. Owner signed off the wording of the four findings. |
 | RP-101 | READY | Accepted | `6631de0` | 331 / 8 | 331 / 8 | Owner (architect checks run) | 2026-11-15 | Order 1 of 11. Diff size differs from the dry run as the contract allows; open choices and two documented residuals (weak-signal cap drop, duplicate credit_id ValidationError) accepted. |
 | RP-102 | READY | Accepted | `7314e9a` | 345 / 8 | 345 / 8 | Owner (architect checks run) | 2026-11-15 | Order 2. Open test-helper details settled without changing contract values; two documented residuals (conservative per-customer credit limit, exponential worst-case cost at the limits) accepted. |
-| RP-103 | READY | Not started | | 354 / 7 | | | | Order 3. Removes 1 marker. |
+| RP-103 | READY | Accepted | `51454e1` | 354 / 7 | 354 / 7 | Owner (architect checks run) | 2026-11-15 | Order 3. Removes 1 marker. Review notes: probe P4 now fails as 'resolved' via the prompt-bundle proposal path (until RP-104), the matcher can still match on ambiguous search via existing filters, and duplicate IDs among cap-dropped records now raise ValidationError (fail closed). |
 | RP-104 | READY | Not started | | 361 / 6 | | | | Order 4. Removes 1 marker. |
 | RP-105 | READY | Not started | | 417 / 1 | | | | Order 9. Owner regenerates the lock. Needs OG-2. |
 | RP-106 | READY | Not started | | 423 / 1 | | | | Order 10 |
@@ -117,7 +117,7 @@ Update when a marker is removed.
 | `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[clears]` | F2 | Marked, strict (added in `123ca6c`) | RP-108 | |
 | `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[covers]` | F2 | Marked, strict (added in `123ca6c`) | RP-108 | |
 | `test_f2_residual_misread_sentence_must_not_authorize_the_wrong_invoices` | F2 residual | Marked, strict (added in `123ca6c`) | Not scheduled | |
-| `test_f3_truncated_search_must_not_match_in_the_rules_only_path` | F3 | Marked, strict (added in `123ca6c`) | RP-103 | |
+| `test_f3_truncated_search_must_not_match_in_the_rules_only_path` | F3 | Removed | RP-103 | `51454e1` |
 | `test_f3_truncated_search_must_not_resolve_a_proposal` | F3 | Marked, strict (added in `123ca6c`) | RP-104 | |
 | `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_A-INV_A1-EMAIL_A]` | F4 | Marked, strict (added in `123ca6c`) | RP-110 | |
 | `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_B-INV_B1-EMAIL_B]` | F4 | Marked, strict (added in `123ca6c`) | RP-110 | |
