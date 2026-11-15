@@ -237,7 +237,6 @@ def test_f3_truncated_search_must_not_match_in_the_rules_only_path():
     assert _decision(f3_dataset(), UnavailableInvestigator()) == "human_review"
 
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason="F3: uniqueness claimed on a truncated search; closed by RP-104")
 def test_f3_truncated_search_must_not_resolve_a_proposal():
     assert _decision(f3_dataset(), FixedInvestigator(F3_PROPOSAL)) == "human_review"
 

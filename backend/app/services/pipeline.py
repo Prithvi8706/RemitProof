@@ -9,7 +9,6 @@ from app.models import (
     ProcessingResult,
 )
 from app.services.ai_investigator import InvestigatorError
-from app.services.alternative_finder import find_valid_alternatives
 from app.services.audit_builder import build_allocation, build_evidence
 from app.services.baseline_matcher import baseline_match
 from app.services.decision_artifacts import (
@@ -152,7 +151,7 @@ def process_payment(
             payment=payment.model_dump(mode="json"),
             baseline=baseline,
             decision=decision,
-            candidates=_candidate_dump(candidates),
+            candidates=_candidate_dump(proof_bundle),
         )
 
     try:
@@ -169,20 +168,20 @@ def process_payment(
             payment=payment.model_dump(mode="json"),
             baseline=baseline,
             decision=decision,
-            candidates=_candidate_dump(candidates),
+            candidates=_candidate_dump(proof_bundle),
             investigator_error=str(exc),
         )
 
-    proof = verify_candidate(candidates, proposal)
-    alternatives = find_valid_alternatives(candidates)
+    proof = verify_candidate(proof_bundle, proposal)
+    alternatives = list(outcome.alternatives)
     sufficiency = evaluate_evidence_sufficiency(
-        candidates,
+        proof_bundle,
         proposal,
         proof,
         alternatives,
     )
     conflict = build_conflict(payment.payment_id, proof, alternatives, sufficiency)
-    counterfactuals = build_counterfactuals(candidates, proposal, alternatives, sufficiency)
+    counterfactuals = build_counterfactuals(proof_bundle, proposal, alternatives, sufficiency)
     decision_artifact = build_decision_artifact(
         payment.payment_id, proposal, proof, alternatives, sufficiency, counterfactuals
     )
@@ -193,7 +192,7 @@ def process_payment(
     else:
         decision_state = "human_review"
         reason = sufficiency.abstention_reason or "evidence_not_sufficient"
-    audit_evidence = build_evidence(candidates, proposal)
+    audit_evidence = build_evidence(proof_bundle, proposal)
     decision = Decision(
         payment_id=payment.payment_id,
         decision=decision_state,
@@ -210,8 +209,8 @@ def process_payment(
         baseline=baseline,
         decision=decision,
         proposal=proposal.model_dump(mode="json"),
-        candidates=_candidate_dump(candidates),
-        proposed_allocation=build_allocation(candidates, proposal),
+        candidates=_candidate_dump(proof_bundle),
+        proposed_allocation=build_allocation(proof_bundle, proposal),
         evidence=audit_evidence,
         proof=proof,
         alternatives=alternatives,
