@@ -220,3 +220,14 @@ Not validated in Phase 5:
 - The frontend. Two new values of `search_detail` can reach a sandbox response only through `Decision.proof`, and by DD-24 no sandbox ledger can produce them. Not checked in the browser.
 - The third bound of X13. It was compared with the solver and nothing else. It was not reviewed, not derived on paper and not tested against CP-SAT.
 - Windows line endings, as in every earlier phase.
+
+## 11. After publication (2026-11-15)
+
+Found while merging `spec/` into `main` (PR #4).
+
+| # | Observation | Effect |
+| --- | --- | --- |
+| P1 | CI failed on the docs-only PR, in the Python 3.9 job only, at "Set up Python": `The version '3.9' with architecture 'x64' was not found for Ubuntu 26.04`. GitHub's `ubuntu-latest` now means Ubuntu 26.04. The `actions/python-versions` manifest has Python 3.9.25 builds for Ubuntu 22.04 and 24.04 only. Python 3.13 and the frontend passed. `main` last passed CI on 2026-10-24, before the runner moved. | The backend job is pinned to `ubuntu-24.04` (DD-11). Every contract that expects CI to pass on Python 3.9 depends on that pin. |
+| P2 | The pin rewrites `.github/workflows/ci.yml:17` in place. No line reference into `ci.yml` moves, and no dry-run patch touches `ci.yml`. The only sentence in the spec that named the runner is `tasks/RP-505.md:44`, now corrected. | No contract is re-derived. |
+| P3 | `main` is no longer `80fc1d7`: it has `spec/` (PR #4) and the pin on top. RP-001 checks `git merge-base --is-ancestor 80fc1d7 HEAD`, not equality, so its start-state check still holds. The full written line (Phases 0 to 3 and 5) was rebuilt on top of the new `main` and gives 793 passed and 1 expected failure on Python 3.13.18 and 3.9.25, with both `--check` commands exiting 0. | The suite totals in every contract stand. |
+

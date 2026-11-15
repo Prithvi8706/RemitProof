@@ -190,6 +190,10 @@ Canonical citations for an alternative, in order and without duplicates: the alt
 
 **Why.** CI runs 3.9 and 3.13 (`.github/workflows/ci.yml`), and the existing code uses this style.
 
+**Amended 2026-11-15.** GitHub's `ubuntu-latest` runner moved to Ubuntu 26.04, and `actions/setup-python` has no Python 3.9 build for it (builds exist for 22.04 and 24.04). The backend job failed at "Set up Python" before any test ran. The backend job is now pinned to `runs-on: ubuntu-24.04` (`.github/workflows/ci.yml:17`). The frontend job stays on `ubuntu-latest`. The change rewrites one line in place, so no line reference into `ci.yml` moves.
+
+**Trade-off.** The pin keeps Python 3.9 in CI only as long as GitHub offers Ubuntu 24.04 runners. When they are withdrawn, the backend job fails the same way and OD-1 has to be decided. Moving to 22.04 would only buy less time.
+
 **Open.** OD-1.
 
 ## DD-12. No new runtime dependency through Phase 7
@@ -345,7 +349,7 @@ An implementer never resolves these.
 
 | ID | Question | Needed before | Default if unanswered |
 | --- | --- | --- | --- |
-| OD-1 | Keep Python 3.9 in the CI matrix? It reached end of life in October 2025, and each new development dependency must still support it. | RP-105 | Keep 3.9 and pin versions that support it |
+| OD-1 | Keep Python 3.9 in the CI matrix? It reached end of life in October 2025, and each new development dependency must still support it. Since 2026-11-15 it also needs the backend CI job pinned to `ubuntu-24.04` (DD-11). | RP-105 | Keep 3.9 and pin versions that support it |
 | OD-2 | Licence for RemitBench data. The repository is all-rights-reserved today, which prevents reuse. | RP-206 | Do not release |
 | OD-3 | Which local model, and a second model family for `P-2llm`? | RP-305 | One model; `P-2llm` is skipped and reported as not run |
 | OD-4 | Who are the seed authors and the second labeller? | RP-203 | Blocked. No substitute. |
@@ -357,6 +361,7 @@ An implementer never resolves these.
 | Date | Change | By |
 | --- | --- | --- |
 | 2026-11-11 | DD-01 to DD-25 and OD-1 to OD-5 recorded | Specification author |
+| 2026-11-15 | DD-11 amended: the backend CI job is pinned to `ubuntu-24.04`, because `ubuntu-latest` (Ubuntu 26.04) has no Python 3.9. OD-1 notes the new cost. No decision about what may be authorized changes. | Specification author |
 | 2026-11-14 | DD-06 revised (four limits from RP-507, credit limit per invoice, allocation cap), DD-16 revised (solver interface, the oracle as a test helper, CP-SAT statuses by known answer), DD-15 validated, DD-12 extended (OR-Tools pin), DD-22: reserved reason `solver_timeout` withdrawn, DD-24 checked against the allocation cap, OD-6 added. All while writing and dry-running the Phase 5 contracts. The allocation cap is stricter than before: a ledger with more than 2048 exact allocations is now refused. The raised invoice and credit limits allow new automation and are stated as such in RP-507. Needs owner acceptance with the Phase 5 contracts. | Specification author |
 | 2026-11-13 | DD-21 location revised (evaluation code in `backend/remitbench/`, not `backend/app/eval/`). DD-27 added. DD-13 stands, but the task that may edit the prompt is now RP-307, not RP-303. While writing and dry-running the Phase 3 contracts. Needs owner acceptance with them. | Specification author |
 | 2026-11-13 | DD-20 extended (salted split, commitment never overwritten, sentence-fingerprint leak guard). DD-26 added. Both while writing and dry-running the Phase 2 contracts. Needs owner acceptance with them. | Specification author |

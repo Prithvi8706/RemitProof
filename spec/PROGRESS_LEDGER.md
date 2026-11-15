@@ -214,6 +214,7 @@ Record every stop, even one resolved in minutes.
 | Date | Change |
 | --- | --- |
 | 2026-11-11 | Package created. Phase 0 contracts validated by dry run. |
+| 2026-11-15 | `spec/` merged into `main` (PR #4, `2b1edd0`). Backend CI job pinned to `ubuntu-24.04` (DD-11). The written line was re-run on top of both: 793 passed, 1 expected failure on Python 3.13.18 and 3.9.25. |
 | 2026-11-14 | Phase 5 contracts RP-501 to RP-508 written and validated by dry run, on Python 3.13.18 and 3.9.25. They start after RP-305 and join the end of the written line. DD-06 and DD-16 revised, DD-15 validated, OD-6 added, the reserved reason `solver_timeout` withdrawn (see `DESIGN_DECISIONS.md`). Phase 5 estimate 25 to 28 implementation hours. |
 | 2026-11-13 | Phase 3 contracts RP-301 to RP-306 written and validated by dry run, on Python 3.13.18 and 3.9.25. RP-307 and H-302 added. Evaluation code moved from the planned `backend/app/eval/` to `backend/remitbench/` (DD-21). DD-27 added. Phase 3 estimate 25 to 30 implementation hours. |
 | 2026-11-13 | Phase 2 contracts RP-201 to RP-208 written and validated by dry run, on Python 3.13.18 and 3.9.25. RP-208 and H-205 added. OG-3 and OG-4 now gate the human steps, not the code. DD-20 extended, DD-26 added. Phase 2 estimate 31 to 37 implementation hours. |
