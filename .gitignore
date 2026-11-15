@@ -13,3 +13,4 @@ frontend/out/
 *.tsbuildinfo
 .impeccable/live/sessions/
 *.log
+.hypothesis/
