@@ -30,7 +30,7 @@ git switch -c research/v1
 | Task | Contract | State | Commit | Suite passed / expected failures (expected) | Observed | Reviewer | Date | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | RP-001 | READY | Accepted | `b16c071` | 289 / 0 | 289 / 0 | Owner | 2026-11-15 | Start tree had one unrelated untracked file (`PROJECT_DOSSIER_LOCAL.md`). |
-| RP-002 | READY | Not started | | 295 / 8 | | | | |
+| RP-002 | READY | Accepted | `123ca6c` | 295 / 8 | 295 / 8 | Owner | 2026-11-15 | Command 2 as written (`-q` twice) prints a per-file count, 14; the IDs list with one `-q`. |
 | RP-003 | READY | Not started | | 307 / 8 | | | | |
 | RP-004 | READY | Not started | | 318 / 8 | | | | |
 | RP-005 | READY | Not started | | 318 / 8 | | | | |
@@ -113,14 +113,14 @@ Update when a marker is removed.
 
 | Probe | Finding | Marker state | Removed by | Commit |
 | --- | --- | --- | --- | --- |
-| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[settles]` | F2 | Not yet added | RP-108 | |
-| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[clears]` | F2 | Not yet added | RP-108 | |
-| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[covers]` | F2 | Not yet added | RP-108 | |
-| `test_f2_residual_misread_sentence_must_not_authorize_the_wrong_invoices` | F2 residual | Not yet added | Not scheduled | |
-| `test_f3_truncated_search_must_not_match_in_the_rules_only_path` | F3 | Not yet added | RP-103 | |
-| `test_f3_truncated_search_must_not_resolve_a_proposal` | F3 | Not yet added | RP-104 | |
-| `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_A-INV_A1-EMAIL_A]` | F4 | Not yet added | RP-110 | |
-| `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_B-INV_B1-EMAIL_B]` | F4 | Not yet added | RP-110 | |
+| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[settles]` | F2 | Marked, strict (added in `123ca6c`) | RP-108 | |
+| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[clears]` | F2 | Marked, strict (added in `123ca6c`) | RP-108 | |
+| `test_f2_unread_instruction_must_not_authorize_the_wrong_invoices[covers]` | F2 | Marked, strict (added in `123ca6c`) | RP-108 | |
+| `test_f2_residual_misread_sentence_must_not_authorize_the_wrong_invoices` | F2 residual | Marked, strict (added in `123ca6c`) | Not scheduled | |
+| `test_f3_truncated_search_must_not_match_in_the_rules_only_path` | F3 | Marked, strict (added in `123ca6c`) | RP-103 | |
+| `test_f3_truncated_search_must_not_resolve_a_proposal` | F3 | Marked, strict (added in `123ca6c`) | RP-104 | |
+| `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_A-INV_A1-EMAIL_A]` | F4 | Marked, strict (added in `123ca6c`) | RP-110 | |
+| `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_B-INV_B1-EMAIL_B]` | F4 | Marked, strict (added in `123ca6c`) | RP-110 | |
 
 ## Generation register
 
