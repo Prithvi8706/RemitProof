@@ -231,3 +231,63 @@ Found while merging `spec/` into `main` (PR #4).
 | P2 | The pin rewrites `.github/workflows/ci.yml:17` in place. No line reference into `ci.yml` moves, and no dry-run patch touches `ci.yml`. The only sentence in the spec that named the runner is `tasks/RP-505.md:44`, now corrected. | No contract is re-derived. |
 | P3 | `main` is no longer `80fc1d7`: it has `spec/` (PR #4) and the pin on top. RP-001 checks `git merge-base --is-ancestor 80fc1d7 HEAD`, not equality, so its start-state check still holds. The full written line (Phases 0 to 3 and 5) was rebuilt on top of the new `main` and gives 793 passed and 1 expected failure on Python 3.13.18 and 3.9.25, with both `--check` commands exiting 0. | The suite totals in every contract stand. |
 
+## 12. Phase 6 addendum (2026-11-16)
+
+Found while designing and dry-running five Phase 6 contracts on top of the tree after RP-508.
+
+### 12.1 Three new findings
+
+Each was observed on the dry-run tree after RP-601 and is recorded by strict probes in RP-604, in the way RP-002 recorded F1 to F4.
+
+| ID | Finding | Example | Before | State |
+| --- | --- | --- | --- | --- |
+| F5 | A remittance instruction that the reader reads completely, and that names other invoices than the only exact allocation, does not stop the rules-only match. | Payment 10000.00. Open invoices `INV_A` 6000.00 and `INV_C` 10000.00. The customer writes "Apply BNK-1 only to INV_A." | `matched_normally` on `INV_C` | Closed by RP-606 (DD-28) |
+| F6 | An identifier is recognised only as `INV_`, `CR_` or `EMAIL_` followed by letters and digits. A prohibition that spells it another way is not seen. | "Do not apply this payment to INV-C." Also `INV C`, `INVC`, full-width letters, a zero-width character inside the identifier. | `matched_normally` on `INV_C` | Open. Five strict probes. DD-19 is the designed answer, in Phase 4. |
+| F7 | A hold that names no identifier is not read. | "Do not apply this payment to any invoice." "This payment was sent in error. Please refund it." | `matched_normally` on `INV_C` | Open. Four strict probes. Measured by the reading policies of Phase 4 (DD-18), or accepted by the owner as a stated limit. |
+
+Why neither the audit nor Phase 1 saw them: none of the 50 matched legacy payments has a candidate email, so on that corpus the rules-only path never meets an instruction.
+
+What they mean for the claim of the project. F5 was a hole in the control itself and is closed. F6 and F7 are the reader's limits, on the path that needs no model: until Phase 4 the system can apply a payment against a customer's written wish when the wish is not phrased in the reader's patterns. That is the research question of Phase 4 stated as two failing tests, and the report must not claim otherwise before Phase 4 has results.
+
+### 12.2 Observations
+
+| # | Observation | Effect |
+| --- | --- | --- |
+| Y1 | The start tree reproduces: 793 passed and 1 expected failure on Python 3.13.18 and 3.9.25, both `--check` commands exit 0. | Phase 6 joins the end of the written line. |
+| Y2 | The repository has moved since the spec was published. `main` is `72aefa5`. On `research/v1` (`4cdee88`) the ledger records Phase 0 and nine Phase 1 tasks as accepted (RP-101 to RP-105, RP-107 to RP-110), each with the suite total its contract predicted. Eight service files of that branch were laid over the dry-run tree and the whole suite still gave 793 and 1 on both Python versions. | The real implementations behave like the dry-run code on every test of the written line that could be run against them. The dry runs still start from `80fc1d7` plus the patch. |
+| Y3 | The real files are not the dry-run files. `pipeline.py` on `research/v1` calls the matcher at line 136; the dry-run tree does at line 139. | New rule R-16: a line number into a file that an earlier task wrote is a dry-run position, and the implementer finds the place by the quoted text or name. RP-605 and RP-606 identify every place by name. Earlier contracts that cite such lines (eight references in RP-502, RP-503, RP-507 and RP-508) are covered by the rule and were not rewritten. |
+| Y4 | The six properties of RP-601 hold on generated cases and on the 80 legacy payments: no float and exact sums (INV-01), free text never matters (INV-03), at most one allocation can be decided (INV-07), nothing resolves without a usable proposal (INV-10), inert records never matter (INV-15), record order never matters (INV-16). | INV-03, INV-15 and INV-16 move from "not verified" to verified inside a stated input model. |
+| Y5 | INV-15 had no exact meaning. One step outside the model that was fixed, a result does change, and correctly: an unrelated customer's open invoice in the payment's currency with exactly the payment's amount makes that customer a candidate. | The model is written down in RP-601 section 6.2 and the boundary is pinned by a test, so that nobody reads INV-15 as "unrelated customers never matter". |
+| Y6 | Hypothesis in derandomized mode takes its examples from the source text of the test function. Two correct implementations of one contract run different examples. | RP-601 and RP-605 pin no count that depends on generated examples. They give thresholds with a wide margin and the dry-run figures for orientation. |
+| Y7 | Three of the eleven defects injected for RP-601 were not caught by the property suite. Each is caught by a test of an earlier task. | Listed in RP-601 section 10 with the reason, so that nobody takes the property suite for complete. |
+| Y8 | What the hostile-input review found to hold: text without an identifier changes no decision; an identifier in a clause the reader cannot classify blocks as `unread_instruction`; a sender whose domain only resembles a customer's is not trusted; regular-expression characters in a bank reference are harmless; a 650 kB email is processed in 0.58 s. | Forty passing tests in RP-604. |
+| Y9 | The first rule tried for F5, "a match must be the one authorizable allocation", refuses a plain payer-name match whenever an unrelated customer has an open invoice of the same amount. | Rejected. The rule of DD-28 asks only for the contradictions of the matched allocation. On 679 generated cases it moves 4 from matched to review and nothing else. No legacy or benchmark decision moves. |
+| Y10 | Assessed without any proposal, 6 of the 18 legacy review decisions are payments with exactly one authorizable allocation: `PAY_053`, `PAY_064`, `PAY_066`, `PAY_072`, `PAY_078`, `PAY_080`. The cached proposal named something else. The assessment agrees with the truth label `should_resolve` on all 80 payments without reading it. The published review reason equals the case's reason for 5 of the 18. | RP-605 is a read-only module beside the decision path (DD-29), not an edit of `Decision.reason` as planned. The six payments are the legacy corpus's missed resolutions seen from the case side: the control was right to refuse the wrong proposal, and the investigator was wrong. |
+| Y11 | Mutation testing with six operators on the five files written in Phases 1 and 5: 102 mutants, 99 killed by the tests named for their file, 3 survived the whole suite, all 3 equivalent. The report is byte-identical on Python 3.9.25 and 3.13.18. | DD-30. The numbers are those of the dry-run code. The contract pins none of them, because the real files have their own text. |
+| Y12 | The first version of the mutation runner reported every survivor as killed by the full suite, because an unrelated test was failing and the runner did not check the full suite before using it. Found by the run, not by an injected defect. | The runner now refuses to use a failing suite, and a test pins it. A reminder that a tool for checking tests needs tests. |
+| Y13 | The same runner on four older authorization-critical files: 252 mutants, 83 survive the 16 gate and proof test files (matcher 4 of 25, proof engine 10 of 93, gate 55 of 113, pipeline 14 of 21). The full suite was run against 13 of the 83 before the run was stopped for time: 7 killed, 6 survived. One survivor turns "the credits on an invoice exceed its amount" into "exceed or equal". | The v0 gate code is less tightly tested than the code written under this specification. New task RP-607, not written. The full-suite stage needs about three minutes per mutant on the two-core dry-run machine. |
+
+### 12.3 Changes from the plan
+
+| Plan | Written | Why |
+| --- | --- | --- |
+| RP-604 "hostile-input tests", 3 hours, low risk | 52 tests, 12 of them strict probes for three findings, 5 hours, medium risk | 12.1 |
+| No such task | RP-606, closes F5, 3 hours, high risk | 12.1, Y9 |
+| RP-605 changes authorization-critical code, 6 hours | A read-only module, 5 hours | Y10, DD-29 |
+| RP-603 "mutation testing setup and triage record", 6 hours | A standard-library runner, the first report, an open triage record, 5 hours. Triage is H-601. | Y11, DD-30 |
+| No such task | RP-607, the older gate code, 8 hours, not written | Y13 |
+| RP-602 in Phase 6 | Not written, moved behind Phase 4 | It needs RP-408 and real dev seeds |
+| Execution order RP-601 to RP-605 | RP-601, RP-604, RP-606, RP-605, RP-603 | The fix follows the probes. The assessment uses the fix. Mutation testing comes last so that its full suite includes everything. |
+
+### 12.4 Not validated in Phase 6
+
+- Any of the five tasks on the real `research/v1` tree. The dry runs start from `80fc1d7` plus the patch. Y2 is the only evidence about the real code.
+- F6 and F7 against a model-backed reader. No model is chosen (OG-5 is open).
+- RP-606 on real payments. Its effect was measured on generated cases and on the legacy corpus, where it changes nothing because no matched payment has an email.
+- The mutation report on the real code, and on any machine but one. A mutant that times out on a slower machine would change a status.
+- The full-suite stage for 70 of the 83 older-code survivors of Y13. The 6 that survived were not triaged.
+- More than six mutation operators. No statement deletion, no changed return values.
+- The case assessment on anything but 80 legacy payments, 300 generated cases and hand-built cases. A replayed transaction, an incomplete search and a payment with another status are covered by one hand-built case each.
+- RP-602. Nothing was prototyped.
+- The HTTP layer of the sandbox, hostile JSON or CSV at the loader, and a hostile model response at the transport, as RP-604 section 9 states.
+

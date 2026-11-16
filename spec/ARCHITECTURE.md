@@ -77,6 +77,21 @@ Stated limits after Phase 5, in addition to items 2 to 6 of section 1a:
 2. **The node budget is reached often on large ledgers.** On synthetic ledgers of 64 invoices the search answers 119 of 360 (`docs/solver_scaling.md`, RP-508). The rest go to review.
 3. **The verifier-only baseline still uses the enumerator over the prompt view.** It is unaffected by the new limits, and it stays conservative for the same reason as before.
 
+## 1c. System after the written part of Phase 6 (as specified by RP-601, RP-604, RP-606, RP-605, RP-603)
+
+Validated in a dry run on top of the tree after RP-508. Nothing here exists in the repository until those tasks are accepted.
+
+One decision step changes (RP-606). Directly after the rules-only matcher returns a match, the pipeline asks the proof engine for the contradictions of the matched allocation, through its canonical proposal. If there is one, the match is refused and the payment continues as an unmatched payment: to the investigator and through the gate. The matcher itself is unchanged, so the `rules_only` system of the benchmark is still the plain matcher.
+
+One module is added beside the decision path (RP-605). `backend/app/services/review_reason.py` assesses a case without any proposal: decidable automatically or not, on which allocation, and if not, the first thing that stops it. `process_payment` does not call it and no result contains it yet. RP-803 decides what is published.
+
+Stated limits after Phase 6, in addition to those of sections 1a and 1b:
+
+1. **The rules-only path trusts the reader's patterns.** A prohibition whose identifier is spelled another way (F6) and a hold with no identifier (F7) do not stop a match. Nine strict probes record this. Phase 4 is where it is designed away or measured.
+2. **Only the matched customer's emails can refuse a match.** An email filed under another customer does not count, by the proof engine's own rule (RP-606, test 7).
+3. **The reason on a published review decision still describes the proposal.** On the legacy corpus it equals the case's reason for 5 of 18 review decisions (RP-605).
+4. **Mutation testing covers five files.** The matcher, the proof engine, the gate and the pipeline are not covered yet, and a first look found survivors there (RP-607).
+
 ## 2. Target system
 
 The model stops proposing allocations and starts reading documents. A deterministic core derives the allocation and is the only place a decision is authorized. The proposal-based configuration stays runnable as a baseline.
@@ -203,10 +218,14 @@ Authorization-critical modules are marked AC. A task may change an AC module onl
 | 5 | `backend/tests/cpsat_oracle.py` | CP-SAT oracle (RP-506). A test helper. OR-Tools is a development dependency (RP-505) and is never imported under `backend/app/`. |
 | 5 | `backend/tests/test_solver_problem.py`, `test_solver_search.py`, `test_solver_solution_limit.py`, `test_solver_node_budget.py`, `test_solver_differential.py`, `test_search_solver.py`, `test_solver_scaling.py` | Phase 5 tests |
 | 5 | `backend/scripts/solver_scaling.py`, `docs/solver_scaling.json`, `docs/solver_scaling.md` | Scaling experiment on synthetic ledgers and its pinned table (RP-508) |
-| 6 | `backend/tests/properties/`, `backend/tests/adversarial/`, `backend/app/services/review_reason.py` | Robustness |
+| 6 | `backend/tests/properties/`: `strategies.py`, `test_decision_properties.py`, `test_amount_properties.py` | Property suite and the case generator (RP-601) |
+| 6 | `backend/tests/test_hostile_inputs.py` | Hostile-input tests and the probes for F5 to F7 (RP-604). The planned directory `backend/tests/adversarial/` is not created. |
+| 6 | `backend/app/services/authorization.py` (`match_contradictions`), `backend/tests/test_match_contradictions.py` | A match must survive its own proof (RP-606). AC. |
+| 6 | `backend/app/services/review_reason.py`, `backend/tests/test_review_reason.py` | Case assessment (RP-605). Reads AC modules. Not on the decision path. |
+| 6 | `backend/scripts/mutation_run.py`, `backend/tests/test_mutation_run.py`, `docs/mutation_report.json`, `docs/mutation_triage.json` | Mutation runner, report and triage record (RP-603) |
 | 7 | `backend/app/services/ledger_index.py`, `backend/app/services/decision_log.py`, `backend/scripts/bench_latency.py` | Engineering |
 
-Phase 1, Phase 2, Phase 3 and Phase 5 paths are defined by their contracts. Phase 4, Phase 6 and Phase 7 paths are fixed names for planning. Their contents are defined only when the task contract is written.
+Phase 1, Phase 2, Phase 3 and Phase 5 paths, and the Phase 6 paths above, are defined by their contracts. Phase 4 and Phase 7 paths are fixed names for planning. Their contents are defined only when the task contract is written.
 
 ## 4. Frozen data contracts
 

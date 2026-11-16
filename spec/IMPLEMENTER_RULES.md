@@ -64,6 +64,8 @@ Run them only if your contract gives the full command line.
 
 **R-15. No silent adjustment.** If a number, count, hash or message differs from the contract, stop and report the difference. Do not edit the contract's expectation, the test or the code until it matches.
 
+**R-16. Line numbers into files that earlier tasks wrote.** A contract gives `path:line` for every statement. For a file that exists at commit `80fc1d7` and that no earlier task changed, the line is exact. For a file that an earlier task created or changed, the line is its position in the architect's dry-run tree, and in your repository it may be a few lines off. Find the place by the quoted text, the function name or the test name the contract gives next to the line number. If that text or name does not exist, or exists more than once, stop and report. Never guess from the line number alone. The same holds for a start-state check whose expected output shows a line number: the text after the number must match, the number may differ, and you report the number you saw.
+
 ## Standard commands
 
 Run from the repository root.

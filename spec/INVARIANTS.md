@@ -64,6 +64,29 @@ Observed in the dry run of RP-501 to RP-508. It becomes fact when those tasks ar
 | INV-P2 | Holds. The prompt bundles, the frozen files and the v1 audit report are unchanged after every Phase 5 task. | Both `--check` commands; RP-101 hash test |
 | INV-P6 | Five pre-existing tests change, each named with its exact new text in the RP-507 contract: four in `test_search.py` and one in `test_pipeline_search.py`. No other existing test is edited in Phase 5. | RP-507 section 12 |
 
+## Status after the written part of Phase 6, as specified
+
+Observed in the dry run of RP-601, RP-604, RP-606, RP-605 and RP-603. It becomes fact when those tasks are accepted.
+
+| ID | Status after Phase 6 | Shown by |
+| --- | --- | --- |
+| INV-01 | Holds as a property: every accepted amount is a whole number of cents, sums are exact and independent of order, and no float appears in any generated or legacy result. | RP-601, tests 14 to 19 |
+| INV-03 | Verified. Free text in a proposal never changes a generated or a legacy result. | RP-601, tests 8 and 9 |
+| INV-07 | Holds as a property: whatever is proposed, at most one allocation can be decided for a fixed input. | RP-601, test 11; RP-605, test 9 |
+| INV-08 | Now holds on the rules-only path for every contradiction the proof engine records (finding F5 closed). It still depends on the reader recognising the instruction: F6 and F7 are open. | RP-606; the F6 and F7 probes of RP-604 |
+| INV-09 | Holds for the cases tested: text without an identifier changes nothing, an identifier in unclassified text blocks, sender look-alikes are not trusted, very large inputs finish. | RP-604, tests 2 to 6 |
+| INV-10 | Holds as a property: without a usable proposal nothing is resolved. | RP-601, test 12 |
+| INV-15 | Verified inside a fixed input model: added customers that share no word with the payer, with invoices in another currency, their credits, their emails, and other payments with another bank reference never change a result. One step outside the model a result does change, correctly: an unrelated customer's invoice in the payment's currency with exactly the payment's amount. | RP-601, section 6.2 and test 13 |
+| INV-16 | Verified inside a fixed input model: each of the five record lists may be permuted independently. The order of sentences inside an email is outside the model. | RP-601, section 6.1 |
+
+Three new findings, recorded as probes by RP-604 (definitions in `AUDIT_VALIDATION.md`, section 12):
+
+| Finding | Invariant it touches | State |
+| --- | --- | --- |
+| F5. A fully read instruction that names other invoices does not stop a rules-only match. | INV-08 | Closed by RP-606 |
+| F6. A prohibited identifier in another spelling (`INV-C`, `INV C`, `INVC`, full-width, zero-width inside) is not seen. | INV-05, INV-14 | Open. Five strict probes. Designed answer: DD-19, Phase 4. |
+| F7. A hold that names no identifier is not read. | INV-05, INV-08 | Open. Four strict probes. Measured by the reading policies of Phase 4 (DD-18), or accepted by the owner as a stated limit. |
+
 ## How a task uses this file
 
 A contract's "Financial correctness invariants" section lists the IDs the task could affect and states, for each, the observable check. If an implementer sees any other invariant at risk, that is a stop condition.

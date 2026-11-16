@@ -2,7 +2,7 @@
 
 Each decision is settled. An implementer who believes a decision is wrong stops and reports. Only the owner changes a decision, by adding a dated entry at the end of this file.
 
-"Validated" means the decision was exercised in a dry run: Phase 0 for DD-02, DD-03, DD-10, DD-13 and DD-14, Phase 1 for DD-04 to DD-09 and DD-11, Phase 5 for DD-15, DD-16 and the revised DD-06. "Reasoned" means it follows from inspected code and was not yet exercised; the task that implements it must validate it when its contract is written.
+"Validated" means the decision was exercised in a dry run: Phase 0 for DD-02, DD-03, DD-10, DD-13 and DD-14, Phase 1 for DD-04 to DD-09 and DD-11, Phase 5 for DD-15, DD-16 and the revised DD-06, Phase 6 for DD-28 to DD-30. "Reasoned" means it follows from inspected code and was not yet exercised; the task that implements it must validate it when its contract is written.
 
 ## Index
 
@@ -35,6 +35,9 @@ Each decision is settled. An implementer who believes a decision is wrong stops 
 | DD-25 | Scope exclusions | Owner direction |
 | DD-26 | Benchmark tooling: location, label, oracle, what a variant may change | Validated on the example seeds |
 | DD-27 | What the benchmark measures, and how a system is run | Validated on the example seeds. No real model run. |
+| DD-28 | A rules-only match must survive its own proof | Validated 2026-11-16 |
+| DD-29 | The review reason of a case is computed beside the decision path and published only by RP-803 | Validated 2026-11-16 |
+| DD-30 | Mutation testing uses a standard-library runner; triage is the owner's | Validated on the dry-run code 2026-11-16 |
 
 ---
 
@@ -343,6 +346,38 @@ Each is also given with a bootstrap interval that resamples seeds, because the c
 
 **Determinism.** Statistics use no `random` module. Bootstrap indices come from SHA-256. A run is recorded at least twice, and the manifest says whether the runs agreed.
 
+## DD-28. A rules-only match must survive its own proof
+
+**Finding (F5).** The matcher reads affirmative invoice IDs only from the payment's own reference fields. A fully read email from the same customer that names other invoices did not stop a match. The proof engine holds exactly that against a proposal, so the two automatic paths disagreed.
+
+**Decision.** A rules-only match is made only if the proof of the matched allocation, computed for its canonical proposal, shows no contradiction. Otherwise the pipeline replaces the matcher's result by "unresolved" with the existing reason `conflicting_remittance_evidence`, and the payment continues as an unmatched payment (RP-606).
+
+**Why in the pipeline and not in the matcher.** The matcher is also the `rules_only` system of the benchmark, and its decisions there are pinned. Keeping it plain keeps that baseline what it was and lets the benchmark show the difference.
+
+**Rejected.** "A match must be the one authorizable allocation" (the predicate of RP-110). It refuses a plain payer-name match whenever an unrelated customer has an open invoice of the same amount, because the gate counts that invoice as a second explanation. On a large ledger that sends many ordinary payments to review. A control test of RP-601 caught it in the dry run.
+
+**Trade-off.** The rule only removes automatic decisions: 4 of 679 generated cases moved from matched to review, and no legacy or benchmark decision moved. It closes F5 only. A match is still as blind as the reader: F6 and F7 stay open.
+
+## DD-29. The review reason of a case is computed beside the decision path
+
+**Decision.** `assess_case(payment_id, dataset)` answers from the case alone whether a payment can be decided automatically, on which allocation, and if not, why not. It lives in `backend/app/services/review_reason.py`. Nothing on the decision path imports it, and no result carries it. RP-803 is the task that may publish it (RP-605).
+
+**Why.** The published reason describes the proposal that was judged. On the legacy corpus it is the case's own reason for 5 of 18 review decisions, and 6 of the 18 are payments with exactly one authorizable allocation that a wrong proposal sent to review. A reviewer needs the case's reason. But `Decision.reason` is part of the frozen legacy snapshot, and a module that cannot change a decision can be checked against the pipeline by a property test.
+
+**Trade-off.** The order of the checks is now written twice, in `process_payment` and in `assess_case`. They are kept in step by a property test over 300 generated cases and by the legacy corpus, not by shared code. Sharing the code would mean restructuring `process_payment`, which is a larger change to authorization-critical code than the benefit justifies before RP-803.
+
+## DD-30. Mutation testing uses a standard-library runner; triage is the owner's
+
+**Decision.** `backend/scripts/mutation_run.py` generates mutants with six operators from the syntax tree, runs each against the tests named for its file and, if it survives, against the whole suite. It writes `docs/mutation_report.json`. Every survivor needs an entry in `docs/mutation_triage.json` with a class and a reason. An implementer leaves every survivor `open`. The owner triages (H-601).
+
+**Why no tool.** `mutmut` for Python 3.9 stops at 3.3.1 and `cosmic-ray` adds dependencies. Either needs another lock regeneration on top of OD-6. The runner is about 250 lines with no dependency and gives an identical report on Python 3.9 and 3.13.
+
+**Why nothing is pinned.** The mutants depend on the exact text of files that implementers write. The contract pins the tool's behaviour on fixed examples and the agreement of report and triage record.
+
+**Why staleness does not fail the suite.** A later task that edits a target file would otherwise have to rerun the tool and triage, and triage is a judgement. `--check` reports a stale report. The owner reruns before the sealed run.
+
+**Trade-off.** Six operators. A surviving mutant is a finding. A killed one proves little. On the dry-run code 99 of 102 mutants were killed and the other 3 were equivalent, which says the Phase 1 and Phase 5 code is tightly tested and says nothing about the older gate code, where a first look found survivors (RP-607).
+
 ## Open decisions for the owner
 
 An implementer never resolves these.
@@ -361,6 +396,7 @@ An implementer never resolves these.
 | Date | Change | By |
 | --- | --- | --- |
 | 2026-11-11 | DD-01 to DD-25 and OD-1 to OD-5 recorded | Specification author |
+| 2026-11-16 | DD-28 (a match must survive its own proof), DD-29 (case assessment beside the decision path) and DD-30 (standard-library mutation runner, owner triage) recorded while writing and dry-running the Phase 6 contracts. DD-28 changes a decision path and only removes automatic decisions. Findings F5 to F7 recorded in `AUDIT_VALIDATION.md` section 12. Needs owner acceptance with the Phase 6 contracts. | Specification author |
 | 2026-11-15 | DD-11 amended: the backend CI job is pinned to `ubuntu-24.04`, because `ubuntu-latest` (Ubuntu 26.04) has no Python 3.9. OD-1 notes the new cost. No decision about what may be authorized changes. | Specification author |
 | 2026-11-14 | DD-06 revised (four limits from RP-507, credit limit per invoice, allocation cap), DD-16 revised (solver interface, the oracle as a test helper, CP-SAT statuses by known answer), DD-15 validated, DD-12 extended (OR-Tools pin), DD-22: reserved reason `solver_timeout` withdrawn, DD-24 checked against the allocation cap, OD-6 added. All while writing and dry-running the Phase 5 contracts. The allocation cap is stricter than before: a ledger with more than 2048 exact allocations is now refused. The raised invoice and credit limits allow new automation and are stated as such in RP-507. Needs owner acceptance with the Phase 5 contracts. | Specification author |
 | 2026-11-13 | DD-21 location revised (evaluation code in `backend/remitbench/`, not `backend/app/eval/`). DD-27 added. DD-13 stands, but the task that may edit the prompt is now RP-307, not RP-303. While writing and dry-running the Phase 3 contracts. Needs owner acceptance with them. | Specification author |
