@@ -9,12 +9,12 @@ Place the folder at the repository root as `spec/`.
 | Item | State |
 | --- | --- |
 | Repository commit validated | `80fc1d7b9f1a9bc0bfc7490aba7d84c2aac7d00e` (2026-10-24), 15 commits, branch `main`, no tags |
-| Audit re-validated | Yes. See `AUDIT_VALIDATION.md`. Eight corrections, one new finding (F4), eleven observations from the Phase 1 dry run (section 7), ten from Phase 2 (section 8), eleven from Phase 3 (section 9) and fourteen from Phase 5 (section 10). |
+| Audit re-validated | Yes. See `AUDIT_VALIDATION.md`. Eight corrections, one new finding (F4), eleven observations from the Phase 1 dry run (section 7), ten from Phase 2 (section 8), eleven from Phase 3 (section 9), fourteen from Phase 5 (section 10) and thirteen from Phase 6 (section 12), with three new findings (F5 to F7). |
 | Architecture | Frozen. See `ARCHITECTURE.md` and `DESIGN_DECISIONS.md`. |
-| Task inventory | 62 tasks in 10 groups. See `TASK_INDEX.md`. |
+| Task inventory | 64 tasks in 10 groups. See `TASK_INDEX.md`. |
 | Phases | 9 (Phase 0 to Phase 8), plus one optional task |
-| Contracts ready to implement | 38 of 62: `tasks/RP-001.md` to `tasks/RP-005.md` (Phase 0), `tasks/RP-101.md` to `tasks/RP-111.md` (Phase 1), `tasks/RP-201.md` to `tasks/RP-208.md` (Phase 2), `tasks/RP-301.md` to `tasks/RP-306.md` (Phase 3) and `tasks/RP-501.md` to `tasks/RP-508.md` (Phase 5) |
-| Contracts not written | 24 (RP-307, Phases 4, 6, 7 and 8, and the optional task). Their rows in `TASK_INDEX.md` are scope statements only. They are not implementation-ready. |
+| Contracts ready to implement | 43 of 64: `tasks/RP-001.md` to `tasks/RP-005.md` (Phase 0), `tasks/RP-101.md` to `tasks/RP-111.md` (Phase 1), `tasks/RP-201.md` to `tasks/RP-208.md` (Phase 2), `tasks/RP-301.md` to `tasks/RP-306.md` (Phase 3) `tasks/RP-501.md` to `tasks/RP-508.md` (Phase 5) and `tasks/RP-601.md`, `RP-603.md`, `RP-604.md`, `RP-605.md`, `RP-606.md` (Phase 6) |
+| Contracts not written | 21 (RP-307, RP-602, RP-607, Phases 4, 7 and 8, and the optional task). Their rows in `TASK_INDEX.md` are scope statements only. They are not implementation-ready. |
 
 ## Reading order
 
@@ -26,7 +26,7 @@ Place the folder at the repository root as `spec/`.
 6. `TEST_STRATEGY.md`: how results are verified.
 7. `TASK_INDEX.md` and `DEPENDENCY_GRAPH.md`: what exists and in what order.
 8. `PROGRESS_LEDGER.md`: the coordination record. The owner updates it.
-9. `tasks/RP-0xx.md` to `tasks/RP-3xx.md` and `tasks/RP-5xx.md`: one contract per task.
+9. `tasks/RP-0xx.md` to `tasks/RP-3xx.md`, `tasks/RP-5xx.md` and `tasks/RP-6xx.md`: one contract per task.
 
 ## How to run one task
 
@@ -95,3 +95,18 @@ Five things in Phase 5 need the owner, not an agent:
 3. Accept the revised DD-06 and DD-16 in `DESIGN_DECISIONS.md`: four limits where the plan had one, a credit limit per invoice where there was one per customer, and a list of allocations that is complete or refused.
 4. Accept one new refusal (RP-507, section 10): a small ledger with more than 2048 exact allocations used to be searched and now goes to review.
 5. Decide whether a third pruning bound is worth a task. A side experiment suggests it removes most budget stops (`AUDIT_VALIDATION.md`, section 10, item X13). It is not designed, not specified and not in the inventory.
+
+## How the Phase 6 contracts were validated
+
+Five Phase 6 tasks were applied on top of the tree after RP-508, in this order: RP-601, RP-604, RP-606, RP-605, RP-603. After each one the full suite and both `--check` commands were run on Python 3.13.18 and 3.9.25. The line ends at 914 passed and 10 expected failures. Forty-one deliberate defects were injected across the five tasks, one at a time. Thirty-six were caught by the task's own tests at once. Two were caught after a test was added for them. Three, in RP-601, are caught only by tests of earlier tasks, and the contract says so.
+
+Read section 12 of `AUDIT_VALIDATION.md` before anything else in this phase. The hostile-input review found three unsafe behaviours of the rules-only matcher. One is closed by a new task (RP-606). Two stay open as strict probes until Phase 4.
+
+Six things in Phase 6 need the owner, not an agent:
+
+1. Accept finding F5 and the rule of DD-28 (RP-606). It changes when a payment is decided without review, and only removes automatic decisions.
+2. Decide what happens to F6 and F7 before Phase 4 is written: designed away (DD-19, DD-18), or accepted as stated limits. Until then the rules-only path can apply a payment against a customer's written wish when the wish is not phrased in the reader's patterns.
+3. Read the legacy table of RP-605. Six payments are in review because of the proposal, not because of the payment. Decide in RP-803 which reason is published.
+4. Triage the surviving mutants after RP-603 is implemented (H-601). The three survivors on the dry-run code were equivalent. The real code will have its own.
+5. Decide the scope of RP-607. The older gate code has surviving mutants, and covering it costs hours of machine time or a narrower kill suite.
+6. Accept rule R-16 in `IMPLEMENTER_RULES.md`. A line number into a file that an earlier task wrote is a dry-run position. The real `pipeline.py` on `research/v1` already differs from the dry-run tree by three lines.

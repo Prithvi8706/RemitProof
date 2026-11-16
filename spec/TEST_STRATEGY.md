@@ -26,6 +26,9 @@ A task is accepted on evidence a reviewer can reproduce, not on the implementer'
 | Differential tests | Independent implementations agree | Solver against a brute force and the enumerator (`test_solver_search.py`, RP-502); solver, enumerator, brute force and CP-SAT together (`test_solver_differential.py`, RP-506); `search` against the enumerator as JSON (`test_search_solver.py`, RP-507); indexed against scan retrieval | RP-502, RP-506, RP-507, RP-701 |
 | Adversarial families | A naive pruning bound is caught by a ledger built against it | `test_solver_differential.py`: equal amounts, one amount that is the sum of others, credits equal to invoice differences, amounts one minor unit apart | RP-506 |
 | Known-answer tests for a tool | A third-party status means what the oracle assumes | `test_solver_differential.py`, tests 1 to 5 (CP-SAT) | RP-506 |
+| Hostile-input tests | Document text, payment fields and proposals cannot change a rule or smuggle in a record; very large inputs finish in bounded time | `backend/tests/test_hostile_inputs.py`. Twelve of its tests are strict expected failures that record findings F5 to F7. | RP-604, RP-606 |
+| Assessment against the pipeline | A case assessed as "needs review" is never decided, whatever is proposed | `backend/tests/test_review_reason.py`, test 9 | RP-605 |
+| Mutation testing | The tests notice small changes to the code that decides | `backend/scripts/mutation_run.py`, `docs/mutation_report.json`, `docs/mutation_triage.json`. Six operators, five target files. Not part of the suite run: it takes minutes. | RP-603, H-601, RP-607 |
 | Metamorphic tests | Decisions are stable across paraphrase and reordering | RemitBench dev | RP-602 |
 | Mutation tests | The suite detects a changed operator in authorization code | Four modules | RP-603 |
 | Hostile inputs | Malformed and oversized input fails closed | `backend/tests/adversarial/` (new) | RP-604 |
@@ -95,8 +98,13 @@ Observed in the dry run. Recorded again in `PROGRESS_LEDGER.md` as each task lan
 | RP-506 | 760 | 1 | +14 |
 | RP-507 | 781 | 1 | +21 new. Five existing tests revised by name, count unchanged. |
 | RP-508 | 793 | 1 | +12 |
+| RP-601 | 812 | 1 | +19 |
+| RP-604 | 852 | 13 | +40 passing, +12 strict expected failures (F5: 3, F6: 5, F7: 4) |
+| RP-606 | 866 | 10 | +11 new. The three F5 probes pass and lose their marker. |
+| RP-605 | 885 | 10 | +19 |
+| RP-603 | 914 | 10 | +29 |
 
-Rows are in execution order. After Phase 1 the expected-failure count is 1 (the F2 residual), and every removed marker corresponds to a probe that passes. Phase 2 adds 135 tests and the written part of Phase 3 adds 92. Neither changes runtime code. Phase 5 adds 136 tests and changes one runtime file. No test contacts a model: the two model-facing modules are tested through a stand-in transport.
+Rows are in execution order. After Phase 1 the expected-failure count is 1 (the F2 residual), and every removed marker corresponds to a probe that passes. Phase 2 adds 135 tests and the written part of Phase 3 adds 92. Neither changes runtime code. Phase 5 adds 136 tests and changes one runtime file. The written part of Phase 6 adds 130 tests, of which 9 are expected failures at its end, changes two runtime files and adds one. No test contacts a model: the two model-facing modules are tested through a stand-in transport.
 
 The final Phase 1 tree was also run from hash-locked environments on Python 3.9.25 and 3.13.18: 430 passed and 1 expected failure on both. The Phase 5 trees were run the same way after every task. From RP-505 on the environments were built from the regenerated lock, which on Python 3.13 means numpy compiled from source (OD-6).
 
@@ -132,6 +140,8 @@ Two kinds of committed output are compared with a fresh run:
 - `audit/<generation>/verifier_only_baseline.json`: the audit report.
 
 A task that legitimately changes either one writes a new generation directory, bumps the constant (`CURRENT_FREEZE_GENERATION` or `CURRENT_AUDIT_GENERATION`), keeps the old directory, and records the before and after figures in its report. A reviewer reads that diff. A changed figure with no explanation is a rejection.
+
+Two kinds of test in Phase 6 pin no count on purpose. The property tests of RP-601 and RP-605 run Hypothesis in derandomized mode, which takes its examples from the source text of the test function, so two correct implementations run different examples. The mutation report of RP-603 depends on the exact text of five files that implementers write. Both contracts give the dry-run numbers for orientation and assert thresholds or agreement instead.
 
 A third kind was added by RP-508: `docs/solver_scaling.json` and `docs/solver_scaling.md`, compared with a fresh run by `python backend/scripts/solver_scaling.py --check`. They have no generation directory. A task that changes a limit of `search` regenerates them with `--write --force` and reports the difference.
 

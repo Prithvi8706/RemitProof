@@ -76,11 +76,13 @@ git switch -c research/v1
 | RP-506 | READY | Not started | | 760 / 1 | | | | Order 6. Needs OR-Tools installed. |
 | RP-507 | READY | Not started | | 781 / 1 | | | | Order 7. Owner accepts the revised DD-06 and one new refusal. |
 | RP-508 | READY | Not started | | 793 / 1 | | | | Order 8. Owner reads the table. |
-| RP-601 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | |
-| RP-602 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | |
-| RP-603 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | |
-| RP-604 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | |
-| RP-605 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | |
+| RP-601 | READY | Not started | | 812 / 1 | | | | Phase 6 order 1 of 5. Needs Hypothesis (RP-105). No pinned count depends on generated examples. |
+| RP-602 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | Moved behind Phase 4. Needs RP-408 and H-205. |
+| RP-603 | READY | Not started | | 914 / 10 | | | | Order 5. The mutant counts are the implementer's own, not the dry run's. Survivors stay `open` until H-601. |
+| RP-604 | READY | Not started | | 852 / 13 | | | | Order 2. Adds 12 strict expected failures for F5, F6 and F7. Owner reads section 1. |
+| RP-605 | READY | Not started | | 885 / 10 | | | | Order 4. Not on the decision path. Owner reads the legacy table. |
+| RP-606 | READY | Not started | | 866 / 10 | | | | Order 3. New task. Closes F5 and removes its three markers. Owner accepts the rule. |
+| RP-607 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | New task. Best written after Phase 4. |
 | RP-701 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | |
 | RP-702 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | |
 | RP-703 | NOT WRITTEN | Blocked: no contract | | set by contract | | | | |
@@ -104,6 +106,7 @@ git switch -c research/v1
 | H-301 | Pre-registration document. Cites the test commitment hash, the metric definitions of RP-302 and the planned comparisons. Committed before RP-801. | Not started | | |
 | H-302 | Owner runs `proposal_pipeline`, `basic_validation` and `llm_abstain` on the dev split with `remitbench_record.py`, two runs each, model identified by digest. Five runs if they differ. Keeps the manifests. | Not started | | |
 | H-401 | Dev runs and policy choice, written down before unsealing | Not started | | |
+| H-601 | Owner triages the surviving mutants of RP-603 in `docs/mutation_triage.json`. Done when `python backend/scripts/mutation_run.py --check` exits 0. Repeated after the last change to a target file and before the sealed run. | Not started | | |
 | H-801 | Technical report | Not started | | |
 | H-802 | Five-minute demo and clean-clone reproduction by another person | Not started | | |
 
@@ -121,6 +124,9 @@ Update when a marker is removed.
 | `test_f3_truncated_search_must_not_resolve_a_proposal` | F3 | Removed | RP-104 | `cea9db8` |
 | `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_A-INV_A1-EMAIL_A]` | F4 | Removed | RP-110 | `a90c981` |
 | `test_f4_conflicting_customer_instructions_must_not_resolve[CUS_B-INV_B1-EMAIL_B]` | F4 | Removed | RP-110 | `a90c981` |
+| `test_f5_a_read_instruction_for_other_invoices_must_stop_the_match` (3 parameters) | F5 | Not yet added. RP-604 adds it marked, strict. | RP-606 | |
+| `test_f6_a_prohibited_identifier_in_another_spelling_must_stop_the_match` (5 parameters: `hyphen`, `space`, `joined`, `fullwidth`, `zero_width_inside`) | F6 | Not yet added. RP-604 adds it marked, strict. | A Phase 4 contract, to be named (DD-19) | |
+| `test_f7_a_hold_without_an_identifier_must_stop_the_match` (4 parameters) | F7 | Not yet added. RP-604 adds it marked, strict. | A Phase 4 contract, to be named (DD-18), or the owner accepts F7 as a stated limit | |
 
 ## Generation register
 
@@ -202,6 +208,21 @@ Observed in the dry run. Compare with the real result when RP-508 is accepted.
 | Synthetic ledgers answered | 360 of 360 at 8 invoices, 360 of 360 at 16, 239 of 360 at 32, 119 of 360 at 64 |
 | Runtime files changed by Phase 5 | `backend/app/services/search.py` modified. `backend/app/solver/` new. Nothing else under `backend/app/`. |
 
+## Reference figures expected after the written part of Phase 6
+
+Observed in the dry run. Compare with the real result when RP-603 is accepted.
+
+| Figure | Value |
+| --- | --- |
+| Backend tests | 914 passed, 10 expected failures, on Python 3.9.25 and 3.13.18 |
+| Expected failures | 1 for the F2 residual, 5 for F6, 4 for F7 |
+| Legacy decisions, audit report v1, frozen files, benchmark decision and table hashes | Unchanged after every Phase 6 task. Both `--check` commands exit 0. |
+| Generated cases changed by RP-606 | 4 of 679, all from `matched_normally` to `human_review` |
+| Legacy payments by case assessment (RP-605) | 50 rules-only, 12 resolved and assessed automatic, 6 in review although one allocation is authorizable, 12 that need review |
+| Published review reason equals the case's reason | 5 of 18 legacy review decisions |
+| Mutation report on the dry-run code (RP-603) | 102 mutants, 99 killed, 3 survived, all 3 equivalent. `docs/mutation_report.json` identical on both Python versions. The real repository's numbers will differ. |
+| Runtime files changed by the written part of Phase 6 | `backend/app/services/authorization.py` and `backend/app/services/pipeline.py` modified (RP-606). `backend/app/services/review_reason.py` new (RP-605). Nothing else under `backend/app/`. |
+
 ## Stops and deviations
 
 Record every stop, even one resolved in minutes.
@@ -217,6 +238,7 @@ Record every stop, even one resolved in minutes.
 | 2026-11-15 | Owner decisions. OD-1: keep Python 3.9 in the CI matrix and pin versions that support it (the default). OD-5: at the owner's request, an agent may commit and push accepted tasks and their ledger records on `research/v1`; implementers still never commit (R-13). |
 | 2026-11-15 | OG-1 met: RP-001 to RP-005 accepted, `audit/v0/` committed, and the owner accepted the 2026-11-12 revisions of DD-04, DD-05, DD-06, DD-07 and DD-09. The 2026-11-14 revision of DD-06 is accepted separately with RP-507. |
 | 2026-11-15 | OG-0 met: specification accepted, `80fc1d7` tagged `v0-audit-baseline`, working branch `research/v1` started from `main` at `72aefa5`. |
+| 2026-11-16 | Phase 6 contracts RP-601, RP-604, RP-606, RP-605 and RP-603 written and validated by dry run, on Python 3.13.18 and 3.9.25. They start after RP-508 and join the end of the written line. Findings F5 to F7 recorded. RP-606 and RP-607 added, RP-602 moved behind Phase 4, H-601 added, rule R-16 added. DD-28 to DD-30 recorded. Phase 6 estimate 26 to 37 implementation hours. |
 | 2026-11-15 | `spec/` merged into `main` (PR #4, `2b1edd0`). Backend CI job pinned to `ubuntu-24.04` (DD-11). The written line was re-run on top of both: 793 passed, 1 expected failure on Python 3.13.18 and 3.9.25. |
 | 2026-11-14 | Phase 5 contracts RP-501 to RP-508 written and validated by dry run, on Python 3.13.18 and 3.9.25. They start after RP-305 and join the end of the written line. DD-06 and DD-16 revised, DD-15 validated, OD-6 added, the reserved reason `solver_timeout` withdrawn (see `DESIGN_DECISIONS.md`). Phase 5 estimate 25 to 28 implementation hours. |
 | 2026-11-13 | Phase 3 contracts RP-301 to RP-306 written and validated by dry run, on Python 3.13.18 and 3.9.25. RP-307 and H-302 added. Evaluation code moved from the planned `backend/app/eval/` to `backend/remitbench/` (DD-21). DD-27 added. Phase 3 estimate 25 to 30 implementation hours. |

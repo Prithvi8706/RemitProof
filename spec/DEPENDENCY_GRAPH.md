@@ -14,7 +14,7 @@ flowchart TD
     P1 --> P4["Phase 4: reader study<br/>RP-401 to RP-408"]
     P3 --> P4
     P1 --> P5["Phase 5: exact solver<br/>RP-501 to RP-508"]
-    P1 --> P6["Phase 6: robustness<br/>RP-601 to RP-605"]
+    P1 --> P6["Phase 6: robustness<br/>RP-601 to RP-607"]
     P4 --> P6
     P5 --> P6
     P1 --> P7["Phase 7: engineering<br/>RP-701 to RP-705"]
@@ -26,9 +26,9 @@ flowchart TD
 
 ## Critical path
 
-By dependency: 157 implementation hours, 40 tasks. It is the written line below without RP-508, then RP-801, RP-802, RP-804. It runs through Phase 5 only because RP-501 was written to start after RP-305. By code alone Phase 5 needs Phase 1 and nothing later. The path through the unwritten Phase 4 (RP-405, RP-408, then RP-801) is 145 hours and becomes the longer one again if Phase 4 grows by 13 hours when its contracts are written.
+By dependency: 182 implementation hours, 44 tasks. It is the whole written line below (174 hours, 43 tasks) and then RP-607. That is an effect of the line: each written contract starts on the tree of the one before it, so Phase 6 now follows Phase 5 although by code it needs only Phase 1 and the solver. The path to the sealed run is shorter: the written line up to RP-507, then RP-801, RP-802, RP-804, 157 hours. The path through the unwritten Phase 4 (RP-405, RP-408, then RP-801) is 145 hours and becomes the longer of those two if Phase 4 grows by 13 hours when its contracts are written.
 
-The written contracts form one line, because each states the suite totals of the one before it. That line is 148 implementation hours.
+The written contracts form one line, because each states the suite totals of the one before it. That line is 174 implementation hours.
 
 The longest wait is not on any of these paths. It is the human benchmark work (H-202, H-203): other people's time. Meet OG-3 in week 1 and send the guide then.
 
@@ -41,10 +41,11 @@ The longest wait is not on any of these paths. It is the human benchmark work (H
 | 2 | RP-201, RP-204, RP-202, RP-208, RP-203, RP-205, RP-206, RP-207 | 565 passed, 1 expected failure |
 | 3 | RP-301, RP-302, RP-306, RP-304, RP-303, RP-305 | 657 passed, 1 expected failure |
 | 5 | RP-501, RP-502, RP-503, RP-504, RP-505, RP-506, RP-507, RP-508 | 793 passed, 1 expected failure |
+| 6 | RP-601, RP-604, RP-606, RP-605, RP-603 | 914 passed, 10 expected failures |
 
 Do not hand two tasks to two agents at once, and do not reorder. Some tasks have no code dependency on the one before them. Their dependency is on the totals.
 
-Phase 5 was written to start after RP-305 and joins the end of the line. A contract written later (Phase 4, Phase 6 onward, and RP-307) must state the tree it starts from. If it is written to start after RP-508, it joins the end of this line. If it is written to start after RP-305, Phase 5 must be re-derived on top of it, or it on top of Phase 5: the totals of only one of the two can stand.
+Phase 5 was written to start after RP-305 and joins the end of the line. The written part of Phase 6 was written to start after RP-508 and joins after it. A contract written later (Phase 4, Phase 7 onward, RP-307, RP-602 and RP-607) must state the tree it starts from. If it is written to start after RP-603, it joins the end of this line. If it is written to start on an earlier tree, every written contract after that point must be re-derived on top of it: the totals of only one line can stand.
 
 ## What can run in parallel
 
@@ -62,7 +63,7 @@ Phase 7 (from RP-701) opens after Phase 1 by dependency. Its contracts are not w
 3. A dependency-changing task (RP-105, RP-505, RP-603, RP-705) is split in two steps: the implementer edits the `.in` file, the owner regenerates locks. Nothing else lands between the two steps.
 4. RP-302 and RP-401 wait for `audit/v1/` (RP-111), so every later measurement is taken on the corrected verifier.
 5. RP-801 runs once. A second run needs a written reason in the access log before it starts.
-6. Nothing outside the written order is merged between RP-001 and RP-508 unless its contract was written for that exact start tree.
+6. Nothing outside the written order is merged between RP-001 and RP-603 unless its contract was written for that exact start tree.
 
 ## Complete edge table
 
@@ -78,11 +79,11 @@ Phase 7 (from RP-701) opens after Phase 1 by dependency. Its contracts are not w
 | RP-103 | RP-102 | RP-104 |
 | RP-104 | RP-103 | RP-107 |
 | RP-105 | RP-110, OG-2 | RP-106, RP-601 |
-| RP-106 | RP-105, RP-102 | RP-111, RP-506 |
+| RP-106 | RP-105, RP-102 | RP-111, RP-506, RP-601 |
 | RP-107 | RP-104 | RP-108 |
 | RP-108 | RP-107 | RP-109, RP-403 |
 | RP-109 | RP-108 | RP-110 |
-| RP-110 | RP-109 | RP-105, RP-111, RP-407, RP-507, RP-601, RP-604, RP-605, RP-703 |
+| RP-110 | RP-109 | RP-105, RP-111, RP-407, RP-507, RP-601, RP-604, RP-605, RP-606, RP-703 |
 | RP-111 | RP-110, RP-106 | RP-201, RP-401 |
 | RP-201 | RP-111 | RP-204 |
 | RP-202 | RP-204 | RP-208 |
@@ -114,18 +115,20 @@ Phase 7 (from RP-701) opens after Phase 1 by dependency. Its contracts are not w
 | RP-505 | RP-504, RP-501, OG-2 | RP-506 |
 | RP-506 | RP-505, RP-504, RP-106 | RP-507 |
 | RP-507 | RP-506, RP-110 | RP-508, RP-603, RP-801, RP-803, RP-901 |
-| RP-508 | RP-507 | none |
-| RP-601 | RP-110, RP-105 | RP-603 |
-| RP-602 | RP-408 | none |
-| RP-603 | RP-601, RP-507 | none |
-| RP-604 | RP-110 | none |
-| RP-605 | RP-110 | RP-803 |
+| RP-508 | RP-507 | RP-601 |
+| RP-601 | RP-508, RP-106, RP-110, RP-105 | RP-603, RP-604, RP-605 |
+| RP-602 | RP-408, H-205 | none |
+| RP-603 | RP-605, RP-601, RP-507 | RP-607 |
+| RP-604 | RP-601, RP-110 | RP-606 |
+| RP-605 | RP-606, RP-601, RP-110 | RP-603, RP-803 |
+| RP-606 | RP-604, RP-110 | RP-605 |
+| RP-607 | RP-603 | none |
 | RP-701 | RP-101 | RP-702, RP-704 |
 | RP-702 | RP-701 | none |
 | RP-703 | RP-110 | none |
 | RP-704 | RP-701 | none |
 | RP-705 | OG-2 | none |
-| RP-801 | RP-408, RP-507, H-205, OG-6 | RP-802 |
+| RP-801 | RP-408, RP-507, H-205, H-601, OG-6 | RP-802 |
 | RP-802 | RP-801 | RP-804 |
 | RP-803 | RP-507, RP-605 | RP-804 |
 | RP-804 | RP-802, RP-803 | none |
@@ -134,7 +137,7 @@ Phase 7 (from RP-701) opens after Phase 1 by dependency. Its contracts are not w
 ## Task view
 
 <details>
-<summary>Task-level graph (62 tasks and the owner gates)</summary>
+<summary>Task-level graph (64 tasks and the owner gates)</summary>
 
 ```mermaid
 flowchart LR
@@ -203,6 +206,8 @@ flowchart LR
         RP603["RP-603"]
         RP604["RP-604"]
         RP605["RP-605"]
+        RP606["RP-606"]
+        RP607["RP-607"]
     end
     subgraph P7["Phase 7. Engineering"]
         RP701["RP-701"]
@@ -290,13 +295,23 @@ flowchart LR
     RP506 --> RP507
     RP110 --> RP507
     RP507 --> RP508
+    RP508 --> RP601
+    RP106 --> RP601
     RP110 --> RP601
     RP105 --> RP601
     RP408 --> RP602
+    H205 --> RP602
+    RP605 --> RP603
     RP601 --> RP603
     RP507 --> RP603
+    RP601 --> RP604
     RP110 --> RP604
+    RP606 --> RP605
+    RP601 --> RP605
     RP110 --> RP605
+    RP604 --> RP606
+    RP110 --> RP606
+    RP603 --> RP607
     RP101 --> RP701
     RP701 --> RP702
     RP110 --> RP703
@@ -305,6 +320,7 @@ flowchart LR
     RP408 --> RP801
     RP507 --> RP801
     H205 --> RP801
+    H601 --> RP801
     OG6 --> RP801
     RP801 --> RP802
     RP507 --> RP803

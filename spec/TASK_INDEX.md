@@ -1,6 +1,6 @@
 # Task index
 
-62 tasks: 61 in 9 phases (Phase 0 to Phase 8) plus one optional task. Thirty-eight have validated contracts: all of Phase 0, Phase 1, Phase 2 and Phase 5, and six of the seven Phase 3 tasks. The other 24 rows are scope statements. They fix the task's identity, order and size. They are not instructions, and no agent should implement from them.
+64 tasks: 63 in 9 phases (Phase 0 to Phase 8) plus one optional task. Forty-three have validated contracts: all of Phase 0, Phase 1, Phase 2 and Phase 5, six of the seven Phase 3 tasks and five of the seven Phase 6 tasks. The other 21 rows are scope statements. They fix the task's identity, order and size. They are not instructions, and no agent should implement from them.
 
 ## Reading the table
 
@@ -23,13 +23,15 @@
 | Phase 3. Baselines and statistics | 7 | 30 | 6 | 36 |
 | Phase 4. Reader study | 8 | 35 | 3 | 38 |
 | Phase 5. Exact solver | 8 | 28 | 0 | 28 |
-| Phase 6. Robustness | 5 | 26 | 0 | 26 |
+| Phase 6. Robustness | 7 | 37 | 2 | 39 |
 | Phase 7. Engineering | 5 | 14 | 0 | 14 |
 | Phase 8. Final run and write-up | 4 | 17 | 14 | 31 |
 | Optional | 1 | 15 | 0 | 15 |
-| **Core plan (Phases 0 to 8)** | **61** | **244** | **51** | **295** |
+| **Core plan (Phases 0 to 8)** | **63** | **255** | **53** | **308** |
 
 The audit estimated about 220 hours. The difference is explained in `AUDIT_VALIDATION.md`, C6: the F4 fix, smaller reviewable steps in Phase 1, lock regeneration tasks, and human benchmark work counted explicitly. The 51 human hours cannot be delegated.
+
+Phase 6 moved from 26 to 37 implementation hours and from 5 to 7 tasks when its contracts were written. The hostile-input review found three unsafe behaviours of the rules-only matcher (F5 to F7), so that task grew from 3 to 5 hours and a new task of 3 hours closes F5 (RP-606). Mutation testing became a tool without a new dependency and a first report (5 hours where 6 were planned), and a new task of 8 hours for the older gate code, where the dry run found survivors (RP-607, not written). The review-reason task shrank from 6 to 5 hours because it no longer edits the pipeline. One human task was added: the owner triages surviving mutants (H-601, 2 hours).
 
 Phase 5 moved from 25 to 28 implementation hours when its contracts were written. The differential tests grew by two hours (the CP-SAT oracle is a module of its own and its statuses are settled by known-answer tests), the switch of `search` by two (five existing tests pin the old limits, and the cap on the list of allocations was not in the scope statement) and the scaling table by one (it is reproducible and pinned). The dependency task shrank by one, and the old "credit options" task by one, because the option builder of RP-501 already covers credits.
 
@@ -179,11 +181,29 @@ RP-505 needs OG-2 and a new owner decision, OD-6 (`DESIGN_DECISIONS.md`): OR-Too
 
 | ID | Title | Depends on | Hours | Risk | Changes AC code | Review | Contract |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| RP-601 | Property suite for the authorization invariants | RP-110, RP-105 | 8 | Medium | No | Architect | NOT WRITTEN |
-| RP-602 | Metamorphic stability report on dev | RP-408 | 3 | Low | No | Standard | NOT WRITTEN |
-| RP-603 | Mutation testing setup and triage record | RP-601, RP-507 | 6 | Medium | No | Owner | NOT WRITTEN |
-| RP-604 | Hostile-input tests | RP-110 | 3 | Low | No | Standard | NOT WRITTEN |
-| RP-605 | Review reasons computed from the case | RP-110 | 6 | Medium | Yes | Architect | NOT WRITTEN |
+| [RP-601](tasks/RP-601.md) | Property suite for the authorization invariants | RP-508, RP-106, RP-110, RP-105 | 8 | Medium | Reads only | Architect | READY |
+| RP-602 | Metamorphic stability report on dev | RP-408, H-205 | 3 | Low | No | Standard | NOT WRITTEN |
+| [RP-603](tasks/RP-603.md) | Mutation testing of the solver, the search and authorization | RP-605, RP-601, RP-507 | 5 | Medium | Reads only | Standard, then Owner | READY |
+| [RP-604](tasks/RP-604.md) | Hostile-input tests, and three findings recorded as probes | RP-601, RP-110 | 5 | Medium | Reads only | Architect, then Owner | READY |
+| [RP-605](tasks/RP-605.md) | Why a case needs review, computed from the case | RP-606, RP-601, RP-110 | 5 | Medium | Reads only | Architect, then Owner | READY |
+| [RP-606](tasks/RP-606.md) | A rules-only match is refused when its own proof shows a contradiction | RP-604, RP-110 | 3 | High | Yes | Architect, then Owner | READY |
+| RP-607 | Mutation testing of the matcher, the proof engine, the gate and the pipeline; triage and the tests it calls for | RP-603 | 8 | Medium | No | Architect, then Owner | NOT WRITTEN |
+
+Human work in this phase, not delegable:
+
+| ID | Work | Depends on | Hours |
+| --- | --- | --- | --- |
+| H-601 | Owner triages the surviving mutants; repeated after the last change to a target file and before the sealed run | RP-603 | 2 |
+
+Execution order of the written tasks. It is fixed, and it is not the numeric order:
+
+RP-601, RP-604, RP-606, RP-605, RP-603.
+
+Phase 6 starts from the tree Phase 5 ends on (793 passed, 1 expected failure) and its written part ends at 914 passed, 10 expected failures. Nine of the ten are the probes for findings F6 and F7, which stay until a Phase 4 contract names them. The tenth is the F2 residual probe.
+
+RP-606 is the one task in the phase that changes a decision path. It only removes automatic decisions, and on the legacy corpus and the benchmark examples it changes nothing.
+
+Two tasks are not written. RP-602 needs the policy runner of RP-408 and real dev seeds (H-205), so it moves behind Phase 4. RP-607 needs the owner's decision on how much of the older gate code to cover: see its scope note below.
 
 ### Phase 7. Engineering
 
@@ -199,7 +219,7 @@ RP-505 needs OG-2 and a new owner decision, OD-6 (`DESIGN_DECISIONS.md`): OR-Too
 
 | ID | Title | Depends on | Hours | Risk | Changes AC code | Review | Contract |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| RP-801 | Sealed-run script with hash check and access logging | RP-408, RP-507, RP-206, OG-6 | 4 | High | No | Owner | NOT WRITTEN |
+| RP-801 | Sealed-run script with hash check and access logging | RP-408, RP-507, RP-206, H-601, OG-6 | 4 | High | No | Owner | NOT WRITTEN |
 | RP-802 | Final tables generator | RP-801 | 3 | Low | No | Standard | NOT WRITTEN |
 | RP-803 | Republish the legacy snapshot as a new generation; API and frontend compatibility | RP-507, RP-605 | 5 | High | No | Architect | NOT WRITTEN |
 | RP-804 | README rewrite and report skeleton | RP-802, RP-803 | 5 | Low | No | Owner | NOT WRITTEN |
@@ -247,9 +267,15 @@ All eight contracts are written and dry-run. The scope notes that stood here are
 
 The audit's note stands: the owner should be able to derive both pruning bounds before accepting RP-502 to RP-504. The derivation, in plain words and with a worked example, is section 8 of `tasks/RP-502.md`.
 
-### Phases 6 to 8
+### Phase 6
 
-- **RP-601.** Fixes the input model for INV-15 and INV-16.
+Five contracts are written and dry-run. Differences from the plan, with reasons, are in `AUDIT_VALIDATION.md` section 12 and `DESIGN_DECISIONS.md` (change log 2026-11-16).
+
+- **RP-602.** Not written. It reruns the reader policies on metamorphic variants of the dev seeds. It needs RP-408 and H-205.
+- **RP-607.** Not written. Point the tool of RP-603 at `baseline_matcher.py`, `proof_engine.py`, `evidence_sufficiency.py` and `pipeline.py`, triage every survivor, and add the tests the triage calls for. What the dry run saw: 252 mutants, 83 survive the 16 gate and proof test files. The full suite was run against 13 of the 83 before the run was stopped for time: it killed 7 and 6 survived. The full-suite stage needs about three minutes per mutant on two cores, so the contract must either name a faster kill suite or accept a run of several hours. Phase 4 changes the gate, so this task is best written after Phase 4.
+
+### Phases 7 and 8
+
 - **RP-703.** Moves `latency_ms` out of the hashed decision content first.
 - **RP-801.** Refuses to run unless the archive hash equals the commitment and the pre-registration commit is an ancestor of `HEAD`.
 - **RP-803.** The only task allowed to change `results/`, `results.py`, the API result shape or the frontend. Bumps the freeze generation.
